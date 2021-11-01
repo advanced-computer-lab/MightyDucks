@@ -1,10 +1,10 @@
 const users = require('../models/userModel');
 
 class userRepository{
-    async login(email, password){
+    async login(userName, password){
         return new Promise((res,rej) =>{
             try{
-                users.findOne({ email : email }, function (err, docs) {
+                users.findOne({ userName : userName }, function (err, docs) {
                     if (docs == undefined){
                         rej("User not found!")
                     }
@@ -17,7 +17,7 @@ class userRepository{
                 });
             }
             catch(err){
-                throw new Error("Email Or Password Are Incorrect")
+                throw new Error("Username Or Password Are Incorrect")
             }
         })
     }

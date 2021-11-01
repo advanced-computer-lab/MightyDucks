@@ -26,11 +26,11 @@ app.get('/', (req, res) => {
 
 app.post('/login', async (req, res) => {
   let user = {
-      email: req.body.email,
+      userName: req.body.userName,
       password: req.body.password
   }
   try {
-    let result = await userRepository.login(user.email,user.password)
+    let result = await userRepository.login(user.userName,user.password)
     res.status(200).send(result)
   } catch (error) {
     res.status(400).json(error)

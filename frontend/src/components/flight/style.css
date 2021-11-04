@@ -1,0 +1,57 @@
+.main {
+    background-color: #F9F9F9;
+    border-radius: 0.75em;
+    border: 2px solid #017A9B;
+}
+
+.date {
+    color: #2E3D49;
+    opacity: 80%;
+    text-align: left;
+}
+
+.airports {
+    padding-left: 1.5em;
+}
+
+.airport {
+    color: #2E3D49;
+}
+
+.details {
+    font-size: 14px;
+    opacity: 70%;
+    text-align: center;
+}
+
+.detailsIn {
+    padding-left: 1em;
+    padding-right: 1em;
+    border-left: 2px solid #2E3D49;
+    border-right: 2px solid #2E3D49;
+}
+
+.p {
+    margin: 0em;
+}
+
+.detailsOut {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.button {
+    color: #017A9B;
+    border: 55px;
+}
+
+.arrow {
+    color: #2E3D49;
+    opacity: 60%;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.hour {
+    opacity: 60%;
+}

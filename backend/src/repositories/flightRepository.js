@@ -15,7 +15,7 @@ class flightRepository{
             console.log(flight)
         try {
             let result = await flight.save()
-            return result;
+            return req.body.flightNumber;;
         }catch (error) {
             throw new Error()
         }
@@ -26,6 +26,26 @@ class flightRepository{
             flightNumber: req.body.flightNumber
         })
         return flight
+    }
+
+    async updateFlight(req){
+        flights.findOneAndUpdate({flightNumber: req.body.oldFlightNumber}, {$set:{
+            from: req.body.from,
+            to: req.body.to,
+            departureTime: req.body.departureTime,
+            arrivalTime:req.body.arrivalTime,
+            economy:req.body.economy,
+            business:req.body.business,
+            first:req.body.first,
+            flightNumber:req.body.flightNumber,}}, function(err, doc){
+                if(err){
+                    console.log("Something went wrong, couldn't update.")
+                    return "Something went wrong, couldn't update.";
+                }
+                
+                console.log(`Flight ${req.body.flightNumber} was updated successfully!`)
+                return req.body.flightNumber;
+            })
     }
 }
 const repository = new flightRepository();

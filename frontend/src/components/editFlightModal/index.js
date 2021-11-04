@@ -7,16 +7,18 @@ import axios from 'axios';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
+import { Button } from "@mui/material"
+import { Edit } from "@mui/icons-material"
 
-const FlightModal =()=>{
-    const [flightNum,setFlightNum]=React.useState("");
-    const [departureTime,setDepartureTime]=React.useState(Date);
-    const [arrivalTime,setArrivalTime]=React.useState(Date);
-    const [from,setFrom]=React.useState("");
-    const [to,setTo]=React.useState("");
-    const [economySeats,setEconomySeats]=React.useState();
-    const [businessSeats,setBusinessSeats]=React.useState();
-    const [firstSeats,setFirstSeats]=React.useState();
+const FlightModal =({flightDetails})=>{
+    const [flightNum,setFlightNum]=React.useState(flightDetails.flightNumber);
+    const [departureTime,setDepartureTime]=React.useState(flightDetails.departureTime);
+    const [arrivalTime,setArrivalTime]=React.useState(flightDetails.arrivalTime);
+    const [from,setFrom]=React.useState(flightDetails.from);
+    const [to,setTo]=React.useState(flightDetails.to);
+    const [economySeats,setEconomySeats]=React.useState(flightDetails.economy);
+    const [businessSeats,setBusinessSeats]=React.useState(flightDetails.business);
+    const [firstSeats,setFirstSeats]=React.useState(flightDetails.first);
     const [error,setError]=React.useState("");
     const [fromErr,setFromErr]=React.useState("");
     const [toErr,setToErr]=React.useState("");
@@ -35,9 +37,9 @@ const FlightModal =()=>{
         var result = validateFields();
         if (result){
             var Flightdetails={
-                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum
+                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum, oldFlightNumber: flightDetails.flightNumber
             }
-            createFlight(Flightdetails)
+            updateFlight(Flightdetails)
         }
     }
     const validateFields=()=>{
@@ -58,11 +60,12 @@ const FlightModal =()=>{
             return false;
         }
     }
-    const createFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/create', data)
+    const updateFlight=async(data)=>{
+        await axios.post('http://localhost:5000/flight/update', data)
         .then((res) => {
             console.log(res.data)
-            resetFields()
+            resetFields();
+            handleClose();
         }).catch((error) => {
             console.log(error)
         });
@@ -81,9 +84,7 @@ const FlightModal =()=>{
     }
     return (
       <div>
-        <div className={styles["addFlightButton"]}>
-            <ContainedButton  onClick={handleOpen} >Add Flight</ContainedButton>   
-        </div>
+        <Button onClick={handleOpen}><Edit /></Button>
         <Modal className={styles["Modal"]}
           open={open}
           onClose={handleClose}
@@ -93,7 +94,7 @@ const FlightModal =()=>{
                 <CloseIcon onClick={handleClose} /> 
             </div>
             <div className={styles["text"]}>
-                Add Flight Details
+                Edit Flight Details
             </div>
             <Typography >
                 <div className={styles["container"]}>
@@ -126,7 +127,7 @@ const FlightModal =()=>{
                         <TextFields label="First Class Seats"  value={firstSeats} variant="outlined" size="small" type="number" required style={{width:400}} onChange={(e)=>setFirstSeats(e.target.value)}/>
                     </div>
                     <div className={styles["button"]} >
-                        <ContainedButton style={{width:400}} onClick={Add}>Add</ContainedButton>
+                        <ContainedButton style={{width:400}} onClick={Add}>Submit</ContainedButton>
                     </div>
                     <div className={styles["error"]} >
                        {error}

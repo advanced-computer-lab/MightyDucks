@@ -27,6 +27,16 @@ class flightRepository{
         })
         return flight
     }
+
+    async getFlights(req){
+        let allFlights = flights.find({})
+        return allFlights
+        // flights.find({}).then(result =>{       
+        //     return result;    
+        //   }).catch(err =>{
+        // console.log(err)
+        //   });
+    }
 }
 const repository = new flightRepository();
 module.exports = repository;

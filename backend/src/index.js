@@ -55,3 +55,12 @@ app.post('/flight/delete', async  (req, res) => {
   }
 })
 
+app.get('/flight/getFlights', async (req, res) => {
+  try {
+    let result = await flightRepository.getFlights(req)
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+

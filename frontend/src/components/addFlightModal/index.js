@@ -1,5 +1,7 @@
 import {Modal,Box ,Typography} from '@mui/material';
 import React, { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import styles from './index.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import { ContainedButton , TextFields} from '../buttons/styledButtons';
@@ -62,6 +64,8 @@ const FlightModal =()=>{
         await axios.post('http://localhost:5000/flight/create', data)
         .then((res) => {
             console.log(res.data)
+            console.log(`Flight ${res.data} was added successfully!`)
+            notify(`Flight ${res.data} was added successfully!`)
             resetFields()
             handleClose()
         }).catch((error) => {
@@ -80,10 +84,14 @@ const FlightModal =()=>{
         setTo(e.target.value);
         setToErr(e.target.value.length===3?"":"error")
     }
+
+    const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT} )
+
     return (
       <div>
+        <ToastContainer />
         <div className={styles["addFlightButton"]}>
-            <ContainedButton  onClick={handleOpen} >Add Flight</ContainedButton>   
+            <ContainedButton onClick={handleOpen} >Add Flight</ContainedButton>   
         </div>
         <Modal className={styles["Modal"]}
           open={open}

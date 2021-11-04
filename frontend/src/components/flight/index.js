@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Grid, Button } from "@mui/material"
-import { ArrowForward, Edit, DeleteForever } from "@mui/icons-material"
+import { ArrowForward, DeleteForever } from "@mui/icons-material"
 import EditFlightModal from "../editFlightModal"
 import "./style.css"
 

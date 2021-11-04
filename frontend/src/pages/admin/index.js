@@ -7,7 +7,7 @@ import styles from './index.module.css';
 const flight = {
     flightNumber: "91234",
     departureTime: "11/4/2021 12:51 pm",
-    arrivalTime: "11/6/2021 9:51 am",
+    arrivalTime: "11/4/2021 9:51 am",
     from: "CAI",
     to: "LAX",
     economy: 21,
@@ -21,6 +21,14 @@ const Admin=()=>{
         <div className={styles["flightModal"]}>
         <br />
       <br />
+      <br />
+    <Flight flightDetails={flight} />
+    <br />
+      <Flight flightDetails={flight} />
+      <br />
+    <Flight flightDetails={flight} />
+    <br />
+      <Flight flightDetails={flight} />
       <br />
     <Flight flightDetails={flight} />
     <br />

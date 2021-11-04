@@ -37,7 +37,7 @@ const FlightModal =({flightDetails})=>{
         var result = validateFields();
         if (result){
             var Flightdetails={
-                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum
+                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum, oldFlightNumber: flightDetails.flightNumber
             }
             updateFlight(Flightdetails)
         }

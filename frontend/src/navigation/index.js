@@ -7,7 +7,6 @@ const RouterConfig =()=>{
     <Router>
         <Switch>
             <Route exact path ="/flight" component={Flight}/>
-            <Route exact path ="/flightModal" component={FlightModal}/>
         </Switch>
     </Router>
     )

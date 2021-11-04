@@ -19,7 +19,14 @@ class flightRepository{
         }catch (error) {
             throw new Error()
         }
-    }  
+    }
+    
+    async deleteFlight(req) {
+        let flight = flights.findOneAndRemove({
+            flightNumber: req.body.flightNumber
+        })
+        return flight
+    }
 }
 const repository = new flightRepository();
 module.exports = repository;

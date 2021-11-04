@@ -46,3 +46,12 @@ app.post('/flight/create', async (req, res)=>{
   }
 })
 
+app.post('/flight/delete', async  (req, res) => {
+  try {
+    let result = await flightRepository.deleteFlight(req)
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+

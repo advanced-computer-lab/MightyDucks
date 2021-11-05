@@ -1,20 +1,57 @@
 import React from 'react'
-import { Grid, Button } from "@mui/material"
-import { ArrowForward, DeleteForever } from "@mui/icons-material"
+import { Grid } from "@mui/material"
+import { ArrowForward, DepartureBoardTwoTone } from "@mui/icons-material"
 import EditFlightModal from "../editFlightModal"
+import DeleteFlightModal from "../deleteFlightModal"
 import "./style.css"
 
-function Flight({flightDetails}) {
+function Flight({flightDetails, getFlights}) {
 
-    const date = new Date(flightDetails.departureTime)
-    const days = ["Sun" ,"Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    const months = ["December", "January", "February", "March", "April", "May", "June", "July", "August", "September", "November"]
+    const departureTime = (new Date(flightDetails.departureTime).toString()).split(" ")
+    const arrivalTime = (new Date(flightDetails.arrivalTime).toString()).split(" ")
 
-    const dateString = `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+    var depHr = departureTime[4].substring(0, 2)
+    var arrHr = arrivalTime[4].substring(0, 2)
 
-    const arrivalDate = new Date(flightDetails.arrivalTime)
+    if(depHr==="00"){
+        depHr = "12:"+departureTime[4].substring(3,5)+" AM"
+    }
+    else if(depHr==="12"){
+        depHr = "12:"+departureTime[4].substring(3,5)+" PM"
+    }
+    else if(parseInt(depHr)>12){
+        let value1 = ((parseInt(depHr)-12)+"")
+        if(value1.length===2){
+        depHr = value1+":"+departureTime[4].substring(3,5)+" PM"
+        }
+        else{
+            depHr = "0"+value1+":"+departureTime[4].substring(3,5)+" PM"   
+        }
+    }
+    else{
+        depHr = departureTime[4].substring(0,5)+" AM"
+    }
 
-    const overnight = arrivalDate.getDay()-date.getDay()
+    if(arrHr==="00"){
+        arrHr = "12:"+arrivalTime[4].substring(3, 5)+" AM"
+    }
+    else if(arrHr==="12"){
+        arrHr = "12:"+arrivalTime[4].substring(3, 5)+" PM"
+    }
+    else if(parseInt(arrHr)>12){
+        let value1 = ((parseInt(arrHr)-12)+"")
+        if(value1.length===2){
+        arrHr = value1+":"+arrivalTime[4].substring(3, 5)+" PM"
+        }
+        else{
+            arrHr = "0"+value1+":"+arrivalTime[4].substring(3, 5)+" PM"   
+        }
+    }
+    else{
+        arrHr = arrivalTime[4].substring(0, 5)+" AM"
+    }
+
+    const dateString = `${departureTime[0]}, ${departureTime[1]} ${departureTime[2]}, ${departureTime[3]}`
 
     return (
         <Grid
@@ -39,7 +76,7 @@ function Flight({flightDetails}) {
                         alignItems="flex-start"
                         style={{width: "auto"}}>
                         <Grid item className="airport"><h2>{flightDetails.from}</h2></Grid>
-                        <Grid item className="hour"><div>{flightDetails.departureTime.split(" ")[1]+" "+flightDetails.departureTime.split(" ")[2].toUpperCase()}</div></Grid>
+                        <Grid item className="hour"><div>{depHr}</div></Grid>
                     </Grid>
                     <Grid 
                         container
@@ -55,10 +92,7 @@ function Flight({flightDetails}) {
                         alignItems="center"
                         style={{width: "auto"}}>
                         <Grid item className="airport"><h2>{flightDetails.to}</h2></Grid>
-                        <Grid item className="hour"><div>{overnight>0? 
-                            (flightDetails.arrivalTime.split(" ")[1]+" "+flightDetails.arrivalTime.split(" ")[2].toUpperCase()+" +"+overnight)
-                            : (flightDetails.arrivalTime.split(" ")[1]+" "+flightDetails.arrivalTime.split(" ")[2].toUpperCase())
-                        }</div></Grid>
+                        <Grid item className="hour"><div>{arrHr}</div></Grid>
                     </Grid>
                 </Grid>
                 <Grid
@@ -110,8 +144,8 @@ function Flight({flightDetails}) {
                     justifyContent="flex-end"
                     alignItems="center"
                     style={{width: "auto"}}>
-                    <Grid item><EditFlightModal flightDetails={flightDetails} /></Grid>
-                    <Grid item><Button className="button"><DeleteForever /></Button></Grid>
+                    <Grid item><EditFlightModal flightDetails={flightDetails} getFlights={getFlights} /></Grid>
+                    <Grid item><DeleteFlightModal flightNumber={flightDetails.flightNumber} getFlights={getFlights} /></Grid>
                 </Grid>
             </Grid>
         </Grid>

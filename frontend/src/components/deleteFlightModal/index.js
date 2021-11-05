@@ -1,14 +1,14 @@
-import {Modal,Box ,Button, Grid} from '@mui/material';
+import {Modal,Box ,Button, Grid, Tooltip} from '@mui/material';
 import { Clear, Check, DeleteForever } from "@mui/icons-material"
 import React from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './index.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import { ContainedButton} from '../buttons/styledButtons';
 import axios from 'axios';
 
-const DeleteFlightModal =({flightNumber})=>{
+const DeleteFlightModal =({flightNumber, getFlights})=>{
     
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -26,6 +26,7 @@ const DeleteFlightModal =({flightNumber})=>{
             console.log(res.data)
             notify(`Flight ${flightNumber} has been deleted successfully!`)
             handleClose()
+            getFlights()
         }).catch((error) => {
             console.log(error)
         });
@@ -35,10 +36,9 @@ const DeleteFlightModal =({flightNumber})=>{
 
     return (
       <div>
-        <ToastContainer />
-        <div className={styles["addFlightButton"]}>
+        <Tooltip title="Delete">
         <Button onClick={handleOpen}><DeleteForever /></Button> 
-        </div>
+        </Tooltip>
         <Modal className={styles["Modal"]}
           open={open}
           onClose={handleClose}

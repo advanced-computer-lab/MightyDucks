@@ -1,4 +1,4 @@
-import {Modal,Box ,Typography} from '@mui/material';
+import {Modal,Box ,Typography, Tooltip} from '@mui/material';
 import React, { useEffect } from 'react';
 import styles from './index.module.css'
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,8 +9,10 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { Button } from "@mui/material"
 import { Edit } from "@mui/icons-material"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
-const FlightModal =({flightDetails})=>{
+const FlightModal =({flightDetails, getFlights})=>{
     const [flightNum,setFlightNum]=React.useState(flightDetails.flightNumber);
     const [departureTime,setDepartureTime]=React.useState(flightDetails.departureTime);
     const [arrivalTime,setArrivalTime]=React.useState(flightDetails.arrivalTime);
@@ -23,14 +25,31 @@ const FlightModal =({flightDetails})=>{
     const [fromErr,setFromErr]=React.useState("");
     const [toErr,setToErr]=React.useState("");
     const [departureErr,setDepartureErr]=React.useState("");
+    const [depChange, setDepChange] = React.useState(false);
+    const [arrChange, setArrChange] = React.useState(false);
+    const [blockButton, setblockButton] = React.useState(false)
     
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        setDepartureErr((departureTime>=new Date() && arrivalTime>departureTime)?"":"date error")
+        if(arrChange || depChange){
+            setDepartureErr((departureTime>=new Date() && arrivalTime>departureTime)?"":"date error")
+        }
       });
+
+      const handleArrChange = (newValue) => {
+        setArrChange(true)
+        setArrivalTime(newValue);
+
+    }
+
+    const handleDepChange = (newValue) => {
+        setDepChange(true)
+        setDepartureTime(newValue);
+
+    }
 
     const Add=()=>{
         setDepartureErr("");
@@ -43,10 +62,15 @@ const FlightModal =({flightDetails})=>{
         }
     }
     const validateFields=()=>{
-        if(flightNum && departureTime  && arrivalTime && from && to && economySeats && economySeats!==-1 && businessSeats && businessSeats!==-1 && firstSeats && firstSeats!==-1){
+        if(flightNum && departureTime  && arrivalTime && from && to && economySeats!==-1 && businessSeats!==-1 && firstSeats!==-1){
             setError("");
             setFromErr(from.length===3?"":"error")
             setToErr(to.length===3?"":"error")
+            console.log(flightNum, error)
+            console.log(departureTime)
+            console.log(arrivalTime)
+            if(depChange || arrChange){
+            }
             console.log("dep err",departureErr.length)
             if(error.length===0 && fromErr.length===0 && toErr.length===0 && departureErr.length===0){
                 console.log("then")
@@ -64,15 +88,17 @@ const FlightModal =({flightDetails})=>{
         await axios.post('http://localhost:5000/flight/update', data)
         .then((res) => {
             console.log(res.data)
+            notify(`Flight ${flightNum} was updated successfully!`)
             resetFields();
             handleClose();
+            getFlights();
         }).catch((error) => {
             console.log(error)
         });
     };
     const resetFields=()=>{
-        setFlightNum(""); setFrom(""); setTo(""); setFromErr(""); setToErr(""); setError("");
-        setDepartureTime(new Date()); setArrivalTime(new Date()); setEconomySeats(""); setBusinessSeats("");setFirstSeats("")
+        setFromErr(""); setToErr(""); setError("");
+        setDepartureErr(""); setblockButton(false);
     }
     const handleFromErr=(e)=>{
         setFrom(e.target.value);
@@ -82,9 +108,14 @@ const FlightModal =({flightDetails})=>{
         setTo(e.target.value);
         setToErr(e.target.value.length===3?"":"error")
     }
+
+    const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
+
     return (
       <div>
+        <Tooltip title="Edit">
         <Button onClick={handleOpen}><Edit /></Button>
+        </Tooltip>
         <Modal className={styles["Modal"]}
           open={open}
           onClose={handleClose}
@@ -109,12 +140,12 @@ const FlightModal =({flightDetails})=>{
                     </div>
                    <div className={styles["datetimepicker"]}> 
                     <LocalizationProvider dateAdapter={AdapterDateFns} >
-                        <MobileDateTimePicker renderInput={(params) => <TextFields {...params} label="Departure Time"  variant="outlined" size="small" style={{width:400}}/>} value={departureTime} onChange={(newValue) => {setDepartureTime(newValue); }}/>
+                        <MobileDateTimePicker renderInput={(params) => <TextFields {...params} label="Departure Time"  variant="outlined" size="small" style={{width:400}}/>} value={departureTime} onChange={(newValue) => {handleDepChange(newValue); }}/>
                     </LocalizationProvider>
                     </div>
                     <div className={styles["datetimepicker"]}>
                     <LocalizationProvider dateAdapter={AdapterDateFns} >
-                        <MobileDateTimePicker renderInput={(params) => <TextFields {...params} label="Arrival Time" variant="outlined" size="small" style={{width:400}}/>}  value={arrivalTime} onChange={(newValue) => {setArrivalTime(newValue); }}/>
+                        <MobileDateTimePicker renderInput={(params) => <TextFields {...params} label="Arrival Time" variant="outlined" size="small" style={{width:400}}/>}  value={arrivalTime} onChange={(newValue) => {handleArrChange(newValue); }}/>
                     </LocalizationProvider>
                     </div>
                     <div className={styles["textfields"]}>
@@ -127,7 +158,7 @@ const FlightModal =({flightDetails})=>{
                         <TextFields label="First Class Seats"  value={firstSeats} variant="outlined" size="small" type="number" required style={{width:400}} onChange={(e)=>setFirstSeats(e.target.value)}/>
                     </div>
                     <div className={styles["button"]} >
-                        <ContainedButton style={{width:400}} onClick={Add}>Submit</ContainedButton>
+                        <ContainedButton style={{width:400}}  disabled={blockButton} onClick={Add}>Submit</ContainedButton>
                     </div>
                     <div className={styles["error"]} >
                        {error}

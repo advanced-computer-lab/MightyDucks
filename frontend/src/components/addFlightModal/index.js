@@ -1,6 +1,6 @@
-import {Modal,Box ,Typography} from '@mui/material';
+import {Modal,Box ,Typography, Button, Tooltip} from '@mui/material';
 import React, { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './index.module.css'
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,8 +9,9 @@ import axios from 'axios';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
+import AddIcon from '@mui/icons-material/Add';
 
-const FlightModal =()=>{
+const FlightModal =({getFlights})=>{
     const [flightNum,setFlightNum]=React.useState("");
     const [departureTime,setDepartureTime]=React.useState(Date);
     const [arrivalTime,setArrivalTime]=React.useState(Date);
@@ -23,6 +24,7 @@ const FlightModal =()=>{
     const [fromErr,setFromErr]=React.useState("");
     const [toErr,setToErr]=React.useState("");
     const [departureErr,setDepartureErr]=React.useState("");
+    const [blockButton, setblockButton] = React.useState(false)
     
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -35,10 +37,12 @@ const FlightModal =()=>{
     const Add=()=>{
         setDepartureErr("");
         var result = validateFields();
+        console.log("====>",departureTime)
         if (result){
             var Flightdetails={
                 from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum
             }
+            setblockButton(true);
             createFlight(Flightdetails)
         }
     }
@@ -65,6 +69,7 @@ const FlightModal =()=>{
         .then((res) => {
             console.log(res.data)
             console.log(`Flight ${res.data} was added successfully!`)
+            getFlights();
             notify(`Flight ${res.data} was added successfully!`)
             resetFields()
             handleClose()
@@ -73,7 +78,7 @@ const FlightModal =()=>{
         });
     };
     const resetFields=()=>{
-        setFlightNum(""); setFrom(""); setTo(""); setFromErr(""); setToErr(""); setError("");
+        setFlightNum(""); setFrom(""); setTo(""); setFromErr(""); setToErr(""); setError(""); setblockButton(false);
         setDepartureTime(new Date()); setArrivalTime(new Date()); setEconomySeats(""); setBusinessSeats("");setFirstSeats("")
     }
     const handleFromErr=(e)=>{
@@ -85,14 +90,13 @@ const FlightModal =()=>{
         setToErr(e.target.value.length===3?"":"error")
     }
 
-    const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT} )
+    const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
 
     return (
       <div>
-        <ToastContainer />
-        <div className={styles["addFlightButton"]}>
-            <ContainedButton onClick={handleOpen} >Add Flight</ContainedButton>   
-        </div>
+        <Tooltip title="Add Flight">
+            <Button onClick={handleOpen} ><AddIcon fontSize="large"/></Button>   
+        </Tooltip>
         <Modal className={styles["Modal"]}
           open={open}
           onClose={handleClose}
@@ -135,7 +139,7 @@ const FlightModal =()=>{
                         <TextFields label="First Class Seats"  value={firstSeats} variant="outlined" size="small" type="number" required style={{width:400}} onChange={(e)=>setFirstSeats(e.target.value)}/>
                     </div>
                     <div className={styles["button"]} >
-                        <ContainedButton style={{width:400}} onClick={Add}>Add</ContainedButton>
+                        <ContainedButton style={{width:400}} disabled={blockButton} onClick={Add}>Add</ContainedButton>
                     </div>
                     <div className={styles["error"]} >
                        {error}

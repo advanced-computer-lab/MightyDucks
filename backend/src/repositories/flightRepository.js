@@ -42,15 +42,12 @@ class flightRepository{
             economy:req.body.economy,
             business:req.body.business,
             first:req.body.first,
-            flightNumber:req.body.flightNumber,}}, function(err, doc){
-                if(err){
-                    console.log("Something went wrong, couldn't update.")
-                    return "Something went wrong, couldn't update.";
-                }
-                
+            flightNumber:req.body.flightNumber,}}).then(() => {
                 console.log(`Flight ${req.body.flightNumber} was updated successfully!`)
                 return req.body.flightNumber;
             })
+        
+        
     }
 }
 const repository = new flightRepository();

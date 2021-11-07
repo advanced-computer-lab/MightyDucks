@@ -74,6 +74,7 @@ const FlightModal =({getFlights})=>{
             resetFields()
             handleClose()
         }).catch((error) => {
+            setblockButton(false);
             console.log(error)
         });
     };

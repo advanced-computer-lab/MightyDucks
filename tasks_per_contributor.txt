@@ -1,0 +1,16 @@
+Amina Yasser:
+Backend AddFlight functionality.
+Frontend addflight functionality.
+Amr Hoballah:
+Backend and node initialization.
+Flight and users Database models.
+Flight and users Database repositories initialization.
+Andrew Hany:
+Searchbar frontend and funtionality.
+Backend deleteFlight functionality.
+Peter Osama:
+Backend getFlights functionality.
+Frontend deleteFlight functionality.
+Shehabeldin Solyman:
+Backend updateFlight functionality.
+Frontend Flight record display and admin page.

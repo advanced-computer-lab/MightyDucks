@@ -76,6 +76,7 @@ const FlightModal =({flightDetails, getFlights})=>{
                 console.log("then")
                 return true;
             }else{
+                setDepartureErr("");
                 console.log("else")
                 return false;
             }

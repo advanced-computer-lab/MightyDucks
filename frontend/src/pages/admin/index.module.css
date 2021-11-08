@@ -1,0 +1,39 @@
+.flightModal{
+    padding: 20px;
+}
+
+.divElement{
+    position: absolute;
+    top: 45%;
+    left: 45%;
+}​
+
+.elementaya{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.stat{
+    text-align: left;
+    font-style: italic;
+    font-size: large;
+    padding-left: 0.5em;
+    color: #017A9B;
+}
+
+.textField{
+    margin: 1em !important;
+    background-color: white !important;
+}
+
+.container{
+    margin: 1em ;
+    background-color: white !important;
+}
+
+.bar{
+    background-color: #017A9B;
+    text-align: center;
+    margin-top: 0em;
+}

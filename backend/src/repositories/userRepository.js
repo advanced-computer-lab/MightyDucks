@@ -21,6 +21,24 @@ class userRepository{
             }
         })
     }
+
+    async getUsers(){
+        let allUsers = users.find({})
+        return allUsers
+    }
+
+    async updateUser(req){
+        users.findOneAndUpdate({userName: req.body.oldUserName}, {$set:{
+            userName: req.body.userName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email:req.body.email,
+            passportNumber:req.body.passportNumber,
+            password:req.body.password,}}).then(() => {
+                console.log(`User ${req.body.userName} was updated successfully!`)
+                return req.body.userName;
+            })
+    }
 }
 
 const repository = new userRepository();

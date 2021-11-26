@@ -1,3 +1,4 @@
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -73,3 +74,21 @@ app.get('/flight/getFlights', async (req, res) => {
   }
 })
 
+app.get('/user/getUsers',async(req,res)=>{
+  try{
+    let result =await userRepository.getUsers()
+    res.status(200).send(result)
+  }catch(error){
+    res.status(400).send(error)
+  }
+})
+
+app.post('/user/update',async(req,res)=>{
+  try{
+    let result =await userRepository.updateUser(req)
+    res.status(200).send(result)
+  }catch(error){
+    console.log("err")
+    res.status(400).send(error)
+  }
+})

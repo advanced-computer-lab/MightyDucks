@@ -31,7 +31,16 @@ const userSchema = new Schema({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  pastFlights:{
+    type: [String],
+    required:true
+  },
+  upcomingFlights :{
+    type: [String],
+    required:true
   }
+
 });
 
 const users = mongoose.model('users', userSchema);

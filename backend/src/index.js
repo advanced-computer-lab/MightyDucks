@@ -92,3 +92,13 @@ app.post('/user/update',async(req,res)=>{
     res.status(400).send(error)
   }
 })
+
+app.post('/flight/filterFlights', async(req, res)=>{
+   try{
+    let result =await flightRepository.filterFlights(req)
+    res.status(200).send(result)
+  }catch(error){
+    console.log("err")
+    res.status(400).send(error)
+  }
+})

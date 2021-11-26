@@ -1,0 +1,30 @@
+.ModalBox{
+    padding: 20px;
+    height: fit-content;
+    background: white;
+    border: 2px solid rgb(231, 222, 222); 
+}
+.Modal{
+    position: absolute;
+    width: 600px;
+    margin: auto;
+    margin-top: 70px;
+}
+.container{
+    text-align: center;
+}
+.icon{
+    text-align:right;
+}
+.text{
+    text-align: center;
+    font-size: larger;
+    color: #03313e;
+    margin-bottom: 25px;
+}
+.textfields{
+    margin-bottom: 10px;
+}
+.button{
+    margin: 25px;
+}

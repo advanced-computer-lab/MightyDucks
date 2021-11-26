@@ -38,6 +38,18 @@ const flightSchema = new Schema({
   economy: {
     type: Number,
     required: true
+  },
+  baggageAllowance: {
+    type: Number,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  bookedSeats: {
+    type: [String],
+    required: true
   }
 });
 

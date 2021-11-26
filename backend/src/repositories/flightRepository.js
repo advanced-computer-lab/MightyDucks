@@ -45,9 +45,25 @@ class flightRepository{
             flightNumber:req.body.flightNumber,}}).then(() => {
                 console.log(`Flight ${req.body.flightNumber} was updated successfully!`)
                 return req.body.flightNumber;
-            })
-        
-        
+            })    
+    }
+    
+    async filterFlights(req){
+        var firstSeats
+        var businessSeats
+        var economySeats
+        req.body.cabin === "first" ? firstSeats = req.body.children + req.body.adults : firstSeats = 0
+        req.body.cabin === "business" ? businessSeats = req.body.children + req.body.adults : businessSeats = 0
+        req.body.cabin === "economy" ? economySeats = req.body.children + req.body.adults : economySeats = 0
+        let flights1 = flights.find({
+            from: req.body.from,
+            to: req.body.to,
+            first:{$gte: firstSeats},
+            business:{$gte: businessSeats},
+            economy: {$gte: economySeats},
+            departureTime: req.body.departure
+        })
+        return flights1
     }
 }
 const repository = new flightRepository();

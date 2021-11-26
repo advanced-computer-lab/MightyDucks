@@ -1,11 +1,11 @@
 import React from 'react'
-import { Grid } from "@mui/material"
+import { Button, Grid } from "@mui/material"
 import { ArrowForward, DepartureBoardTwoTone } from "@mui/icons-material"
 import EditFlightModal from "../editFlightModal"
 import DeleteFlightModal from "../deleteFlightModal"
 import "./style.css"
 
-function Flight({flightDetails, getFlights}) {
+function Flight({flightDetails, getFlights, isAdmin, cabin}) {
 
     const departureTime = (new Date(flightDetails.departureTime).toString()).split(" ")
     const arrivalTime = (new Date(flightDetails.arrivalTime).toString()).split(" ")
@@ -51,14 +51,29 @@ function Flight({flightDetails, getFlights}) {
         arrHr = arrivalTime[4].substring(0, 5)+" AM"
     }
 
+    const date1 = new Date(flightDetails.departureTime);
+    const date2 = new Date(flightDetails.arrivalTime);
+    const difftime = Math.abs(date1 - date2) / 36e5;
+
     const dateString = `${departureTime[0]}, ${departureTime[1]} ${departureTime[2]}, ${departureTime[3]}`
+
+    var priceAddOn = 0;
+    if(cabin==="Business"){
+        priceAddOn = 100;
+    }
+    else if(cabin==="First"){
+        priceAddOn = 400;
+    }
 
     return (
         <Grid
             className="main"
             container
             direction="column">
-            <Grid item className="date">{dateString}</Grid>
+            <Grid container direction="row" justifyContent="space-between" className="date">
+                <Grid item>{dateString}</Grid>
+                {!isAdmin && <Grid item>{cabin} Class</Grid>}
+            </Grid>
             <Grid
                 container
                 direction="row"
@@ -83,6 +98,7 @@ function Flight({flightDetails, getFlights}) {
                         direction="column"
                         justifyContent="center"
                         style={{width: "auto"}}>
+                        <Grid item style={{opacity: "60%", color: "#000"}}>{Math.floor(difftime)}h {((difftime%1)*60)>0 && (difftime%1)*60+"m"}</Grid>
                         <Grid item className="arrow"><ArrowForward fontSize="large" /></Grid>
                     </Grid>
                     <Grid
@@ -110,7 +126,7 @@ function Flight({flightDetails, getFlights}) {
                         <Grid item><div>Flight No.</div></Grid>
                         <Grid item><div>{flightDetails.flightNumber}</div></Grid>
                     </Grid>
-                    <Grid
+                    {isAdmin ? <Grid
                         container
                         direction="column"
                         justifyContent="center"
@@ -123,8 +139,23 @@ function Flight({flightDetails, getFlights}) {
                             <p className="p">{flightDetails.economy>0 && flightDetails.economy}</p>
                             <p className="p">{(flightDetails.economy<=0 && flightDetails.business<=0 && flightDetails.first<=0) && "Out of seats"}</p>
                         </div></Grid>
-                    </Grid>
-                    <Grid
+                    </Grid> : <Grid
+                        container
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{width: "auto"}}>
+                        <Grid item className="detailsIn details"><div>
+                            <div>Available Seats</div>
+                            {cabin==="First" && <p className="p">{flightDetails.first>0 && flightDetails.first}</p>}
+                            {cabin==="Business" && <p className="p">{flightDetails.business>0 && flightDetails.business}</p>}
+                            {cabin==="Economy" && <p className="p">{flightDetails.economy>0 && flightDetails.economy}</p>}
+                            {cabin==="First" && <p className="p">{(flightDetails.first<=0) && "Out of seats"}</p>}
+                            {cabin==="Business" && <p className="p">{(flightDetails.business<=0) && "Out of seats"}</p>}
+                            {cabin==="Economy" && <p className="p">{(flightDetails.economy<=0) && "Out of seats"}</p>}
+                        </div></Grid>
+                    </Grid>}
+                    {isAdmin ? <Grid
                         container
                         direction="column"
                         justifyContent="center"
@@ -136,7 +167,17 @@ function Flight({flightDetails, getFlights}) {
                         <Grid item><div>{flightDetails.business>0 && "Business"}</div></Grid>
                         <Grid item><div>{flightDetails.economy>0 && "Economy"}</div></Grid>
                         <Grid item><div>{(flightDetails.economy<=0 && flightDetails.business<=0 && flightDetails.first<=0) && "Out of seats"}</div></Grid>
+                    </Grid> : <Grid
+                        container
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{width: "auto"}}
+                        className="detailsOut details">
+                        <Grid item><div>Baggage Allowance</div></Grid>
+                        <Grid item><div>45Kg</div></Grid>
                     </Grid>
+                    }
                 </Grid>
                 <Grid
                     container
@@ -144,8 +185,9 @@ function Flight({flightDetails, getFlights}) {
                     justifyContent="flex-end"
                     alignItems="center"
                     style={{width: "auto"}}>
-                    <Grid item><EditFlightModal flightDetails={flightDetails} getFlights={getFlights} /></Grid>
-                    <Grid item><DeleteFlightModal flightNumber={flightDetails.flightNumber} getFlights={getFlights} /></Grid>
+                    {isAdmin && <Grid item><EditFlightModal flightDetails={flightDetails} getFlights={getFlights} /></Grid>}
+                    {isAdmin && <Grid item><DeleteFlightModal flightNumber={flightDetails.flightNumber} getFlights={getFlights} /></Grid>}
+                    {!isAdmin && <Grid item style={{marginRight: "2em"}}><Button style={{width: "6em"}} variant="contained" size="large">{"$"+(50+priceAddOn)}</Button></Grid>}
                 </Grid>
             </Grid>
         </Grid>

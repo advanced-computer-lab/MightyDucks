@@ -132,7 +132,6 @@ export default class Admin extends Component {
                  })
                 res = results.filter((flight)=> {
                     console.log(flight.arrivalTime.toString().substring(0,21))
-                    console.log("hahaha lol")
                     console.log(str.toString().substring(0,21))
                 return flight.arrivalTime.substring(0,21) === str.toString().substring(0,21)
             })

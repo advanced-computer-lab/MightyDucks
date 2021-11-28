@@ -23,6 +23,7 @@ import Logo from '../../assets/Images/logo.svg'
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { NavLink } from 'react-router-dom';
 
 function Navbar(props){
     const [users,setUsers]=React.useState();
@@ -107,7 +108,7 @@ function Navbar(props){
       return (
         <AppBar className={styles.appBar}>
           <Toolbar>
-            <Grid container direction = "row" justifyContent="flex-start" spacing = {1} className={styles.grid1}>
+            <Grid container direction = "row" justifyContent="flex-start" spacing = {0} className={styles.grid1}>
               <Grid item className={styles.drawerLoc}>
                 <IconButton onClick={handleDrawerOpen}>
                   <MenuIcon className={styles.drawer}/>
@@ -143,8 +144,10 @@ function Navbar(props){
                 </Grid> 
 
                 <Grid item>
-                  <div className={styles.barButtons}>
-                    Book a flight?
+                  <div className={styles.barButtons} className={styles.navLink}>
+                    <NavLink to="/" className={styles.navLink}>
+                      Book a flight?
+                    </NavLink>
                   </div>
                 </Grid>  
 
@@ -170,7 +173,9 @@ function Navbar(props){
             <Grid container direction = "row" className={styles.grid2} justifyContent="flex-end" spacing = {3}>
               <Grid item>
                 <div className={styles.barButtons} style = {{marginTop: "0.5em"}}>
-                  Book a flight?
+                  <NavLink to="/" className={styles.navLink}>
+                      Book a flight?
+                  </NavLink>
                 </div>
               </Grid> 
 

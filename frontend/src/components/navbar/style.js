@@ -72,6 +72,10 @@ export const useStyles = makeStyles((theme) =>({
         width: "7.5em !important",
         backgroundColor: "white !important",
         borderRadius: "0.95em !important",
-    }  
+    },
+    navLink: {
+        textDecoration: 'none',
+        color: "white"
+    }
 }))
 export default useStyles;

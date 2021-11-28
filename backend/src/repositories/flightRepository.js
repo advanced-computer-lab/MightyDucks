@@ -11,6 +11,9 @@ class flightRepository{
             business:req.body.business,
             first:req.body.first,
             flightNumber:req.body.flightNumber,
+            baggageAllowance:req.body.baggageAllowance,
+            price:req.body.price,
+            bookedSeats:[]
             })
             console.log(flight)
         try {
@@ -42,7 +45,10 @@ class flightRepository{
             economy:req.body.economy,
             business:req.body.business,
             first:req.body.first,
-            flightNumber:req.body.flightNumber,}}).then(() => {
+            flightNumber:req.body.flightNumber,
+            baggageAllowance: req.body.baggageAllowance,
+            price: req.body.price,
+            bookedSeats: req.body.bookedSeats,}}).then(() => {
                 console.log(`Flight ${req.body.flightNumber} was updated successfully!`)
                 return req.body.flightNumber;
             })    
@@ -61,7 +67,7 @@ class flightRepository{
             first:{$gte: firstSeats},
             business:{$gte: businessSeats},
             economy: {$gte: economySeats},
-            departureTime: req.body.departure
+            $departureTime: {$search: req.body.departure}
         })
         return flights1
     }

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, Grid } from "@mui/material"
-import { ArrowForward, DepartureBoardTwoTone } from "@mui/icons-material"
+import { ArrowForward } from "@mui/icons-material"
 import EditFlightModal from "../editFlightModal"
 import DeleteFlightModal from "../deleteFlightModal"
 import "./style.css"
 
-function Flight({flightDetails, getFlights, isAdmin, cabin}) {
+function Flight({flightDetails, getFlights, isAdmin, cabin, handleChosen, currentChosen}) {
 
     const departureTime = (new Date(flightDetails.departureTime).toString()).split(" ")
     const arrivalTime = (new Date(flightDetails.arrivalTime).toString()).split(" ")
@@ -65,6 +65,8 @@ function Flight({flightDetails, getFlights, isAdmin, cabin}) {
         priceAddOn = 400;
     }
 
+    const isSelected = flightDetails.flightNumber===currentChosen.flightNumber
+
     return (
         <Grid
             className="main"
@@ -72,6 +74,7 @@ function Flight({flightDetails, getFlights, isAdmin, cabin}) {
             direction="column">
             <Grid container direction="row" justifyContent="space-between" className="date">
                 <Grid item>{dateString}</Grid>
+                {!isAdmin && isSelected && <span className="italicOne">--Selected--</span>}
                 {!isAdmin && <Grid item>{cabin} Class</Grid>}
             </Grid>
             <Grid
@@ -98,7 +101,7 @@ function Flight({flightDetails, getFlights, isAdmin, cabin}) {
                         direction="column"
                         justifyContent="center"
                         style={{width: "auto"}}>
-                        <Grid item style={{opacity: "60%", color: "#000"}}>{Math.floor(difftime)}h {((difftime%1)*60)>0 && (difftime%1)*60+"m"}</Grid>
+                        <Grid item style={{opacity: "60%", color: "#000"}}>{Math.floor(difftime)}h {((difftime%1)*60)>0 && parseInt((difftime%1)*60)+"m"}</Grid>
                         <Grid item className="arrow"><ArrowForward fontSize="large" /></Grid>
                     </Grid>
                     <Grid
@@ -175,7 +178,7 @@ function Flight({flightDetails, getFlights, isAdmin, cabin}) {
                         style={{width: "auto"}}
                         className="detailsOut details">
                         <Grid item><div>Baggage Allowance</div></Grid>
-                        <Grid item><div>45Kg</div></Grid>
+                        <Grid item><div>{flightDetails.baggageAllowance}</div></Grid>
                     </Grid>
                     }
                 </Grid>
@@ -187,7 +190,7 @@ function Flight({flightDetails, getFlights, isAdmin, cabin}) {
                     style={{width: "auto"}}>
                     {isAdmin && <Grid item><EditFlightModal flightDetails={flightDetails} getFlights={getFlights} /></Grid>}
                     {isAdmin && <Grid item><DeleteFlightModal flightNumber={flightDetails.flightNumber} getFlights={getFlights} /></Grid>}
-                    {!isAdmin && <Grid item style={{marginRight: "2em"}}><Button style={{width: "6em"}} variant="contained" size="large">{"$"+(50+priceAddOn)}</Button></Grid>}
+                    {!isAdmin && <Grid item style={{marginRight: "2em"}}><Button onClick={() => {handleChosen(flightDetails)}} style={{width: "6em"}} variant="contained" size="large">{"$"+(flightDetails.price+priceAddOn)}</Button></Grid>}
                 </Grid>
             </Grid>
         </Grid>

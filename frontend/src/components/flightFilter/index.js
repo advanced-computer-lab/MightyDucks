@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, } from 'react-router-dom'
 
 import axios from 'axios';
@@ -11,7 +11,7 @@ import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import { Button, TextField } from '@material-ui/core';
 import { format } from 'date-fns'
 
-function FlightFilter() {
+function FlightFilter({ setCriteria }) {
     const theme = useTheme()
     const styles = useStyles()
 
@@ -109,6 +109,15 @@ function FlightFilter() {
             setCabinErr(true)
         }
         if(!fromErr && !toErr && !departureErr && !returnErr && !cabinErr){
+            setCriteria({
+                from: from,
+                to: to,
+                depDate: departure,
+                retDate: returnD,
+                adults: adults,
+                children: children,
+                cabin: cabin,
+            })
             setValid(true)
         }
     }
@@ -236,7 +245,7 @@ function FlightFilter() {
                     <Grid item>
                         
                         <Button variant="contained" size="medium" className={styles.button} onClick={handleFilter}>
-                           <NavLink className={styles.navLink} to={{pathname: "/select-flights",userProps: {from: from, to: to, depDate: departure, retDate: returnD, adults: adults, children: children, cabin: cabin},}} onClick={handleNavLink}>
+                           <NavLink className={styles.navLink} to={{pathname: "/select-flights"}} onClick={handleNavLink}>
                             Find Flights
                             </NavLink>
                         </Button>

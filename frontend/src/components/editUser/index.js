@@ -60,7 +60,7 @@ const EditUser=(props)=>{
     const handleEdit=()=>{
         var result = validateFields();
         if (result){
-            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:password}
+            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:password, flights: props.user.flights}
             updateUser(user);
         }
     }

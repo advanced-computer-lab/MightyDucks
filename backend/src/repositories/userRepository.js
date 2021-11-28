@@ -34,6 +34,7 @@ class userRepository{
             lastName: req.body.lastName,
             email:req.body.email,
             passportNumber:req.body.passportNumber,
+            flights: req.body.flights,
             password:req.body.password,}}).then(() => {
                 console.log(`User ${req.body.userName} was updated successfully!`)
                 return req.body.userName;

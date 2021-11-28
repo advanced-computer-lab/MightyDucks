@@ -36,6 +36,9 @@ function Navbar(props){
         axios.get('http://localhost:5000/user/getUsers')
         .then((res) => {
         setUsers(res.data)
+        if(props.setuser!=null){
+        props.setuser(res.data[1])
+        }
         setFlag(true);
     })},[isEdit]);
     const theme = useTheme()

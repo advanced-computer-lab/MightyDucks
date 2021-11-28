@@ -66,3 +66,8 @@
 .hour {
     opacity: 60%;
 }
+
+.italicOne{
+    font-style: italic;
+    text-decoration: underline overline #017A9B;
+}

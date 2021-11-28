@@ -39,7 +39,7 @@ const FlightModal =({getFlights})=>{
         
         if (result){
             var Flightdetails={
-                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum
+                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum,baggageAllowance:45,price:200
             }
             setblockButton(true);
             createFlight(Flightdetails)

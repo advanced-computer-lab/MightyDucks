@@ -40,7 +40,7 @@ const FlightModal =({flightDetails, getFlights})=>{
         var result = validateFields();
         if (result){
             var Flightdetails={
-                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum, oldFlightNumber: flightDetails.flightNumber
+                from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum, oldFlightNumber: flightDetails.flightNumber, baggageAllowance: 45, price:200, bookedSeats: flightDetails.bookedSeats
             }
             updateFlight(Flightdetails)
         }

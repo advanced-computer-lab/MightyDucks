@@ -67,7 +67,7 @@ class flightRepository{
             first:{$gte: firstSeats},
             business:{$gte: businessSeats},
             economy: {$gte: economySeats},
-            departureTime: req.body.departure
+            $departureTime: {$search: req.body.departure}
         })
         return flights1
     }

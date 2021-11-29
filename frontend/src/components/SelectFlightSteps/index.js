@@ -27,8 +27,8 @@ function SelectFlightSteps(props) {
     from: props.from,
     to: props.to,
     departure: props.depDate,
-    adults: props.adults,
-    children: props.children,
+    adults: parseInt(props.adults),
+    children: parseInt(props.children),
     cabin: props.cabin
   }
   console.log("ch", props.children)
@@ -38,8 +38,8 @@ function SelectFlightSteps(props) {
     from: props.to,
     to: props.from,
     departure: props.retDate,
-    adults: props.adults,
-    children: props.children,
+    adults: parseInt(props.adults),
+    children: parseInt(props.children),
     cabin: props.cabin
   }
 
@@ -76,10 +76,10 @@ function SelectFlightSteps(props) {
         setActiveStep(2);
       }
     } else if (activeStep === 2) {
-      if (departingFlightSeats.length < props.adults + props.children) {
+      if (departingFlightSeats.length < (parseInt(props.adults) + parseInt(props.children))) {
         toast.error(
           `Please choose ${
-            props.adults + props.children - departingFlightSeats.length
+            parseInt(props.adults) + parseInt(props.children) - parseInt(departingFlightSeats.length)
           } more seat(s).`,
           { position: toast.POSITION.BOTTOM_RIGHT }
         );
@@ -87,10 +87,10 @@ function SelectFlightSteps(props) {
         setActiveStep(3);
       }
     } else if (activeStep === 3) {
-      if (returningFlightSeats.length < props.adults + props.children) {
+      if (returningFlightSeats.length < (parseInt(props.adults) + parseInt(props.children))) {
         toast.error(
           `Please choose ${
-            props.adults + props.children - returningFlightSeats.length
+            parseInt(props.adults) + parseInt(props.children) - parseInt(returningFlightSeats.length)
           } more seat(s).`,
           { position: toast.POSITION.BOTTOM_RIGHT }
         );

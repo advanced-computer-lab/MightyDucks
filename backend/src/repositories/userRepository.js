@@ -73,7 +73,7 @@ class userRepository {
         })
         for (let i in user.flights) {
             if (user.flight[i].includes(req.body.bookingId))
-                user.flights.spilce(i, 1)
+                user.flights.splice(i, 1)
         }
         users
             .findOneAndUpdate({

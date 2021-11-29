@@ -76,10 +76,10 @@ function SelectFlightSteps(props) {
         setActiveStep(2);
       }
     } else if (activeStep === 2) {
-      if (departingFlightSeats.length < elprops.adults + elprops.children) {
+      if (departingFlightSeats.length < props.adults + props.children) {
         toast.error(
           `Please choose ${
-            elprops.adults + elprops.children - departingFlightSeats.length
+            props.adults + props.children - departingFlightSeats.length
           } more seat(s).`,
           { position: toast.POSITION.BOTTOM_RIGHT }
         );
@@ -87,10 +87,10 @@ function SelectFlightSteps(props) {
         setActiveStep(3);
       }
     } else if (activeStep === 3) {
-      if (returningFlightSeats.length < elprops.adults + elprops.children) {
+      if (returningFlightSeats.length < props.adults + props.children) {
         toast.error(
           `Please choose ${
-            elprops.adults + elprops.children - returningFlightSeats.length
+            props.adults + props.children - returningFlightSeats.length
           } more seat(s).`,
           { position: toast.POSITION.BOTTOM_RIGHT }
         );

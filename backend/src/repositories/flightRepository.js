@@ -31,7 +31,7 @@ class flightRepository{
         return flight
     }
 
-    async getFlights(req){
+    async getFlights(){
         let allFlights = flights.find({})
         return allFlights
     }

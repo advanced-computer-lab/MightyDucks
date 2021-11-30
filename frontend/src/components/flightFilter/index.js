@@ -73,7 +73,7 @@ function FlightFilter({ setCriteria }) {
     const handleReturnChange = (event) => {
         setReturnD(format(new Date(event), 'yyyy-MM-dd'))
         setReturnErr(false)
-        if(returnD === null || returnD<departure){
+        if(returnD === null || returnD<departure || format(new Date(returnD), 'yyyy-MM-dd')<(format(new Date(), 'yyyy-MM-dd'))){
             setReturnErr(true)
         }    
     }
@@ -127,6 +127,7 @@ function FlightFilter({ setCriteria }) {
             setValid(true)
         }
     }
+
 
     const handleNavLink = (e) => {
         if(from === null){

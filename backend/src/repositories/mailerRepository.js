@@ -52,7 +52,7 @@ class mailerRepository{
 
             <body>
                 <h3 style="font-size:22pt;">Hello, ${req.body.firstName}</h3>
-                <h2>Greatings from Mighty Ducks Airline!</h2>
+                <h2>Greetings from Mighty Ducks Airline!</h2>
                 <h3>We understand that you canceled your trip on ${req.body.depdate}, ${req.body.depTime} from ${req.body.departureAirport} to ${req.body.arrivalAirport} and back on ${req.body.retDate}, ${req.body.retTime}.</h3>
                 <h3>A refund amount of ${req.body.refund} will be reimbursed to your account.</h3>
                 

@@ -59,7 +59,7 @@ function TripCard({user, reservation, upcoming, setDeleted}) {
     
     return (
         <div className={styles.grid}>
-            <Grid container direction = "column" justifyContent="center" >
+            <Grid container direction = "column" justifyContent="center">
                 <Grid container direction = "row" justifyContent="space-between">
                     <Grid item>
                         <div className={styles.dates}>
@@ -74,7 +74,7 @@ function TripCard({user, reservation, upcoming, setDeleted}) {
                     </Grid>
                 </Grid>
 
-                <Grid container direction = "row" justifyContent="space-evenly" spacing ={6}>
+                <Grid container direction = "row" justifyContent="space-evenly" spacing ={7}>
                     <Grid item>
                         <div className={styles.terminals}>
                             {from || <CircularProgress />} 

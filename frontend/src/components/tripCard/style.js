@@ -11,12 +11,12 @@ export const useStyles = makeStyles((theme) =>({
     },
     dates: {
         color: "white",
-        textShadow: "1.5px 1.5px black"
+        textShadow: "1.5px 2.5px black"
     },
     terminals: {
         color: "white",
-        textShadow: "1.5px 1.5px black",
-        fontSize: "4em",
+        textShadow: "2.5px 3.5px black",
+        fontSize: "3.5em",
         [theme.breakpoints.only("xs")]: {
             fontSize: "3em"
         },

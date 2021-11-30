@@ -46,7 +46,7 @@ class userRepository {
             });
     }
 
-    async getFlights(userName,allFlights) {
+    async getFlights(userName, allFlights) {
         return new Promise((res, rej) => {
             users.findOne({
                 userName: userName
@@ -59,7 +59,7 @@ class userRepository {
                     for (let flight of docs.flights) {
                         let data = flight.split(" ")
                         let filtered = allFlights.filter(f => f.flightNumber == data[0])
-                        if(filtered.length == 1)
+                        if (filtered.length == 1)
                             results.push(flight)
                     }
                     res(results);

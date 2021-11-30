@@ -5,11 +5,11 @@ let transport = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
     }
- });
- 
+});
+
 
 let mailOptions = {
     from: process.env.EMAIL_USERNAME, // Sender address
@@ -20,9 +20,9 @@ let mailOptions = {
 
 
 
-class mailerRepository{
+class mailerRepository {
 
-    cancel(req){
+    cancel(req) {
         mailOptions.subject = "Mighty Ducks Airline Flight Refund";
         mailOptions.html = `<html>
             <head>
@@ -63,18 +63,18 @@ class mailerRepository{
 
     }
 
-    async send(req){
+    async send(req) {
         mailOptions.to = req.body.email;
-        if(req.body.type == 'cancel')
+        if (req.body.type == 'cancel')
             this.cancel(req);
 
-        transport.sendMail(mailOptions, function(err, info) {
+        transport.sendMail(mailOptions, function (err, info) {
             if (err) {
-              console.log(err)
+                console.log(err)
             } else {
-              console.log(info);
+                console.log(info);
             }
-         });
+        });
     }
 }
 

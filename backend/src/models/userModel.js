@@ -32,9 +32,9 @@ const userSchema = new Schema({
     type: Boolean,
     required: true
   },
-  flights:{
+  flights: {
     type: [String],
-    required:true
+    required: true
   }
 
 });

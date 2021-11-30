@@ -107,16 +107,9 @@ app.get('/user/getFlights/upcoming', async (req, res) => {
   try {
     console.log("/user/getFlights/upcoming")
     let flights = await flightRepository.getFlights()
-    let userFlights = await userRepository.getFlights(req.body.userName);
-    console.log(userFlights)
     let upcomingFlights = flights.filter(flight => flight.departureTime > new Date());
-    let result = [];
-    for(let flight of upcomingFlights){
-      if(userFlights.includes(flight.flightNumber))
-        result.push(flight)
-    }
-    console.log(result)
-    res.status(200).send(result)
+    let userFlights = await userRepository.getFlights(req.body.userName,upcomingFlights);
+    res.status(200).send(userFlights)
   } catch (error) {
     res.status(400).send(error)
   }
@@ -125,15 +118,9 @@ app.get('/user/getFlights/upcoming', async (req, res) => {
 app.get('/user/getFlights/past', async (req, res) => {
   try {
     let flights = await flightRepository.getFlights()
-    let userFlights = await userRepository.getFlights(req.body.userName);
-    let upcomingFlights = flights.filter(flight => flight.departureTime < new Date());
-    let result = [];
-    for(let flight of upcomingFlights){
-      if(userFlights.includes(flight.flightNumber))
-        result.push(flight)
-    }
-    console.log(result)
-    res.status(200).send(result)
+    let pastFlights = flights.filter(flight => flight.departureTime < new Date());
+    let userFlights = await userRepository.getFlights(req.body.userName,pastFlights);
+    res.status(200).send(userFlights)
   } catch (error) {
     res.status(400).send(error)
   }

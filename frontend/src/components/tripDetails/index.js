@@ -4,6 +4,7 @@ import { ArrowForward } from '@mui/icons-material';
 import axios from "axios"
 import { toast } from 'react-toastify';
 import { NavLink, Navigate } from 'react-router-dom';
+import ConfirmationModal from "../confirmationModal"
 
 const style = {
   position: 'absolute',
@@ -162,11 +163,14 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
 
     const [checker, setChecker] = React.useState(false)
     const [checker2, setChecker2] = React.useState(false)
+    const [cancelModal, setCancelModal] = React.useState(false);
+
+    const handleCancelModal = () => {
+        setCancelModal(true)
+    }
 
     const handleCancel = () => {
         console.log("cancel reservation")
-        //update user
-        
         const userNewFlights = user.flights.filter((flight) => {
             return flight.split(' ')[4] !== bookingId
         })
@@ -339,7 +343,8 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                     </Grid>
                 </Typography>
                 <br/>
-                {!create && upcoming && <Grid item style={{ fontSize:"15px", textDecoration: "underline", cursor: "pointer" }} onClick={handleCancel}>cancel reservation</Grid>}
+                {!create && upcoming && cancelModal && <ConfirmationModal bookingId={bookingId} open={cancelModal} setOpen={setCancelModal} setConfirm={handleCancel}/>}
+                {!create && upcoming && <Grid item style={{ fontSize:"15px", textDecoration: "underline", cursor: "pointer" }} onClick={handleCancelModal}>cancel reservation</Grid>}
                 {create && !upcoming && <Button variant="outlined" style={{ color: "#017A9B"}} onClick={handleConfirm}>Confirm reservation</Button>}
             </Box>
             </Modal>

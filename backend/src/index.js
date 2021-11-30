@@ -5,6 +5,7 @@ const cors = require("cors");
 const mongoose = require('mongoose');
 const flightRepository = require("./repositories/flightRepository");
 const userRepository = require("./repositories/userRepository")
+const mailerRepository = require("./repositories/mailerRepository")
 const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
@@ -132,5 +133,14 @@ app.delete('/user/deleteFlight', async (req, res) => {
     res.status(200).send(result)
   } catch (error) {
     res.status(400).send(error)
+  }
+})
+
+app.post('/user/notify', async (req, res) => {
+  try{
+    let result = await mailerRepository.send(req);
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error.message)
   }
 })

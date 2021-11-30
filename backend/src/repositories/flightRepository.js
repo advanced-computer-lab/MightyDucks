@@ -98,9 +98,10 @@ class flightRepository {
             economy: {
                 $gte: economySeats
             },
-            $departureTime: {
-                $search: req.body.departure
-            },
+            departureTime:{
+                $gte: new Date(new Date(req.body.departureTime).setHours(0, 0, 0)),
+                $lte: new Date(new Date(req.body.departureTime).setHours(23, 59, 59))
+            }
         });
         return flights1;
     }

@@ -9,15 +9,10 @@ export const useStyles = makeStyles((theme) =>({
         left:"8em",
         backgroundColor: "white",
         position: "relative",
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("sm")]: {
             width: "92%",
             left:"1.5em",
         },
-    },
-    wallpaper: {
-        width: "100%",
-        position: "absolute",
-        zIndex: "0"
     },
     main: {
         backgroundImage: `url(${wallpaper})`,

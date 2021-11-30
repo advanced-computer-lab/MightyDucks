@@ -83,6 +83,16 @@ app.get('/user/getUsers', async (req, res) => {
   }
 })
 
+    
+app.post('/flight/getFlight', async (req, res) => {
+  try {
+    let result = await flightRepository.getFlight(req)
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+    
 app.post('/user/update', async (req, res) => {
   try {
     let result = await userRepository.updateUser(req)
@@ -103,7 +113,7 @@ app.post('/flight/filterFlights', async (req, res) => {
   }
 })
 
-app.get('/user/getFlights/upcoming', async (req, res) => {
+app.post('/user/getFlights/upcoming', async (req, res) => {
   try {
     console.log("/user/getFlights/upcoming")
     let flights = await flightRepository.getFlights()
@@ -115,7 +125,7 @@ app.get('/user/getFlights/upcoming', async (req, res) => {
   }
 })
 
-app.get('/user/getFlights/past', async (req, res) => {
+app.post('/user/getFlights/past', async (req, res) => {
   try {
     let flights = await flightRepository.getFlights()
     let pastFlights = flights.filter(flight => flight.departureTime < new Date());

@@ -18,8 +18,8 @@ function FlightFilter({ setCriteria }) {
     const [flights, setFlights] = useState([])
     const [from, setFrom] = useState(null)
     const [to, setTo] = useState(null)
-    const [departure, setDeparture] = useState(null)
-    const [returnD, setReturnD] = useState(null)
+    const [departure, setDeparture] = useState(new Date())
+    const [returnD, setReturnD] = useState(new Date())
     const [cabin, setCabin] = useState(null)
     const [adults, setAdults] = useState(1)
     const [children, setChildren] = useState(0)
@@ -65,11 +65,17 @@ function FlightFilter({ setCriteria }) {
     const handleDepartureChange = (event) => {
         setDeparture(format(new Date(event), 'yyyy-MM-dd'))
         setDepartureErr(false)
+        if(departure === null || format(new Date(departure), 'yyyy-MM-dd')<(format(new Date(), 'yyyy-MM-dd'))){
+            setDepartureErr(true)
+        }   
     }
 
     const handleReturnChange = (event) => {
         setReturnD(format(new Date(event), 'yyyy-MM-dd'))
         setReturnErr(false)
+        if(returnD === null || returnD<departure){
+            setReturnErr(true)
+        }    
     }
 
     const handleCabinChange = (event) => {
@@ -132,13 +138,13 @@ function FlightFilter({ setCriteria }) {
         if(departure === null){
             setDepartureErr(true)
         }
-        if(returnD === null){
+        if(returnD === null || returnD<departure){
             setReturnErr(true)
         }
         if(cabin === null){
             setCabinErr(true)
         }
-        if(from === null || to === null || departure === null || returnD === null || cabin === null){
+        if(from === null || to === null || departure === null || returnD === null || cabin === null || returnD<departure ){
             e.preventDefault()
         }
     }
@@ -201,7 +207,6 @@ function FlightFilter({ setCriteria }) {
                   <Grid item sx = {{maxWidth: 155}}>
                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                            <MobileDatePicker
-                                
                                 label="Return Date"
                                 inputFormat="yyyy-MM-dd"
                                 value={returnD}

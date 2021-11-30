@@ -10,6 +10,9 @@ export const useStyles = makeStyles((theme) =>({
     button: {
         backgroundColor: "#017A9B",
         color: "white",
+        "&:hover": {
+        backgroundColor: "#0090B8",
+        },
     },
     grid: {
         backgroundColor: "white",

@@ -65,11 +65,17 @@ function FlightFilter({ setCriteria }) {
     const handleDepartureChange = (event) => {
         setDeparture(format(new Date(event), 'yyyy-MM-dd'))
         setDepartureErr(false)
+        if(departure === null || format(new Date(departure), 'yyyy-MM-dd')<(format(new Date(), 'yyyy-MM-dd'))){
+            setDepartureErr(true)
+        }   
     }
 
     const handleReturnChange = (event) => {
         setReturnD(format(new Date(event), 'yyyy-MM-dd'))
         setReturnErr(false)
+        if(returnD === null || returnD<departure){
+            setReturnErr(true)
+        }    
     }
 
     const handleCabinChange = (event) => {

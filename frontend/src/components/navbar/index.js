@@ -24,6 +24,7 @@ import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { NavLink, Navigate } from 'react-router-dom';
+import { AdminPanelSettings } from '@mui/icons-material';
 function Navbar(props){
     const [users,setUsers]=React.useState();
     const [open, setOpen] = React.useState(false);
@@ -31,6 +32,7 @@ function Navbar(props){
     const [edited,setEdited]=React.useState(false)
     const [flag,setFlag]= React.useState(false);
     const [toTrips, setToTrips] = React.useState(false);
+    const [toAdmin, setToAdmin] = React.useState(false);
 
     const handleDrawerOpen=()=>{ setOpen(true) }
     useEffect(() => {
@@ -59,6 +61,12 @@ function Navbar(props){
             default : ;break;
         }
     }
+    const handleAdmin=(text)=>{
+      switch(text){
+          case 'Admin Controls': setToAdmin(true) ; break;
+          default : ;break;
+      }
+  }
       const listSigned = (anchor) => (
         <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2  }} >
           <List>
@@ -94,6 +102,15 @@ function Navbar(props){
               </ListItem>
             ))}
           </List>
+          {users[1].isAdmin && <Divider />}
+          {users[1].isAdmin && <List>
+            {['Admin Controls'].map((text, index) => (
+              <ListItem onClick={()=>handleAdmin(text)} button key={text}>
+                <ListItemIcon  className={edited?styles.stylesEdited:""}> <AdminPanelSettings/> </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>}
         </Box>
       );
       const listUnsigned=(anchor)=>(
@@ -215,6 +232,7 @@ function Navbar(props){
             </Grid>
             }
             {toTrips && <Navigate to="/itinerary"/>}
+            {toAdmin && <Navigate to="/admin"/>}
             </Toolbar>
             
         </AppBar>

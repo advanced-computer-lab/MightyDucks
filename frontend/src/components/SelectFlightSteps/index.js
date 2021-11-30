@@ -12,16 +12,6 @@ const steps = [
     'Choose Returning Flight Seats',
 ];
 
-const elprops = {
-  from: "FRA",
-  to: "MUN",
-  depDate: "2021-12-30",
-  retDate: "2022-01-01",
-  adults: 1,
-  children: 0,
-  cabin: "First"
-}
-
 function SelectFlightSteps(props) {
   const dep = {
     from: props.from,

@@ -77,13 +77,13 @@ class flightRepository {
         var firstSeats;
         var businessSeats;
         var economySeats;
-        req.body.cabin === "first" ?
+        req.body.cabin === "First" ?
             (firstSeats = req.body.children + req.body.adults) :
             (firstSeats = 0);
-        req.body.cabin === "business" ?
+        req.body.cabin === "Business" ?
             (businessSeats = req.body.children + req.body.adults) :
             (businessSeats = 0);
-        req.body.cabin === "economy" ?
+        req.body.cabin === "Economy" ?
             (economySeats = req.body.children + req.body.adults) :
             (economySeats = 0);
         let flights1 = flights.find({
@@ -98,8 +98,9 @@ class flightRepository {
             economy: {
                 $gte: economySeats
             },
-            $departureTime: {
-                $search: req.body.departure
+            departureTime: {
+                $gte: new Date(new Date(req.body.departure).setHours(0, 0, 0)),
+                $lte: new Date(new Date(req.body.departure).setHours(23, 59, 59))
             },
         });
         return flights1;

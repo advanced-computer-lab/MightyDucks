@@ -10,6 +10,8 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { TextField, Button, Menu, MenuItem, InputAdornment, IconButton,} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Navigate } from "react-router-dom"
+import Navbar from "../../components/navbar"
 
 export default class Admin extends Component {
 
@@ -20,8 +22,10 @@ export default class Admin extends Component {
     category: "",
     anchorEl: null,
     date: "",
-    searchDate: false
+    searchDate: false,
+    adminFlag: true,
   }
+  
 
   componentDidMount = () => {
     this.getFlights()
@@ -163,7 +167,7 @@ export default class Admin extends Component {
     }
     return (
       <container style={{textAlign: "-webkit-center"}}>
-        
+        <Navbar setuser={(u) => {this.setState({...this.state, adminFlag: u.isAdmin})}}/>
         <div className={styles["bar"]}>
             {this.state.searchDate ? 
             (
@@ -236,6 +240,7 @@ export default class Admin extends Component {
             )
           }))}
         </div>
+        {this.state.adminFlag && <Navigate to="/"/>}
           </div>
         </container>
     )

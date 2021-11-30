@@ -19,9 +19,7 @@ const style = {
 };
 
 function ChildModal(props) {
-    const handleOpen = () => {
-      props.setOpen(true);
-    };
+
     const handleClose = () => {
       props.setOpen(false);
     };
@@ -198,8 +196,20 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                     position: toast.POSITION.BOTTOM_RIGHT,
                 });
                 setDeleted(true)
+                const emailData={
+                    firstName: user.firstName,
+                    depdate: `${departureTime1[0]}, ${departureTime1[1]} ${departureTime1[2]}, ${departureTime1[3]}`,
+                    depTime: depHr,
+                    departureAirport: departureFlight.from,
+                    arrivalAirport: departureFlight.to,
+                    retDate: `${departureTime2[0]}, ${departureTime2[1]} ${departureTime2[2]}, ${departureTime2[3]}`,
+                    retTime: arrHr,
+                    refund: parseInt(departingFlightSeats.length*(departureFlight.price+priceAddOn) + returningFlightSeats.length*(returnFlight.price+priceAddOn)),
+                    email: user.email,
+                    type: "cancel"
+                }
+                sendCancelEmail(emailData)
                 handleClose()
-                //Send mail to user with cancellation details
         }
     }
 
@@ -249,6 +259,15 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
         }).catch((error) => {
             console.log(error)
             create ? setChecker(true) : setChecker2(true)
+        });
+    };
+
+    const sendCancelEmail=async(data)=>{
+        await axios.post('http://localhost:5000/user/notify', data)
+        .then(() => {
+            console.log("email sent")
+        }).catch((error) => {
+            console.log(error)
         });
     };
 

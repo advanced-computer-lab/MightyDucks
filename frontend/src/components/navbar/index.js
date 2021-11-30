@@ -23,14 +23,15 @@ import Logo from '../../assets/Images/logo.svg'
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { NavLink } from 'react-router-dom';
-
+import { NavLink, Navigate } from 'react-router-dom';
 function Navbar(props){
     const [users,setUsers]=React.useState();
     const [open, setOpen] = React.useState(false);
     const [isEdit,setIsEdit]=React.useState(false);
     const [edited,setEdited]=React.useState(false)
     const [flag,setFlag]= React.useState(false);
+    const [toTrips, setToTrips] = React.useState(false);
+
     const handleDrawerOpen=()=>{ setOpen(true) }
     useEffect(() => {
         axios.get('http://localhost:5000/user/getUsers')
@@ -40,7 +41,7 @@ function Navbar(props){
         props.setuser(res.data[1])
         }
         setFlag(true);
-    })},[isEdit]);
+    })},[isEdit, props.deleted]);
     const theme = useTheme()
     const styles = useStyles()
     const xs = useMediaQuery(theme.breakpoints.only('xs'));
@@ -52,10 +53,9 @@ function Navbar(props){
         }
     }
 
-    //TODO: ItineraryTrips here
     const handleItinerary=(text)=>{
         switch(text){
-            case 'My Trips': console.log("in trips") ; break;
+            case 'My Trips': setToTrips(true) ; break;
             default : ;break;
         }
     }
@@ -122,15 +122,21 @@ function Navbar(props){
                     </Drawer>
               </Grid>
 
+              
               <Grid item>
-                <img src={Logo} alt = "logo" className={styles.image}/>
+                <NavLink to="/">
+                  <img src={Logo} alt = "logo" className={styles.image}/>
+                </NavLink>
               </Grid>
+              
               
               {(xs) ? null
               :
               <Grid item>
                 <div className={styles.barTitle}>
-                  Mighty Ducks
+                   <NavLink to="/" className={styles.navLink}>
+                      Mighty Ducks
+                    </NavLink>
                 </div>
               </Grid>
               }
@@ -147,7 +153,7 @@ function Navbar(props){
                 </Grid> 
 
                 <Grid item>
-                  <div className={styles.barButtons} className={styles.navLink}>
+                  <div className={styles.barButtons} className={styles.navLink} href="/">
                     <NavLink to="/" className={styles.navLink}>
                       Book a flight?
                     </NavLink>
@@ -208,7 +214,7 @@ function Navbar(props){
                 
             </Grid>
             }
-            
+            {toTrips && <Navigate to="/itinerary"/>}
             </Toolbar>
             
         </AppBar>

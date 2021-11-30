@@ -36,6 +36,13 @@ class flightRepository{
         return allFlights
     }
 
+    async getFlight(req){
+        let flight = flights.find({
+            flightNumber: req.body.flightNumber
+        })
+        return flight
+    }
+
     async updateFlight(req){
         flights.findOneAndUpdate({flightNumber: req.body.oldFlightNumber}, {$set:{
             from: req.body.from,

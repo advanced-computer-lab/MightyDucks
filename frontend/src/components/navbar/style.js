@@ -38,7 +38,8 @@ export const useStyles = makeStyles((theme) =>({
         boxShadow: "none !important",
         backgroundColor: "#017A9B !important",
         borderBottomLeftRadius: "0.4em",
-        borderBottomRightRadius: "0.4em"
+        borderBottomRightRadius: "0.4em",
+        position: "fixed"
     },
     image: {
         width: "3.5em",

@@ -46,7 +46,7 @@ function ChildModal(props) {
     );
   }
 
-export default function TripDetails({open, setOpen, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming, user}) {
+export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming, user}) {
     const handleClose = () => setOpen(false);
 
     const departureTime1 = (new Date(departureFlight.departureTime).toString()).split(" ")
@@ -161,14 +161,42 @@ export default function TripDetails({open, setOpen, bookingId, departureFlight, 
 
 
     const [checker, setChecker] = React.useState(false)
+    const [checker2, setChecker2] = React.useState(false)
 
     const handleCancel = () => {
         console.log("cancel reservation")
         //update user
+        
+        const userNewFlights = user.flights.filter((flight) => {
+            return flight.split(' ')[4] !== bookingId
+        })
+        var userDUDE = {oldUserName:user.userName ,userName:user.userName,firstName:user.firstName ,lastName:user.lastName,email:user.email,passportNumber:user.passportNumber,password:user.password, flights: userNewFlights}
+        updateUser(userDUDE);
+
         //updateflight dep
+        const depNewSeats = departureFlight.bookedSeats.filter((seat) => {
+            return !departingFlightSeats.includes(seat)
+        })
+        var departureFlightdetails={from:departureFlight.from, to:departureFlight.to, departureTime: departureFlight.departureTime,arrivalTime:departureFlight.arrivalTime,economy:(cabin==="Economy"? departureFlight.economy+departingFlightSeats.length : departureFlight.economy),business:(cabin==="Business"? departureFlight.business+departingFlightSeats.length : departureFlight.business), first:(cabin==="First"? departureFlight.first+departingFlightSeats.length : departureFlight.first),flightNumber:departureFlight.flightNumber, oldFlightNumber: departureFlight.flightNumber, baggageAllowance: departureFlight.baggageAllowance, price:departureFlight.price, bookedSeats: depNewSeats}
+        updateFlight(departureFlightdetails)
+        
         //updateflight ret
+        const retNewSeats = returnFlight.bookedSeats.filter((seat) => {
+            return !returningFlightSeats.includes(seat)
+        })
+        var returnFlightdetails={from:returnFlight.from, to:returnFlight.to, departureTime: returnFlight.departureTime,arrivalTime:returnFlight.arrivalTime,economy:(cabin==="Economy"? returnFlight.economy+returningFlightSeats.length : returnFlight.economy),business:(cabin==="Business"? returnFlight.business+returningFlightSeats.length : returnFlight.business), first:(cabin==="First"? returnFlight.first+returningFlightSeats.length : returnFlight.first),flightNumber:returnFlight.flightNumber, oldFlightNumber: returnFlight.flightNumber, baggageAllowance: returnFlight.baggageAllowance, price:returnFlight.price, bookedSeats: retNewSeats}
+            updateFlight(returnFlightdetails)
+
+            
         //check all updates success
-        //toast.success
+        if(!checker2){
+                toast.success("Trip cancelled successfully!", {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                });
+                setDeleted(true)
+                handleClose()
+                //Send mail to user with cancellation details
+        }
     }
 
     const [child, setChild] = React.useState(false)
@@ -206,7 +234,7 @@ export default function TripDetails({open, setOpen, bookingId, departureFlight, 
             console.log(res.data)
         }).catch((error) => {
             console.log(error)
-            setChecker(true)
+            create ? setChecker(true) : setChecker2(true)
         });
     };
 
@@ -216,7 +244,7 @@ export default function TripDetails({open, setOpen, bookingId, departureFlight, 
             console.log(res.data)
         }).catch((error) => {
             console.log(error)
-            setChecker(true)
+            create ? setChecker(true) : setChecker2(true)
         });
     };
 

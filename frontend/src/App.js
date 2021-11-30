@@ -5,8 +5,7 @@ import SelectFlight from "./pages/selectFlight"
 import Dashboard from "./pages/dashboard"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-
-
+import Itinerary from "./pages/itinerary"
 
 function App() {
 
@@ -21,6 +20,7 @@ function App() {
           <Route exact path="/" element={<Dashboard setCriteria={setCriteria}/>} />
           <Route path="/admin" element={<Admin/>} />
           <Route path="/select-flights" element={<SelectFlight criteria={criteria}/>} />
+          <Route path="/itinerary" element = {<Itinerary/>}/>
         </Routes>
       </Router>
     </div>

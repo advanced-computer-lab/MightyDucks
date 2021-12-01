@@ -47,14 +47,17 @@ export const useStyles = makeStyles((theme) =>({
         position: 'absolute',
         top: "20%",
         left: "12%",
-        [theme.breakpoints.only("lg")]: {
-            left: "40%"
-        },
         [theme.breakpoints.only("xs")]: {
             left: "0%"
         },
+        [theme.breakpoints.only("sm")]: {
+            left: "17%"
+        },
+        [theme.breakpoints.only("lg")]: {
+            left: "40%"
+        },
         [theme.breakpoints.up("xl")]: {
-            left: "49%"
+            left: "46%"
         }
     }
 }))

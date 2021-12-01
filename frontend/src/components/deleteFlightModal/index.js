@@ -23,7 +23,6 @@ const DeleteFlightModal =({flightNumber, getFlights})=>{
     const deleteFlight=async(data)=>{
         await axios.post('http://localhost:5000/flight/delete', data)
         .then((res) => {
-            console.log(res.data)
             notify(`Flight ${flightNumber} has been deleted successfully!`)
             handleClose()
             getFlights()

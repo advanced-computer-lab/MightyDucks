@@ -75,6 +75,12 @@ export const useStyles = makeStyles((theme) =>({
     navLink: {
         textDecoration: 'none',
         color: "white"
+    },
+    barLink: {
+        textDecoration: 'none',
+        color: "white",
+        fontSize:"1em",
+        cursor: "pointer"
     }
 }))
 export default useStyles;

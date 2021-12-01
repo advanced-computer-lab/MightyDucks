@@ -23,7 +23,6 @@ function ChildModal(props) {
     const handleClose = () => {
       props.setOpen(false);
     };
-    console.log("child", props.open)
   
     return (
       <React.Fragment>
@@ -168,7 +167,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     }
 
     const handleCancel = () => {
-        console.log("cancel reservation")
         const userNewFlights = user.flights.filter((flight) => {
             return flight.split(' ')[4] !== bookingId
         })
@@ -217,7 +215,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const [Redirect, setRedirect] = React.useState(false)
 
     const handleConfirm = () => {
-        console.log("confirm reservation")
         if(user===null){
             setChild(true)
         }
@@ -245,7 +242,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const updateFlight=async(data)=>{
         await axios.post('http://localhost:5000/flight/update', data)
         .then((res) => {
-            console.log(res.data)
         }).catch((error) => {
             console.log(error)
             create ? setChecker(true) : setChecker2(true)
@@ -255,7 +251,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const updateUser=async(data)=>{
         await axios.post('http://localhost:5000/user/update', data)
         .then((res) => {
-            console.log(res.data)
         }).catch((error) => {
             console.log(error)
             create ? setChecker(true) : setChecker2(true)
@@ -265,7 +260,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const sendCancelEmail=async(data)=>{
         await axios.post('http://localhost:5000/user/notify', data)
         .then(() => {
-            console.log("email sent")
         }).catch((error) => {
             console.log(error)
         });

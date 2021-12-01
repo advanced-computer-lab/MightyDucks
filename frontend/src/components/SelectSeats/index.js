@@ -10,7 +10,6 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
             const res = flightSeats.filter((s)=> {
                 return s!==seat
             })
-            console.log(res);
             setFlightSeats(res)
         }
         else if(flightSeats.length<noSeats){
@@ -19,8 +18,6 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
             }
             else{
                 const res = flightSeats.concat([seat])
-                console.log(res)
-                console.log(noSeats)
                 setFlightSeats(res)
             }
         }
@@ -61,11 +58,11 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
                 <Grid container alignContent="center" direction="row" justifyContent="center">
                     <Button>-</Button>
                     {row0.slice(0,3).map((element) => {
-                        return (<Button>{element}</Button>)
+                        return (<Button key={element+'1'}>{element}</Button>)
                     })}
                     <div style={{width:"2em"}}></div>
                     {row0.slice(3).map((element) => {
-                        return (<Button>{element}</Button>)
+                        return (<Button key={element+'1'}>{element}</Button>)
                     })}
                     <Button>-</Button>
                 </Grid>
@@ -74,7 +71,7 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
                 return( <Grid container alignContent="center" direction="row" justifyContent="center">
                     <Button>{val}</Button>
                     {row.slice(0,Math.ceil(row.length/2)).map((element) => {
-                        return (<Tooltip title={element}><Button onClick={()=>handleClick(element)} id={element}>
+                        return (<Tooltip key={element} title={element}><Button onClick={()=>handleClick(element)} id={element}>
                             {flight.bookedSeats.includes(element)
                                 ? <EventSeat color="error" fontSize="large" />
                                 : (flightSeats.includes(element)
@@ -86,7 +83,7 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
                     })}
                     <div style={{width:"2em"}}></div>
                     {row.slice(Math.ceil(row.length/2)).map((element) => {
-                        return (<Tooltip title={element}><Button onClick={()=>handleClick(element)} id={element}>
+                        return (<Tooltip key={element} title={element}><Button onClick={()=>handleClick(element)} id={element}>
                             {flight.bookedSeats.includes(element)
                                 ? <EventSeat color="error" fontSize="large" />
                                 : (flightSeats.includes(element)
@@ -103,11 +100,11 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
                 <Grid container alignContent="center" direction="row" justifyContent="center">
                     <Button>-</Button>
                     {row0.slice(0,3).map((element) => {
-                        return (<Button>{element}</Button>)
+                        return (<Button key={element+'2'}>{element}</Button>)
                     })}
                     <div style={{width:"2em"}}></div>
                     {row0.slice(3).map((element) => {
-                        return (<Button>{element}</Button>)
+                        return (<Button key={element+'2'}>{element}</Button>)
                     })}
                     <Button>-</Button>
                 </Grid>

@@ -22,10 +22,10 @@ import Grid from '@mui/material/Grid'
 import Logo from '../../assets/Images/logo.svg'
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { NavLink, Navigate } from 'react-router-dom';
+import { useTheme } from "@material-ui/core/styles";
+import { Navigate } from 'react-router-dom';
 import { AdminPanelSettings } from '@mui/icons-material';
-function Navbar(props){
+function Navbar({setUser, deleted}){
     const [users,setUsers]=React.useState();
     const [open, setOpen] = React.useState(false);
     const [isEdit,setIsEdit]=React.useState(false);
@@ -39,15 +39,14 @@ function Navbar(props){
         axios.get('http://localhost:5000/user/getUsers')
         .then((res) => {
         setUsers(res.data)
-        if(props.setuser!=null){
-        props.setuser(res.data[1])
+        if(setUser!=null){
+        setUser(res.data[1])
         }
         setFlag(true);
-    })},[isEdit, props.deleted]);
+    })},[isEdit, deleted]);
     const theme = useTheme()
     const styles = useStyles()
     const xs = useMediaQuery(theme.breakpoints.only('xs'));
-    const sm = useMediaQuery(theme.breakpoints.only('sm'));
     const handleList=(text)=>{
         switch(text){
             case 'Edit Profile': setIsEdit(true);setEdited(true) ; break;
@@ -141,20 +140,20 @@ function Navbar(props){
 
               
               <Grid item>
-                <NavLink to="/">
-                  <img src={Logo} alt = "logo" className={styles.image}/>
-                </NavLink>
+                <a href='/'>
+                  <img src={Logo} alt = "logo" className={styles.image} href="/"/>
+                </a>
               </Grid>
               
               
               {(xs) ? null
               :
               <Grid item>
+              <a href='/' style={{textDecoration: "none"}}>
                 <div className={styles.barTitle}>
-                   <NavLink to="/" className={styles.navLink}>
                       Mighty Ducks
-                    </NavLink>
                 </div>
+              </a>
               </Grid>
               }
               
@@ -170,11 +169,11 @@ function Navbar(props){
                 </Grid> 
 
                 <Grid item>
-                  <div className={styles.barButtons} className={styles.navLink} href="/">
-                    <NavLink to="/" className={styles.navLink}>
-                      Book a flight?
-                    </NavLink>
+                <a href='/' style={{textDecoration: "none"}}>
+                  <div className={styles.barLink}>
+                      Book a flight?   
                   </div>
+                </a>
                 </Grid>  
 
                 {(xs) ? null 
@@ -198,11 +197,11 @@ function Navbar(props){
             :
             <Grid container direction = "row" className={styles.grid2} justifyContent="flex-end" spacing = {3}>
               <Grid item>
-                <div className={styles.barButtons} style = {{marginTop: "0.5em"}}>
-                  <NavLink to="/" className={styles.navLink}>
-                      Book a flight?
-                  </NavLink>
-                </div>
+                 <a href='/' style={{textDecoration: "none"}}>
+                  <div className={styles.barButtons} style = {{marginTop: "0.5em"}}>
+                      Book a flight?   
+                  </div>
+                </a>
               </Grid> 
 
               {(xs) ? null

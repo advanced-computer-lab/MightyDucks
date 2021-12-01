@@ -9,7 +9,6 @@ import Tab from '@mui/material/Tab'
 import {Box, Typography} from '@mui/material'
 import PropTypes from 'prop-types';
 
-
 function Itinerary(props) {
     const styles = useStyles()
     const [currentUser, setUser] = useState({})
@@ -89,7 +88,7 @@ TabPanel.propTypes = {
 
     return (
         <div >
-        <Navbar setuser={setUser} deleted={deleted}/>
+        <Navbar setUser={setUser} deleted={deleted}/>
         <div style={{alignContent:"center"}}>
             <Tabs sx={{marginTop: "5em"}} className={styles.tabs} centered={true} value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Upcoming Trips" {...a11yProps(0)} />
@@ -103,8 +102,8 @@ TabPanel.propTypes = {
             <Grid item>
                 <div className={styles.empty}>No Upcoming Flights to Preview</div>
             </Grid> :           
-            upcoming && upcoming.map((flight) => {
-                return (<Grid item className={styles.card}>
+            upcoming && upcoming.map((flight,index) => {
+                return (<Grid key={index} item className={styles.card}>
                             <TripCard user={currentUser} reservation={flight} upcoming={true} setDeleted = {setDeleted}/>
                         </Grid>)
             })}
@@ -116,8 +115,8 @@ TabPanel.propTypes = {
             <Grid item>
                 <div className={styles.empty}>No Past Flights to Preview</div>
             </Grid> :
-            past && past.map((flight) => {
-                return (<Grid item className={styles.card}>
+            past && past.map((flight,index) => {
+                return (<Grid key={index} item className={styles.card}>
                             <TripCard user={currentUser} reservation={flight} upcoming={false}/>
                         </Grid>)
             })}

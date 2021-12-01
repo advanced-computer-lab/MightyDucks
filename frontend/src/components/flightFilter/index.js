@@ -3,7 +3,6 @@ import { NavLink, } from 'react-router-dom'
 
 import axios from 'axios';
 import useStyles from './style'
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -12,15 +11,14 @@ import { Button, TextField } from '@material-ui/core';
 import { format } from 'date-fns'
 
 function FlightFilter({ setCriteria }) {
-    const theme = useTheme()
     const styles = useStyles()
 
     const [flights, setFlights] = useState([])
-    const [from, setFrom] = useState(null)
-    const [to, setTo] = useState(null)
+    const [from, setFrom] = useState('')
+    const [to, setTo] = useState('')
     const [departure, setDeparture] = useState(new Date())
     const [returnD, setReturnD] = useState(new Date())
-    const [cabin, setCabin] = useState(null)
+    const [cabin, setCabin] = useState('')
     const [adults, setAdults] = useState(1)
     const [children, setChildren] = useState(0)
 
@@ -29,7 +27,6 @@ function FlightFilter({ setCriteria }) {
     const [departureErr, setDepartureErr] = useState(false)
     const [returnErr, setReturnErr] = useState(false)
     const [cabinErr, setCabinErr] = useState(false)
-    const [valid, setValid] = useState(false)
     
     useEffect(() => {
         axios.get('http://localhost:5000/flight/getFlights')
@@ -99,10 +96,10 @@ function FlightFilter({ setCriteria }) {
     };
 
     const handleFilter = () => {
-        if(from === null){
+        if(from === ''){
             setFromErr(true)
         }
-        if(to === null){
+        if(to === ''){
             setToErr(true)
         }    
         if(departure === null){
@@ -111,7 +108,7 @@ function FlightFilter({ setCriteria }) {
         if(returnD === null){
             setReturnErr(true)
         }
-        if(cabin === null){
+        if(cabin === ''){
             setCabinErr(true)
         }
         if(!fromErr && !toErr && !departureErr && !returnErr && !cabinErr){
@@ -124,16 +121,15 @@ function FlightFilter({ setCriteria }) {
                 children: children,
                 cabin: cabin,
             })
-            setValid(true)
         }
     }
 
 
     const handleNavLink = (e) => {
-        if(from === null){
+        if(from === ''){
             setFromErr(true)
         }
-        if(to === null){
+        if(to === ''){
             setToErr(true)
         }    
         if(departure === null){
@@ -142,10 +138,10 @@ function FlightFilter({ setCriteria }) {
         if(returnD === null || returnD<departure){
             setReturnErr(true)
         }
-        if(cabin === null){
+        if(cabin === ''){
             setCabinErr(true)
         }
-        if(from === null || to === null || departure === null || returnD === null || cabin === null || returnD<departure ){
+        if(from === '' || to === '' || departure === null || returnD === null || cabin === '' || returnD<departure ){
             e.preventDefault()
         }
     }

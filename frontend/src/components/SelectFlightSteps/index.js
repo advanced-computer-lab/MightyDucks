@@ -21,8 +21,6 @@ function SelectFlightSteps(props) {
     children: parseInt(props.children),
     cabin: props.cabin
   }
-  console.log("ch", props.children)
-  console.log("p", props.adults)
   
   const ret = {
     from: props.to,
@@ -34,9 +32,9 @@ function SelectFlightSteps(props) {
   }
 
   const [activeStep, setActiveStep] = useState(0);
-  const [completed, setCompleted] = useState({});
+  const completed = {}
   const [open, setOpen] = useState(false);
-  const [bookingId, setBookingId] = useState(new Date().getTime());
+  const bookingId = new Date().getTime()
   const [departingFlight, setDepartingFlight] = useState("");
   const [returningFlight, setReturningFlight] = useState("");
   const [departingFlightSeats, setDepartingFlightSeats] = useState([]);

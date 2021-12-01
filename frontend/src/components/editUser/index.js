@@ -36,7 +36,6 @@ const EditUser=(props)=>{
     const updateUser=async(data)=>{
         await axios.post('http://localhost:5000/user/update', data)
         .then((res) => {
-            console.log(res.data)
             notify(`User ${userName} was updated successfully!`)
             handleClose();
         }).catch((error) => {
@@ -52,7 +51,6 @@ const EditUser=(props)=>{
         setPassportNumErr(passportNumber?"":"passport error")
         setPasswordErr(password?"":"password error")
         if(!userName || !firstName || !lastName || !email || !passportNumber || !password){
-            console.log("fields empty")
             return false;
         }
         return true;

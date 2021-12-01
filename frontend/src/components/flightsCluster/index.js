@@ -9,16 +9,15 @@ function FlightsCluster({criteria, handleChosen, currentChosen}) {
     const [isLoading, setLoading] = useState(true);
 
     const findFlights=()=>{
-        var Flightdetails={
+        var flightDetails={
             from:criteria.from,
             to:criteria.to,
-            departure: criteria.departure, //2022-01-01
+            departure: criteria.departure,
             children:criteria.children,
             adults:criteria.adults,
             cabin:criteria.cabin,
         }
-        console.log("departure====", Flightdetails.departure)
-        filterFlights(Flightdetails)
+        filterFlights(flightDetails)
     }
 
     const filterFlights=async(data)=>{
@@ -49,7 +48,7 @@ function FlightsCluster({criteria, handleChosen, currentChosen}) {
         {flights.length > 0 &&
           flights.map((flight) => {
             return (
-              <div>
+              <div key={flight._id}>
                 <Flight
                   flightDetails={flight}
                   isAdmin={false}

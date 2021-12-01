@@ -34,9 +34,7 @@ const FlightModal =({getFlights})=>{
     const handleClose = () => setOpen(false);
     const Add=()=>{
         setDepartureErr("");
-        var result = validateFields();
-        console.log("====>",departureTime)
-        
+        var result = validateFields();        
         if (result){
             var Flightdetails={
                 from:from, to:to, departureTime: departureTime,arrivalTime:arrivalTime,economy:economySeats,business:businessSeats, first:firstSeats,flightNumber:flightNum,baggageAllowance:45,price:200
@@ -55,19 +53,15 @@ const FlightModal =({getFlights})=>{
         setDepartureErr(( departureTime.length!==0 && new Date(departureTime)>=new Date())?"":"departure error val");
         setArrivalTimeErr(( arrivalTime.length!==0 && new Date(departureTime)<new Date(arrivalTime))?"":"arrivalTime error val");
         if(!flightNum || !departureTime ||departureTime.length===0 || arrivalTime.length===0 ||!arrivalTime || !from || !to || economySeats.length===0 || economySeats<=-1 || businessSeats.length===0 || businessSeats<=-1|| firstSeats.length===0 || firstSeats<=-1){
-            console.log("empty fields");
             return false;
         }
         if(from.length!==3 || to.length!==3){
-            console.log("error in lengths")
             return false;
         }
         if(economySeats<0 || businessSeats<0 || firstSeats<0){
-            console.log("seats error")
             return false;
         }
         if(departureTime>=arrivalTime || departureTime<new Date()){
-            console.log("date Errors")
             return false;
         }
         return true;
@@ -75,8 +69,6 @@ const FlightModal =({getFlights})=>{
     const createFlight=async(data)=>{
         await axios.post('http://localhost:5000/flight/create', data)
         .then((res) => {
-            console.log(res.data)
-            console.log(`Flight ${res.data} was added successfully!`)
             getFlights();
             notify(`Flight ${res.data} was added successfully!`)
             resetFields()

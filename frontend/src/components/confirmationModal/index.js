@@ -1,10 +1,9 @@
 import React from 'react'
-import {Modal,Box ,Typography} from '@mui/material';
+import {Modal,Box , Grid} from '@mui/material';
 import { useStyles } from './style'
 import HelpIcon from '@mui/icons-material/Help';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
-import { Toolbar, AppBar, Grid } from '@mui/material';
 import { Button } from '@material-ui/core';
 
 function ConfirmationModal({bookingId, open, setOpen, setConfirm}) {

@@ -4,7 +4,7 @@ class flightRepository {
     async createFlight(req) {
         if (
             req.body.arrivalTime < new Date() ||
-            req.body.departureTime < req.body.arrivalTime ||
+            req.body.departureTime > req.body.arrivalTime ||
             req.body.first < 0 ||
             req.body.economy < 0 ||
             req.body.business < 0 ||

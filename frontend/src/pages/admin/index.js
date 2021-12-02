@@ -10,6 +10,9 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { TextField, Button, Menu, MenuItem, InputAdornment, IconButton,} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Navigate } from "react-router-dom"
+import Navbar from "../../components/navbar"
+import { format } from 'date-fns'
 
 export default class Admin extends Component {
 
@@ -19,9 +22,11 @@ export default class Admin extends Component {
     flights: [],
     category: "",
     anchorEl: null,
-    date: "",
-    searchDate: false
+    date: new Date(),
+    searchDate: false,
+    adminFlag: true,
   }
+  
 
   componentDidMount = () => {
     this.getFlights()
@@ -34,7 +39,6 @@ export default class Admin extends Component {
     })
     await axios.get('http://localhost:5000/flight/getFlights')
     .then((res) => {
-        console.log(res.data);
         this.setState({
           ...this.state,
           isLoading: false,
@@ -69,7 +73,7 @@ export default class Admin extends Component {
                 ...this.state,
                 category: str,
                 anchorEl: null,
-                date: "",
+                date: new Date(),
                 searchDate: true
             })
         }    
@@ -86,11 +90,10 @@ export default class Admin extends Component {
     const handleDateClick = (str) => {
         this.setState({
             ...this.state,
-            category: str,
             anchorEl: null,
-            date: str
+            date: format(new Date(str), "yyyy-MM-dd, HH:mm")
         })
-        handleSearch(str)
+        handleSearch(format(new Date(str), "yyyy-MM-dd, HH:mm"))
     }
 
     const handleSearch = (str) => {
@@ -110,35 +113,27 @@ export default class Admin extends Component {
             })
             this.setState({
                 ...this.state,
-                flights: res
+                flights: res,
             })
             }
             else if (category === "departureTime"){
-                 results.forEach((flight)=> {
-                     flight.departureTime = new Date(flight.departureTime).toString()
-                 })
-
                 res = results.filter((flight)=> {
-                    return flight.departureTime.substring(0,21) === str.toString().substring(0,21)
+                    return format(new Date(flight.departureTime), "yyyy-MM-dd, HH:mm") === str
                 })
             this.setState({
                 ...this.state,
-                flights: res
+                flights: res,
+                date: format(new Date(str), "yyyy-MM-dd, HH:mm")
             })
             }
             else if (category === "arrivalTime"){
-                 results.forEach((flight)=> {
-                     flight.arrivalTime = new Date(flight.arrivalTime).toString()
-                 })
                 res = results.filter((flight)=> {
-                    console.log(flight.arrivalTime.toString().substring(0,21))
-                    console.log("hahaha lol")
-                    console.log(str.toString().substring(0,21))
-                return flight.arrivalTime.substring(0,21) === str.toString().substring(0,21)
+                return format(new Date(flight.arrivalTime), "yyyy-MM-dd, HH:mm") === str
             })
             this.setState({
                 ...this.state,
-                flights: res
+                flights: res,
+                date: format(new Date(str), "yyyy-MM-dd, HH:mm")
             })
             }
             else if (category === "from"){
@@ -163,8 +158,8 @@ export default class Admin extends Component {
         }           
     }
     return (
-      <container style={{textAlign: "-webkit-center"}}>
-        
+      <div style={{textAlign: "-webkit-center"}}>
+        <Navbar setUser={(u) => {this.setState({...this.state, adminFlag: u.isAdmin})}}/>
         <div className={styles["bar"]}>
             {this.state.searchDate ? 
             (
@@ -182,7 +177,7 @@ export default class Admin extends Component {
             <TextField  id="searchBar" label="Search" className ={styles["textField"]} variant="outlined" onChange={(e)=>handleSearch(e.target.value)}
             InputProps={{
             endAdornment: (
-                <InputAdornment>
+                <InputAdornment position= "start">
                     <IconButton style={{color:"#017A9B"}}>
                       <SearchOutlinedIcon />
                     </IconButton>
@@ -230,15 +225,16 @@ export default class Admin extends Component {
         {this.state.flights.length>0 && 
           (this.state.flights.map((flight) => {
             return (
-              <div>
-                <Flight flightDetails={flight} getFlights={this.getFlights} />
+              <div key = {flight._id}>
+                <Flight flightDetails={flight} getFlights={this.getFlights} isAdmin={true} cabin="" currentChosen="" />
                 <br />
               </div>
             )
           }))}
         </div>
+        {!this.state.adminFlag && <Navigate to="/"/>}
           </div>
-        </container>
+        </div>
     )
   }
 }

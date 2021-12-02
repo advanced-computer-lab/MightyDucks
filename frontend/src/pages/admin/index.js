@@ -232,7 +232,7 @@ export default class Admin extends Component {
             )
           }))}
         </div>
-        {this.state.adminFlag && <Navigate to="/"/>}
+        {!this.state.adminFlag && <Navigate to="/"/>}
           </div>
         </div>
     )

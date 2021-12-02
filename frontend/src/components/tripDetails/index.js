@@ -352,7 +352,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 <Typography style={{backgroundColor: "#017A9B", color: "white"}} id="modal-modal-title" variant="h6" component="h2">
                     <Grid container direction="row" justifyContent="space-evenly">
                         <Grid item>Total Price:</Grid>
-                        <Grid item>{departingFlightSeats.length*(departureFlight.price+priceAddOn) + returningFlightSeats.length*(returnFlight.price+priceAddOn)}</Grid>
+                        <Grid item>${departingFlightSeats.length*(departureFlight.price+priceAddOn) + returningFlightSeats.length*(returnFlight.price+priceAddOn)}</Grid>
                     </Grid>
                 </Typography>
                 <br/>

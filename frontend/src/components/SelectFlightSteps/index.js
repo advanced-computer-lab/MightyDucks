@@ -114,8 +114,8 @@ function SelectFlightSteps(props) {
               <Typography sx={{ mt: 2, mb: 1 }}>
                 {activeStep === 0 && <FlightsCluster criteria={dep} handleChosen={setDepartingFlight} currentChosen={departingFlight} />}
                 {activeStep === 1 && <FlightsCluster criteria={ret} handleChosen={setReturningFlight} currentChosen={returningFlight} />}
-                {activeStep === 2 && <SelectSeats flightSeats={departingFlightSeats} setFlightSeats={setDepartingFlightSeats} noSeats={parseInt(dep.adults)+parseInt(dep.children)} cabin={dep.cabin} flight={departingFlight}/>}
-                {activeStep === 3 && <SelectSeats flightSeats={returningFlightSeats} setFlightSeats={setReturningFlightSeats} noSeats={parseInt(ret.adults)+parseInt(ret.children)} cabin={ret.cabin} flight={returningFlight}/>}
+                {activeStep === 2 && <SelectSeats oldSeats={[]} changing={false} flightSeats={departingFlightSeats} setFlightSeats={setDepartingFlightSeats} noSeats={parseInt(dep.adults)+parseInt(dep.children)} cabin={dep.cabin} flight={departingFlight}/>}
+                {activeStep === 3 && <SelectSeats oldSeats={[]} changing={false} flightSeats={returningFlightSeats} setFlightSeats={setReturningFlightSeats} noSeats={parseInt(ret.adults)+parseInt(ret.children)} cabin={ret.cabin} flight={returningFlight}/>}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button

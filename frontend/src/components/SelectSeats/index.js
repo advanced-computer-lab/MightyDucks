@@ -3,26 +3,50 @@ import { Button, Grid, Tooltip } from '@mui/material';
 import { EventSeat } from "@mui/icons-material"
 import { toast } from 'react-toastify';
 
-function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
-
+function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats, oldSeats, changing, setNewSeats}) {
+    const [changeSeats, setChangeSeats] = React.useState(flightSeats)
     const handleClick = (seat) => {
-        if(flightSeats.includes(seat)){
+        if(!changing){
+            if(flightSeats.includes(seat)){
             const res = flightSeats.filter((s)=> {
                 return s!==seat
             })
             setFlightSeats(res)
-        }
-        else if(flightSeats.length<noSeats){
-            if(flight.bookedSeats.includes(seat)){
-                toast.error("This seat is already booked", {position: toast.POSITION.BOTTOM_RIGHT})
+            }
+            else if(flightSeats.length<noSeats){
+                if(flight.bookedSeats.includes(seat)){
+                    toast.error("This seat is already booked", {position: toast.POSITION.BOTTOM_RIGHT})
+                }
+                else{
+                    const res = flightSeats.concat([seat])
+                    setFlightSeats(res)
+                }
             }
             else{
-                const res = flightSeats.concat([seat])
-                setFlightSeats(res)
+                toast.warn("You've selected all your required seats", {position: toast.POSITION.BOTTOM_RIGHT})
             }
         }
         else{
-            toast.warn("You've selected all your required seats", {position: toast.POSITION.BOTTOM_RIGHT})
+            if(changeSeats.includes(seat)){
+                const res = changeSeats.filter((s)=> {
+                    return s!==seat
+                })
+                setChangeSeats(res)
+                setNewSeats(res)
+            }
+            else if(changeSeats.length<noSeats){
+                if(flight.bookedSeats.includes(seat) && !oldSeats.includes(seat)){
+                    toast.error("This seat is already booked", {position: toast.POSITION.BOTTOM_RIGHT})
+                }
+                else{
+                    const res = changeSeats.concat([seat])
+                    setChangeSeats(res)
+                    setNewSeats(res)
+                }
+            }
+            else{
+                toast.warn("You've selected all your required seats", {position: toast.POSITION.BOTTOM_RIGHT})
+            }
         }
     }
 
@@ -72,25 +96,35 @@ function SelectSeats({flight, cabin, noSeats, flightSeats, setFlightSeats}) {
                     <Button>{val}</Button>
                     {row.slice(0,Math.ceil(row.length/2)).map((element) => {
                         return (<Tooltip key={element} title={element}><Button onClick={()=>handleClick(element)} id={element}>
-                            {flight.bookedSeats.includes(element)
-                                ? <EventSeat color="error" fontSize="large" />
-                                : (flightSeats.includes(element)
-                                    ? <EventSeat fontSize="large" />
-                                    : <EventSeat color="disabled" fontSize="large" />
-                                )
-                            }
+                            {changing? (changeSeats.includes(element)
+                                ? <EventSeat fontSize="large" />
+                                : (oldSeats.includes(element)
+                                    ? <EventSeat color="warning" fontSize='large' />
+                                    : (flight.bookedSeats.includes(element)
+                                        ? <EventSeat color="error" fontSize="large" />
+                                        : <EventSeat color="disabled" fontSize="large" />)))
+                                : (flight.bookedSeats.includes(element)
+                                    ? <EventSeat color="error" fontSize="large" />
+                                    : (flightSeats.includes(element)
+                                        ? <EventSeat fontSize="large" />
+                                        : <EventSeat color="disabled" fontSize="large" />))}
                         </Button></Tooltip>)
                     })}
                     <div style={{width:"2em"}}></div>
                     {row.slice(Math.ceil(row.length/2)).map((element) => {
                         return (<Tooltip key={element} title={element}><Button onClick={()=>handleClick(element)} id={element}>
-                            {flight.bookedSeats.includes(element)
-                                ? <EventSeat color="error" fontSize="large" />
-                                : (flightSeats.includes(element)
-                                    ? <EventSeat fontSize="large" />
-                                    : <EventSeat color="disabled" fontSize="large" />
-                                )
-                            }
+                            {changing? (changeSeats.includes(element)
+                                ? <EventSeat fontSize="large" />
+                                : (oldSeats.includes(element)
+                                    ? <EventSeat color="warning" fontSize='large' />
+                                    : (flight.bookedSeats.includes(element)
+                                        ? <EventSeat color="error" fontSize="large" />
+                                        : <EventSeat color="disabled" fontSize="large" />)))
+                                : (flight.bookedSeats.includes(element)
+                                    ? <EventSeat color="error" fontSize="large" />
+                                    : (flightSeats.includes(element)
+                                        ? <EventSeat fontSize="large" />
+                                        : <EventSeat color="disabled" fontSize="large" />))}
                         </Button></Tooltip>)
                     })}
                     <Button>{val++}</Button>

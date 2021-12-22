@@ -40,6 +40,7 @@ function Itinerary(props) {
     useEffect(() => {
         if(deleted){
             getUpcomingFlights({userName: currentUser.userName})
+            setDeleted(false)
         }
     },[deleted]);
 

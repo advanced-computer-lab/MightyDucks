@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { NavLink, Navigate } from 'react-router-dom';
 import ConfirmationModal from "../confirmationModal"
 import ChangeSeatsModal from "../changeSeatsModal"
+import ChangeFlightModal from "../changeFlightModal"
 
 const style = {
   position: 'absolute',
@@ -316,7 +317,14 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
 
     React.useEffect(() => {
         if(confirmNewSeats){
-            handleChangeSeatsConfirm();
+            if(newSeats.length===changeSeatsFlightSeats.length){
+                handleChangeSeatsConfirm();
+            }
+            else{
+                toast.warn("You haven't chosen enough seats!", {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                });
+            }
             setConfirmNewSeats(false);
         }
     }, [confirmNewSeats])
@@ -334,7 +342,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
             const depNewSeats = departureFlight.bookedSeats.filter((seat) => {
                 return !departingFlightSeats.includes(seat)
             })
-            var departureFlightdetails={from:departureFlight.from, to:departureFlight.to, departureTime: departureFlight.departureTime,arrivalTime:departureFlight.arrivalTime,economy:(cabin1==="Economy"? departureFlight.economy+departingFlightSeats.length : departureFlight.economy),business:(cabin1==="Business"? departureFlight.business+departingFlightSeats.length : departureFlight.business), first:(cabin1==="First"? departureFlight.first+departingFlightSeats.length : departureFlight.first),flightNumber:departureFlight.flightNumber, oldFlightNumber: departureFlight.flightNumber, baggageAllowance: departureFlight.baggageAllowance, price:departureFlight.price, bookedSeats: depNewSeats.concat(newSeats)}
+            var departureFlightdetails={from:departureFlight.from, to:departureFlight.to, departureTime: departureFlight.departureTime,arrivalTime:departureFlight.arrivalTime,economy:departureFlight.economy, business:departureFlight.business, first:departureFlight.first ,flightNumber:departureFlight.flightNumber, oldFlightNumber: departureFlight.flightNumber, baggageAllowance: departureFlight.baggageAllowance, price:departureFlight.price, bookedSeats: depNewSeats.concat(newSeats)}
             updateFlight(departureFlightdetails)
         }
         else{
@@ -344,7 +352,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
             const retNewSeats = returnFlight.bookedSeats.filter((seat) => {
                 return !returningFlightSeats.includes(seat)
             })
-            var returnFlightdetails={from:returnFlight.from, to:returnFlight.to, departureTime: returnFlight.departureTime,arrivalTime:returnFlight.arrivalTime,economy:(cabin2==="Economy"? returnFlight.economy+returningFlightSeats.length : returnFlight.economy),business:(cabin2==="Business"? returnFlight.business+returningFlightSeats.length : returnFlight.business), first:(cabin2==="First"? returnFlight.first+returningFlightSeats.length : returnFlight.first),flightNumber:returnFlight.flightNumber, oldFlightNumber: returnFlight.flightNumber, baggageAllowance: returnFlight.baggageAllowance, price:returnFlight.price, bookedSeats: retNewSeats.concat(newSeats)}
+            var returnFlightdetails={from:returnFlight.from, to:returnFlight.to, departureTime: returnFlight.departureTime,arrivalTime:returnFlight.arrivalTime,economy:returnFlight.economy, business: returnFlight.business, first: returnFlight.first, flightNumber:returnFlight.flightNumber, oldFlightNumber: returnFlight.flightNumber, baggageAllowance: returnFlight.baggageAllowance, price:returnFlight.price, bookedSeats: retNewSeats.concat(newSeats)}
                 updateFlight(returnFlightdetails)
         }
         var userDUDE = {oldUserName:user.userName ,userName:user.userName,firstName:user.firstName ,lastName:user.lastName,email:user.email,passportNumber:user.passportNumber,password:user.password, flights: userNewFlights}
@@ -361,26 +369,45 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 position: toast.POSITION.BOTTOM_RIGHT,
             });
         }
-
+        setChangeSeats(false);
         setDeleted(true)
     }
 
 
 
-
-
+    const [changeFlight, setChangeFlight] = React.useState(false)
+    const [flightType, setFlightType] = React.useState("")
+    const [otherDate, setOtherDate] = React.useState("")
+    const [changeFlightOldFlight, setChangeFlightOldFlight] = React.useState(null)
+    const [changeFlightOldSeats, setChangeFlightOldSeats] = React.useState(null)
+    const [changeFlightOldCabin, setChangeFlightOldCabin] = React.useState(null)
+    const [changeFlightNewFlight, setChangeFlightNewFlight] = React.useState(null)
+    const [confirmNewFlight, setConfirmNewFlight] = React.useState(false)
 
     const handleChangeFlight = (depFlight) => {
+        setChangeFlightNewFlight(null);
+        setConfirmNewFlight(false);
         if(depFlight){
+            setChangeFlightOldFlight(departureFlight)
+            setFlightType("dep")
+            setOtherDate(returnFlight.departureTime)
+            setChangeFlightOldSeats(departingFlightSeats)
+            setChangeFlightOldCabin(cabin1)
             toast.success("Your Departure flight changed to J1234!", {
                 position: toast.POSITION.BOTTOM_RIGHT,
             });
         }
         else{
+            setChangeFlightOldFlight(returnFlight)
+            setFlightType("ret")
+            setOtherDate(departureFlight.departureTime)
+            setChangeFlightOldSeats(returningFlightSeats)
+            setChangeFlightOldCabin(cabin2)
             toast.success("Your Return flight changed to J1234!", {
                 position: toast.POSITION.BOTTOM_RIGHT,
             });
         }
+        setChangeFlight(true)
     }
 
     return (
@@ -483,10 +510,13 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 </Typography>
                 <br/>
                 {!create && upcoming && <Grid container direction="row" justifyContent="space-between">
-                    {cancelModal && <ConfirmationModal bookingId={bookingId} open={cancelModal} setOpen={setCancelModal} setConfirm={handleCancel}/>}
-                    {changeSeats && <ChangeSeatsModal setConfirmNewSeats={setConfirmNewSeats} setNewSeats={setNewSeats} flight={changeSeatsFlight} cabin={changeSeatsCabin} oldFlightSeats={changeSeatsFlightSeats} setFlightSeats={setChangeSeatsFlightSeats} open={changeSeats} setOpen={setChangeSeats}/>}
                     <Grid item style={{ fontSize:"15px", textDecoration: "underline", cursor: "pointer" }} onClick={handleCancelModal}>cancel reservation</Grid>
                     <Grid item style={{ fontSize:"15px", textDecoration: "underline", cursor: "pointer" }} onClick={handleSendItinerary}>Resend itinerary</Grid>
+                </Grid>}
+                {!create && upcoming && <Grid container direction="row" justifyContent="space-between">
+                    {cancelModal && <ConfirmationModal bookingId={bookingId} open={cancelModal} setOpen={setCancelModal} setConfirm={handleCancel}/>}
+                    {changeSeats && <ChangeSeatsModal setConfirmNewSeats={setConfirmNewSeats} setNewSeats={setNewSeats} flight={changeSeatsFlight} cabin={changeSeatsCabin} oldFlightSeats={changeSeatsFlightSeats} setFlightSeats={setChangeSeatsFlightSeats} open={changeSeats} setOpen={setChangeSeats}/>}
+                    {changeFlight && <ChangeFlightModal oldFlight={changeFlightOldFlight} otherDate={otherDate} flightType={flightType} oldSeats={changeFlightOldSeats} oldCabin={changeFlightOldCabin} open={changeFlight} setOpen={setChangeFlight} />}
                 </Grid>}
                 {create && !upcoming && <Button variant="outlined" style={{ color: "#017A9B"}} onClick={handleConfirm}>Confirm reservation</Button>}
             </Box>

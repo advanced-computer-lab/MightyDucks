@@ -75,6 +75,7 @@ app.get('/flight/getFlights', async (req, res) => {
 })
 
 app.get('/user/getUsers', async (req, res) => {
+app.get('/user/getUsers',adminAuthorize, async (req, res) => {
   try {
     let result = await userRepository.getUsers()
     res.status(200).send(result)
@@ -151,5 +152,14 @@ app.post('/user/notify', async (req, res) => {
     res.status(200).send(result)
   } catch (error) {
     res.status(400).send(error.message)
+  }
+})
+
+app.post('/user/add', async (req, res) => {
+  try {
+    let result = await userRepository.addUser(req);
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
   }
 })

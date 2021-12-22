@@ -6,6 +6,7 @@ import Dashboard from "./pages/dashboard"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Itinerary from "./pages/itinerary"
+import SignUp from "./components/signUp"
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/admin" element={<Admin/>} />
           <Route path="/select-flights" element={<SelectFlight criteria={criteria}/>} />
           <Route path="/itinerary" element = {<Itinerary/>}/>
+          <Route path="/signup" element = {<SignUp/>}/>
         </Routes>
       </Router>
     </div>

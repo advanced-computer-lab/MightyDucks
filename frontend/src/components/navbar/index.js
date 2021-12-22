@@ -25,6 +25,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from "@material-ui/core/styles";
 import { Navigate } from 'react-router-dom';
 import { AdminPanelSettings } from '@mui/icons-material';
+import {useLocation} from 'react-router-dom'
+
 function Navbar({setUser, deleted}){
     const [users,setUsers]=React.useState();
     const [open, setOpen] = React.useState(false);
@@ -33,8 +35,10 @@ function Navbar({setUser, deleted}){
     const [flag,setFlag]= React.useState(false);
     const [toTrips, setToTrips] = React.useState(false);
     const [toAdmin, setToAdmin] = React.useState(false);
-
+    const [toSignUp, setToSignup] = React.useState(false);
     const handleDrawerOpen=()=>{ setOpen(true) }
+
+    const location = useLocation()
     useEffect(() => {
         axios.get('http://localhost:5000/user/getUsers')
         .then((res) => {
@@ -65,7 +69,16 @@ function Navbar({setUser, deleted}){
           case 'Admin Controls': setToAdmin(true) ; break;
           default : ;break;
       }
-  }
+    }
+
+    const handleSignup = () => {
+      if(location.pathname === "/signup")
+        window.location.reload(false)
+      else {
+        setToSignup(true)
+      }
+    }
+
       const listSigned = (anchor) => (
         <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2  }} >
           <List>
@@ -159,7 +172,7 @@ function Navbar({setUser, deleted}){
               
             </Grid>
 
-            {flag ?
+            {1===5 ?
 
              <Grid container direction = "row" className={styles.grid2} justifyContent="flex-end" spacing = {3} >
                 <Grid item>
@@ -215,14 +228,14 @@ function Navbar({setUser, deleted}){
                
               <Grid item>
                 <div className={styles.barButtons} style = {{marginTop: "0.5em"}}>
-                  Sign In
+                  Login
                 </div>
               </Grid>
 
               {(xs) ? null
               :
               <Grid item>
-                <Button className={styles.button}>
+                <Button className={styles.button} onClick={handleSignup}>
                   Sign Up
                 </Button>
               </Grid> 
@@ -232,6 +245,7 @@ function Navbar({setUser, deleted}){
             }
             {toTrips && <Navigate to="/itinerary"/>}
             {toAdmin && <Navigate to="/admin"/>}
+            {toSignUp  && <Navigate to="/signup"/>}
             </Toolbar>
             
         </AppBar>

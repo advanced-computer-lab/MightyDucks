@@ -75,7 +75,6 @@ app.get('/flight/getFlights', async (req, res) => {
 })
 
 app.get('/user/getUsers', async (req, res) => {
-app.get('/user/getUsers',adminAuthorize, async (req, res) => {
   try {
     let result = await userRepository.getUsers()
     res.status(200).send(result)

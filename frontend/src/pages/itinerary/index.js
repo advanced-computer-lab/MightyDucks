@@ -8,28 +8,55 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import {Box, Typography} from '@mui/material'
 import PropTypes from 'prop-types';
+import { HeadsetRounded } from '@mui/icons-material';
 
 function Itinerary(props) {
     const styles = useStyles()
-    const [currentUser, setUser] = useState({})
+    const [currentUser, setCurrentUser] = useState({})
     const [value, setValue] = useState(0);
     const [upcoming, setUpcoming] = useState([])
     const [past, setPast] = useState([])
     const [deleted, setDeleted] = useState(false)
-
+    const [flag, setFlag] = useState(false)
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+    useEffect(() => {
+       if(!flag || deleted)
+       { console.log("lol effect")
+           axios.post('http://localhost:5000/user/getUser', {}, header)
+        .then((res) => {
+          if(!(res.data.message === "Incorrect Token Given")){
+            setCurrentUser(res.data)
+            console.log(res.data.userName)
+          }
+          else{
+            setCurrentUser(null)
+          }
+        getUpcomingFlights({userName: res.data.userName})
+        getPastFlights({userName: res.data.userName})
+        setFlag(true)
+        }).catch((error) => {
+            console.log(error)
+        });
+        
+    }
+    },[deleted, flag])
 
      const getUpcomingFlights=async(data)=>{
-        await axios.post('http://localhost:5000/user/getFlights/upcoming', data)
+         console.log(header)
+        await axios.post('http://localhost:5000/user/getFlights/upcoming', data , header)
         .then((res) => {
             setUpcoming(res.data)
             setDeleted(false)
         }).catch((error) => {
             console.log(error)
         });
-    };
-    
+        };
+
      const getPastFlights=async(data)=>{
-        await axios.post('http://localhost:5000/user/getFlights/past', data)
+        await axios.post('http://localhost:5000/user/getFlights/past', data , header)
         .then((res) => {
             setPast(res.data)
         }).catch((error) => {
@@ -37,16 +64,7 @@ function Itinerary(props) {
         });
     };
 
-    useEffect(() => {
-        if(deleted){
-            getUpcomingFlights({userName: currentUser.userName})
-        }
-    },[deleted]);
-
-    useEffect(() => {
-        getUpcomingFlights({userName: currentUser.userName})
-        getPastFlights({userName: currentUser.userName})
-    },[currentUser]);
+    
    
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -88,7 +106,6 @@ TabPanel.propTypes = {
 
     return (
         <div >
-        <Navbar setUser={setUser} deleted={deleted}/>
         <div style={{alignContent:"center"}}>
             <Tabs sx={{marginTop: "5em"}} className={styles.tabs} centered={true} value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Upcoming Trips" {...a11yProps(0)} />

@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import useStyles from './style'
-import { Grid, Button, Typography} from '@mui/material';
-import { TextField } from '@material-ui/core';
-import 'react-toastify/dist/ReactToastify.css'
+import useStyles from './style';
+import { Grid, Button, Typography, TextField} from '@mui/material';
+import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-import Navbar from '../navbar';
+import { IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import {InputAdornment} from '@mui/material';
+import { Navigate } from 'react-router-dom';
 
-function SignUp({}) {
+function Signup({}) {
     const styles = useStyles()
 
     const [userName, setUserName] = useState("")
@@ -18,7 +21,7 @@ function SignUp({}) {
     const [password, setPassword] = useState("")
 
     const [home, setHome] = useState("")
-    const [telephoneNumber, setTelephoneNumber] = useState([])
+    const [telephoneNumber, setTelephoneNumber] = useState("")
     const [countryCode, setCountryCode] = useState("")
 
     const [userNameErr, setUserNameErr] = useState(false)
@@ -29,6 +32,9 @@ function SignUp({}) {
     const [passwordErr, setPasswordErr] = useState(false)
     const [telephoneNumberErr, setTelephoneNumberErr] = useState(false)
     const [countryCodeErr, setCountryCodeErr] = useState(false)
+    const [toLogin, setToLogin] = useState(false)
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     const [data, setData] = useState("")
 
@@ -101,16 +107,17 @@ function SignUp({}) {
             setPassportNumberErr(true)
         }
 
-        if(telephoneNumber !== "" && !(/^\d+$/).test(telephoneNumber)){
+        if(telephoneNumber.length !==0 && !(/^\d+$/).test(telephoneNumber)){
             setTelephoneNumberErr(true)
         }
         
         if(countryCode !== "" && countryCode.charAt(0) !=='+'){
-            console.log(countryCode.substring(1))
             setCountryCodeErr(true)
         }
-
-        if(!userNameErr && !firstNameErr && !lastNameErr && !emailErr && !passwordErr && !passportNumberErr && !telephoneNumberErr && !countryCodeErr){
+        if(userNameErr || firstNameErr || lastNameErr || emailErr || passwordErr || passportNumberErr || telephoneNumberErr || countryCodeErr){
+            toast.error("Make sure all data entries are valid", {position: toast.POSITION.BOTTOM_RIGHT})
+        }
+        else {
             setData({
                 userName: userName,
                 firstName: firstName,
@@ -119,20 +126,19 @@ function SignUp({}) {
                 passportNumber: passportNumber,
                 password: password,
                 homeAddress: home,
-                telephoneNumbers: telephoneNumber,
+                telephoneNumber: telephoneNumber,
                 countryCode: countryCode
-            })
-            
-            
+            }) 
         }
     }
 
     useEffect(() => {
-        if(data !==""){
+        if(data !== ""){
             console.log(data)
         axios.post("http://localhost:5000/user/add", data)
             .then (() => {
-                toast.success(`User created successfully. Welcome ${userName}`, {position: toast.POSITION.BOTTOM_RIGHT})
+                toast.success(`User created successfully. Welcome ${userName}. Login to your account to proceed`, {position: toast.POSITION.BOTTOM_RIGHT})
+                setToLogin(true)
             })
             .catch((error) => {
                 toast.error("An error occurred while trying to create your account", {position: toast.POSITION.BOTTOM_RIGHT})
@@ -143,12 +149,11 @@ function SignUp({}) {
     }, [data])
 
     return (
-    <div className ={styles.grid}>
-        <Navbar/>
-        <Grid container className ={styles.grid} direction = "column" justifyContent = "center" alignItems = "center" spacing = {3} className='styles.relativity'>
+    <div className = {styles.grid}>
+        <Grid container direction = "column" justifyContent = "center" alignItems = "center" spacing = {3} >
             
-        <Grid item>
-                <TextField label = 'Username' error = {userNameErr? true: false} value = {userName} onChange = {handleUsername} variant = 'outlined' className = {styles.textField} size = "small">
+            <Grid item>
+                <TextField label = 'Username' required error = {userNameErr? true: false} value = {userName} onChange = {handleUsername} variant = 'outlined' className = {styles.textField} size = "small">
                 </TextField>
             </Grid>
 
@@ -156,29 +161,35 @@ function SignUp({}) {
             <Grid item>
                 <Grid container direction = "row" alignItems = "center" spacing = {4} >
                     <Grid item>
-                        <TextField label = 'First Name' error = {firstNameErr? true: false} value = {firstName} onChange = {handleFirstName} variant = 'outlined' className = {styles.textFieldRow} size = "small">
+                        <TextField label = 'First Name' required error = {firstNameErr? true: false} value = {firstName} onChange = {handleFirstName} variant = 'outlined' className = {styles.textFieldRow} size = "small">
                         </TextField>
                     </Grid>
                     
                     <Grid item>
-                        <TextField label = 'Last Name' error = {lastNameErr? true: false} value = {lastName} onChange = {handleLastName} variant = 'outlined' className = {styles.textFieldRow} size = "small">
+                        <TextField label = 'Last Name' required error = {lastNameErr? true: false} value = {lastName} onChange = {handleLastName} variant = 'outlined' className = {styles.textFieldRow} size = "small">
                         </TextField>
                     </Grid>
                 </Grid>
             </Grid>
 
             <Grid item>
-                <TextField label = 'Email' error = {emailErr? true: false} value = {email} onChange = {handleEmail} variant = 'outlined' className = {styles.textField} size = "small">
+                <TextField label = 'Email' required error = {emailErr? true: false} value = {email} onChange = {handleEmail} variant = 'outlined' className = {styles.textField} size = "small">
                 </TextField>
             </Grid>
 
             <Grid item>
-                <TextField label = 'Password' error = {passwordErr? true: false} value = {password} onChange = {handlePassword} variant = 'outlined' className = {styles.textField} size = "small">
+                <TextField label = 'Password' required type={showPassword ? "text" : "password"} error = {passwordErr? true: false} value = {password} onChange = {handlePassword} variant = 'outlined' className = {styles.textField} size = "small" InputProps={{
+                        endAdornment: (
+                              <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword}>
+                                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                              </InputAdornment>
+                        )}}>
                 </TextField>
             </Grid>
 
             <Grid item>
-                <TextField label = 'Passport Number' error = {passportNumberErr? true: false} value = {passportNumber} onChange = {handlePassportNumber}variant = 'outlined' className = {styles.textField}  size = "small">
+                <TextField label = 'Passport Number' required error = {passportNumberErr? true: false} value = {passportNumber} onChange = {handlePassportNumber}variant = 'outlined' className = {styles.textField}  size = "small">
                 </TextField>
             </Grid>
 
@@ -224,10 +235,10 @@ function SignUp({}) {
                     Create Account
                 </Button>
             </Grid>
-            
+            {toLogin  && <Navigate to="/login"/>}
         </Grid>
       </div>
     );
 }
 
-export default SignUp
+export default Signup

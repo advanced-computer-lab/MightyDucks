@@ -49,6 +49,12 @@ function ChildModal(props) {
 export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming, user}) {
     const handleClose = () => setOpen(false);
 
+    const header = { headers:{
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+        }
+    }
+
     const departureTime1 = (new Date(departureFlight.departureTime).toString()).split(" ")
     const arrivalTime1 = (new Date(departureFlight.arrivalTime).toString()).split(" ")
     
@@ -228,7 +234,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const [Redirect, setRedirect] = React.useState(false)
 
     const handleConfirm = () => {
-        if(user===null){
+        if(localStorage.getItem("token")===null){
             setChild(true)
         }
         else{
@@ -253,7 +259,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     }
 
     const updateFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/update', data)
+        await axios.post('http://localhost:5000/flight/update', data, header)
         .then((res) => {
         }).catch((error) => {
             console.log(error)
@@ -262,7 +268,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     };
 
     const updateUser=async(data)=>{
-        await axios.post('http://localhost:5000/user/update', data)
+        await axios.post('http://localhost:5000/user/update', data, header)
         .then((res) => {
         }).catch((error) => {
             console.log(error)
@@ -271,7 +277,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     };
 
     const sendCancelEmail=async(data)=>{
-        await axios.post('http://localhost:5000/user/notify', data)
+        await axios.post('http://localhost:5000/user/notify', data, header)
         .then(() => {
         }).catch((error) => {
             console.log(error)
@@ -382,10 +388,12 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const [changeFlightOldSeats, setChangeFlightOldSeats] = React.useState(null)
     const [changeFlightOldCabin, setChangeFlightOldCabin] = React.useState(null)
     const [changeFlightNewFlight, setChangeFlightNewFlight] = React.useState(null)
+    const [changeFlightNewSeats, setChangeFlightNewSeats] = React.useState([])
     const [confirmNewFlight, setConfirmNewFlight] = React.useState(false)
 
     const handleChangeFlight = (depFlight) => {
         setChangeFlightNewFlight(null);
+        setChangeFlightNewSeats([])
         setConfirmNewFlight(false);
         if(depFlight){
             setChangeFlightOldFlight(departureFlight)
@@ -393,9 +401,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
             setOtherDate(returnFlight.departureTime)
             setChangeFlightOldSeats(departingFlightSeats)
             setChangeFlightOldCabin(cabin1)
-            toast.success("Your Departure flight changed to J1234!", {
-                position: toast.POSITION.BOTTOM_RIGHT,
-            });
         }
         else{
             setChangeFlightOldFlight(returnFlight)
@@ -403,11 +408,68 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
             setOtherDate(departureFlight.departureTime)
             setChangeFlightOldSeats(returningFlightSeats)
             setChangeFlightOldCabin(cabin2)
-            toast.success("Your Return flight changed to J1234!", {
+        }
+        setChangeFlight(true)
+    }
+
+    React.useEffect(() => {
+        if(confirmNewFlight){
+            handleChangeFlightConfirm();
+            setConfirmNewSeats(false);
+        }
+    }, [confirmNewFlight])
+
+    const handleChangeFlightConfirm = () => {
+        console.log(changeFlightNewFlight)
+        console.log(changeFlightNewSeats)
+
+
+
+        var userNewFlights = user.flights.filter((flight) => {
+            return flight.split(' ')[4] !== bookingId
+        })
+        if(flightType==="dep"){
+            userNewFlights = userNewFlights.concat([changeFlightNewFlight.flightNumber+" "+changeFlightNewSeats+" "+returnFlight.flightNumber+" "+returningFlightSeats+" "+bookingId])
+            
+            //updateflight dep
+            const depNewSeats = departureFlight.bookedSeats.filter((seat) => {
+                return !departingFlightSeats.includes(seat)
+            })
+            var departureFlightdetails={from:departureFlight.from, to:departureFlight.to, departureTime: departureFlight.departureTime,arrivalTime:departureFlight.arrivalTime,economy:(cabin1==="Economy"? departureFlight.economy+departingFlightSeats.length : departureFlight.economy),business:(cabin1==="Business"? departureFlight.business+departingFlightSeats.length : departureFlight.business), first:(cabin1==="First"? departureFlight.first+departingFlightSeats.length : departureFlight.first),flightNumber:departureFlight.flightNumber, oldFlightNumber: departureFlight.flightNumber, baggageAllowance: departureFlight.baggageAllowance, price:departureFlight.price, bookedSeats: depNewSeats}
+            updateFlight(departureFlightdetails)
+        
+        }
+        else if(flightType==="ret"){
+            userNewFlights = userNewFlights.concat([departureFlight.flightNumber+" "+departingFlightSeats+" "+changeFlightNewFlight.flightNumber+" "+changeFlightNewSeats+" "+bookingId])
+            
+            //updateflight ret
+            const retNewSeats = returnFlight.bookedSeats.filter((seat) => {
+                return !returningFlightSeats.includes(seat)
+            })
+            var returnFlightdetails={from:returnFlight.from, to:returnFlight.to, departureTime: returnFlight.departureTime,arrivalTime:returnFlight.arrivalTime,economy:(cabin2==="Economy"? returnFlight.economy+returningFlightSeats.length : returnFlight.economy),business:(cabin2==="Business"? returnFlight.business+returningFlightSeats.length : returnFlight.business), first:(cabin2==="First"? returnFlight.first+returningFlightSeats.length : returnFlight.first),flightNumber:returnFlight.flightNumber, oldFlightNumber: returnFlight.flightNumber, baggageAllowance: returnFlight.baggageAllowance, price:returnFlight.price, bookedSeats: retNewSeats}
+            updateFlight(returnFlightdetails)
+        }
+        var userDUDE = {oldUserName:user.userName ,userName:user.userName,firstName:user.firstName ,lastName:user.lastName,email:user.email,passportNumber:user.passportNumber,password:user.password, flights: userNewFlights}
+        updateUser(userDUDE);
+
+        var newFlightdetails={
+            from:changeFlightNewFlight.from, to:changeFlightNewFlight.to, departureTime: changeFlightNewFlight.departureTime,arrivalTime:changeFlightNewFlight.arrivalTime,economy:(changeFlightNewSeats[0].charAt(0)==="E"? changeFlightNewFlight.economy-changeFlightNewSeats.length : changeFlightNewFlight.economy),business:(changeFlightNewSeats[0].charAt(0)==="B"? changeFlightNewFlight.business-changeFlightNewSeats.length : changeFlightNewFlight.business), first:(changeFlightNewSeats[0].charAt(0)==="F"? changeFlightNewFlight.first-changeFlightNewSeats.length : changeFlightNewFlight.first),flightNumber:changeFlightNewFlight.flightNumber, oldFlightNumber: changeFlightNewFlight.flightNumber, baggageAllowance: changeFlightNewFlight.baggageAllowance, price:changeFlightNewFlight.price, bookedSeats: changeFlightNewFlight.bookedSeats.concat(changeFlightNewSeats)
+        }
+        updateFlight(newFlightdetails)
+        
+
+        if(flightType==="dep"){
+            toast.success(`Your Departure flight changed to ${changeFlightNewFlight.flightNumber}!`, {
                 position: toast.POSITION.BOTTOM_RIGHT,
             });
         }
-        setChangeFlight(true)
+        else if(flightType==="ret"){
+            toast.success(`Your Return flight changed to ${changeFlightNewFlight.flightNumber}!`, {
+                position: toast.POSITION.BOTTOM_RIGHT,
+            });
+        }
+        setChangeFlight(false);
+        setDeleted(true)
     }
 
     return (
@@ -516,7 +578,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 {!create && upcoming && <Grid container direction="row" justifyContent="space-between">
                     {cancelModal && <ConfirmationModal bookingId={bookingId} open={cancelModal} setOpen={setCancelModal} setConfirm={handleCancel}/>}
                     {changeSeats && <ChangeSeatsModal setConfirmNewSeats={setConfirmNewSeats} setNewSeats={setNewSeats} flight={changeSeatsFlight} cabin={changeSeatsCabin} oldFlightSeats={changeSeatsFlightSeats} setFlightSeats={setChangeSeatsFlightSeats} open={changeSeats} setOpen={setChangeSeats}/>}
-                    {changeFlight && <ChangeFlightModal oldFlight={changeFlightOldFlight} otherDate={otherDate} flightType={flightType} oldSeats={changeFlightOldSeats} oldCabin={changeFlightOldCabin} open={changeFlight} setOpen={setChangeFlight} />}
+                    {changeFlight && <ChangeFlightModal setNewFlight={setChangeFlightNewFlight} setNewSeats={setChangeFlightNewSeats} setConfirmNewFlight={setConfirmNewFlight} oldFlight={changeFlightOldFlight} otherDate={otherDate} flightType={flightType} oldSeats={changeFlightOldSeats} oldCabin={changeFlightOldCabin} open={changeFlight} setOpen={setChangeFlight} />}
                 </Grid>}
                 {create && !upcoming && <Button variant="outlined" style={{ color: "#017A9B"}} onClick={handleConfirm}>Confirm reservation</Button>}
             </Box>

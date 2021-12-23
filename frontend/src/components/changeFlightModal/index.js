@@ -95,7 +95,7 @@ function ChangeFlightModal({
       aria-labelledby="child-modal-title"
       aria-describedby="child-modal-description"
     >
-        {filtered ? <SelectingModal handleParentClose={handleClose} criteria={criteria} oldFlight={oldFlight} oldSeats={oldSeats.length} oldCabin={oldCabin} newCabin={cabin} open={filtered} setOpen={setFiltered} setFlight={setNewFlight} setSeats={setNewSeats} finalConfirm={setConfirmNewFlight} />
+        {filtered ? <SelectingModal handleParentClose={handleClose} criteria={criteria} oldFlight={oldFlight} oldSeats={oldSeats} oldCabin={oldCabin} newCabin={cabin} open={filtered} setOpen={setFiltered} setFlight={setNewFlight} setSeats={setNewSeats} finalConfirm={setConfirmNewFlight} />
           : <div className={styles.alignment}>
           <Box
             className={styles.box1}
@@ -193,8 +193,8 @@ function SelectingModal({criteria, oldFlight, oldCabin, oldSeats, newCabin, open
         setActiveStep(1);
       }
     } else if (activeStep === 1) {
-      if(flightSeats.length<oldSeats){
-        toast.error(`Please select ${oldSeats-flightSeats.length}  more seat(s)!`, {
+      if(flightSeats.length<oldSeats.length){
+        toast.error(`Please select ${oldSeats.length-flightSeats.length}  more seat(s)!`, {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
       }
@@ -273,8 +273,8 @@ function SelectingModal({criteria, oldFlight, oldCabin, oldSeats, newCabin, open
                 {activeStep === 0 &&  <Grid container direction="column" sx={{minHeight: 100, minWidth: 1600, width: "100%"}}>
                                         <FlightsCluster criteria={criteria} handleChosen={setNewFlight} currentChosen={newFlight} changing={true} oldFlight={oldFlight} oldCabin={oldCabin} setNum={setNoOfFlights}/>
                                       </Grid>}
-                {activeStep === 1 && <SelectSeats flight={newFlight} cabin={criteria.cabin} noSeats={oldSeats} oldSeats={[]} flightSeats={flightSeats} setFlightSeats={setFlightSeats} changing={false}/>}
-                {activeStep === 2 && <PaymentLocation flight={newFlight} price={100*flightSeats.length} paid={paid} setPaid={setPaid} flightSeats={flightSeats} cabin={newCabin}/>}
+                {activeStep === 1 && <SelectSeats flight={newFlight} cabin={criteria.cabin} noSeats={oldSeats.length} oldSeats={[]} flightSeats={flightSeats} setFlightSeats={setFlightSeats} changing={false}/>}
+                {activeStep === 2 && <PaymentLocation flight={newFlight} price={newFlight.price} oldFlight={oldFlight} paid={paid} setPaid={setPaid} oldSeats={oldSeats} flightSeats={flightSeats}/>}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
@@ -298,7 +298,7 @@ function SelectingModal({criteria, oldFlight, oldCabin, oldSeats, newCabin, open
   )
 }
 
-function PaymentLocation({price, paid, setPaid, flight, flightSeats, cabin}){
+function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, oldFlight}){
 
   if(price===0){
     setPaid(true)
@@ -356,6 +356,27 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, cabin}){
     const date2 = new Date(flight.arrivalTime);
     const difftime = Math.abs(date1 - date2) / 36e5;
 
+    var cabin1 = "Economy"
+    var priceAddOn1 = 0;
+    if(flightSeats[0].charAt(0)==="B"){
+        priceAddOn1 = 100;
+        cabin1 = "Business"
+    }
+    else if(flightSeats[0].charAt(0)==="F"){
+        priceAddOn1 = 400;
+        cabin1 = "First"
+    }
+
+    var cabin2 = "Economy"
+    var priceAddOn2 = 0;
+    if(oldSeats[0].charAt(0)==="B"){
+        priceAddOn2 = 100;
+        cabin2 = "Business"
+    }
+    else if(oldSeats[0].charAt(0)==="F"){
+        priceAddOn2 = 400;
+        cabin2 = "First"
+    }
 
 
   return(
@@ -378,17 +399,17 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, cabin}){
           </Grid>
           <Grid container direction="row" justifyContent="space-between">
             <Grid item>{`Seats: ${flightSeats}`}</Grid>
-            <Grid item>{cabin+" class"}</Grid>
+            <Grid item>{cabin1+" class"}</Grid>
           </Grid>
           <Grid container direction="row" justifyContent="space-between">
             <Grid item>Seats</Grid>
-            <Grid item>Price($)</Grid>
-            <Grid item>Total($)</Grid>
+            <Grid item>Price difference($)</Grid>
+            <Grid item>Total difference($)</Grid>
           </Grid>
           <Grid style={{textDecoration: "underline"}} container direction="row" justifyContent="space-between">
             <Grid item>{flightSeats.length}</Grid>
-            <Grid item>{price}</Grid>
-            <Grid item>{flightSeats.length*(price)}</Grid>
+            <Grid item>{parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2)}</Grid>
+            <Grid item>{flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2))}</Grid>
           </Grid>
         </Grid>
       </Typography>

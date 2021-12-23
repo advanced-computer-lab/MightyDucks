@@ -1,6 +1,6 @@
 import styles from './index.module.css';
 import { ContainedButton , TextFields} from '../buttons/styledButtons';
-import {Modal,Box ,Typography} from '@mui/material';
+import {Modal,Box ,Typography, Button} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import React from 'react';
@@ -22,15 +22,19 @@ const EditUser=(props)=>{
     const [lastNameErr,setLastNameErr]=React.useState("");
     const [emailErr,setEmailErr]=React.useState("");
     const [passportNumErr,setPassportNumErr]=React.useState("");
-    const [passwordErr,setPasswordErr]=React.useState("");
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [oldPassword, setOldPassword] = React.useState("");
+    const [newPassword, setNewPassword] = React.useState("");
+    const [newPassErr,setNewPassErr]= React.useState("");
+    const [oldPassErr,setOldPassErr]= React.useState("");
+    const [passChange,setPasswordChange]= React.useState(false);
+    const [showOldPassword, setShowOldPassword] = React.useState(false);
+    const [showNewPassword, setShowNewPassword] = React.useState(false);
 
     const [open, setOpen] = React.useState(true);
     const handleClose = () =>{
         setOpen(false);
         props.onEdit(false)
     } 
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
     const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
    
     const updateUser=async(data)=>{
@@ -42,6 +46,10 @@ const EditUser=(props)=>{
             console.log(error)
         });
     };
+
+    const handleClickShowOldPassword = () => setShowOldPassword(!showOldPassword);
+    const handleClickShowNewPassword = () => setShowNewPassword(!showNewPassword);
+
     
     const validateFields=()=>{
         setUserNameErr(userName?"":"username error")
@@ -49,16 +57,26 @@ const EditUser=(props)=>{
         setLastNameErr(lastName?"":"lastname error")
         setEmailErr(email?"":"email error");
         setPassportNumErr(passportNumber?"":"passport error")
-        setPasswordErr(password?"":"password error")
-        if(!userName || !firstName || !lastName || !email || !passportNumber || !password){
+        setOldPassErr((oldPassword===password) && (passChange) ?"":"old password error val")
+        setNewPassErr((newPassword!==oldPassword) && (passChange) && (newPassword) ?"":"new password error val")
+        if(!userName || !firstName || !lastName || !email || !passportNumber ){
             return false;
         }
+        if((passChange && (!oldPassword  || !newPassword || oldPassword!==password || oldPassword===newPassword))){
+            return false;
+        }
+        else{
         return true;
+        }
     }
     const handleEdit=()=>{
-        var result = validateFields();
+        var result = validateFields(); 
         if (result){
+            if (newPassword){
+                var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:newPassword, flights: props.user.flights}
+            }else{
             var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:password, flights: props.user.flights}
+            }
             updateUser(user);
         }
     }
@@ -82,9 +100,17 @@ const EditUser=(props)=>{
         setPassportNumber(e.target.value)
         setPassportNumErr("")
     }
-    const handlePassword=(e)=>{
-        setPassword(e.target.value)
-        setPasswordErr("")
+    const handleOldPassword=(e)=>{
+        setOldPassword(e.target.value)
+        setOldPassErr((e.target.value===password) && (passChange) ?"":"old password error onchange")
+       
+    }
+    const handleNewPassword=(e)=>{
+        setNewPassword(e.target.value)
+        setNewPassErr(((e.target.value!==oldPassword) && (passChange) && (e.target.value)) ?"":"new password error onchange")
+    }
+    const handleChangePassword=()=>{
+        setPasswordChange(true);
     }
     return(
     <div>
@@ -99,7 +125,7 @@ const EditUser=(props)=>{
             <div className={styles["text"]}>
                Edit Profile
             </div>
-            <Typography >
+            <Typography>
                 <div className={styles["container"]}>
                     <div className={styles["textfields"]}>
                         <TextFields label="UserName" value={userName} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handleUserName} error={usernameErr?true:false}/>
@@ -116,15 +142,33 @@ const EditUser=(props)=>{
                     <div className={styles["textfields"]}>
                         <TextFields label="Passport Number" value={passportNumber} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handlePassportNum} error={passportNumErr?true:false}/>
                     </div>
+                    {!passChange?
+                    <div className={styles["buttonPass"]}>
+                        <Button onClick={handleChangePassword}>Change Password</Button>
+                    </div>:
+                    <>
                     <div className={styles["textfields"]}>
-                        <TextFields label="Password"  value={password}  variant="outlined" size="small" type={showPassword ? "text" : "password"} required style={{width:400}} onChange={handlePassword} error={passwordErr?true:false}
-                        InputProps={{  endAdornment: (
-                              <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword}>
-                                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                              </InputAdornment>
-                        ) }}/>
+                        <TextFields label="Old Password" value={oldPassword} variant="outlined" size="small" type={showOldPassword ? "text" : "password"} required style={{width:400}} onChange={handleOldPassword} error={oldPassErr?true:false}
+                         InputProps={{  endAdornment: (
+                            <InputAdornment position="end"> <IconButton onClick={handleClickShowOldPassword}>
+                                {showOldPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                      ) }}/>
                     </div>
+                    <div className={styles["textfields"]}>
+                        <TextFields label="New Password" value={newPassword} variant="outlined" size="small" type={showNewPassword ? "text" : "password"} required style={{width:400}} onChange={handleNewPassword} error={newPassErr?true:false}
+                         InputProps={{  endAdornment: (
+                            <InputAdornment position="end"> <IconButton onClick={handleClickShowNewPassword}>
+                                {showNewPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                      ) }}/>
+                    </div>
+                </>}
+                   
+                    
+
                     <div className={styles["button"]} >
                         <ContainedButton style={{width:400}} onClick={handleEdit}>Save</ContainedButton>
                     </div>

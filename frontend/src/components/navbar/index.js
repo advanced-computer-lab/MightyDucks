@@ -67,10 +67,10 @@ function Navbar({setUser, deleted}){
       }
   }
       const listSigned = (anchor) => (
-        <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2  }} >
+        <Box sx={{ width: anchor === 'top'? 'auto' : 'fit-content' ,marginRight:4 ,minWidth:250 }} >
           <List>
             <Paper elevation={0} >
-                <div className={styles.list}  >
+                <div className={styles.list} >
                   <ListItemIcon > <AccountCircleIcon/></ListItemIcon>
                   Profile
                 </div>

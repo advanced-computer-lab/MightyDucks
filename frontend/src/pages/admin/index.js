@@ -226,7 +226,7 @@ export default class Admin extends Component {
           (this.state.flights.map((flight) => {
             return (
               <div key = {flight._id}>
-                <Flight flightDetails={flight} getFlights={this.getFlights} isAdmin={true} cabin="" currentChosen="" />
+                <Flight flightDetails={flight} getFlights={this.getFlights} isAdmin={true} cabin="" currentChosen="" changing={false} oldFlight={null} oldCabin={""} />
                 <br />
               </div>
             )

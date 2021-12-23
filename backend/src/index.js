@@ -153,3 +153,12 @@ app.post('/user/notify', async (req, res) => {
     res.status(400).send(error.message)
   }
 })
+
+app.post('/user/add', async (req, res) => {
+  try {
+    let result = await userRepository.addUser(req);
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})

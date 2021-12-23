@@ -22,7 +22,8 @@ const userSchema = new Schema({
   },
   passportNumber: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
@@ -35,6 +36,15 @@ const userSchema = new Schema({
   flights: {
     type: [String],
     required: true
+  },
+  homeAddress: {
+    type: String
+  },
+  telephoneNumbers: {
+    type: [String],
+  },
+  countryCode:{
+    type: String
   }
 
 });

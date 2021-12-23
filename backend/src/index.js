@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const {authorize , adminAuthorize} = require("./middleware/authorized.middleware")
 
 const flightRepository = require("./repositories/flightRepository");
 const userRepository = require("./repositories/userRepository")
@@ -85,6 +86,14 @@ app.get('/user/getUsers',adminAuthorize, async (req, res) => {
   }
 })
 
+app.get('/user/getUser',authorize, async (req, res) => {
+  try {
+    let result = await userRepository.getUser(req.userName)
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
     
 app.post('/flight/getFlight', async (req, res) => {
   try {
@@ -165,12 +174,11 @@ app.post('/user/add', async (req, res) => {
   }
 })
 
-app.post("/create-payment-intent", async (req, res) => {
-  const { items } = req.body;
-
+app.post("/create-payment-intent",authorize, async (req, res) => {
+  let price = req.body.price;
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
+    amount: price,
     currency: "usd",
     automatic_payment_methods: {
       enabled: true,
@@ -181,10 +189,3 @@ app.post("/create-payment-intent", async (req, res) => {
     clientSecret: paymentIntent.client_secret,
   });
 });
-
-const calculateOrderAmount = (items) => {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return 1400;
-};

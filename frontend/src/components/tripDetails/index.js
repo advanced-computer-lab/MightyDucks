@@ -38,7 +38,7 @@ function ChildModal(props) {
           <Box sx={{ ...style, width: 200 }}>
             <h2 id="child-modal-title">Your are not logged in</h2>
             <p id="child-modal-description">
-              Please <NavLink style={{color:"#017A9B"}} to={{pathname: "/"}}>Sign In</NavLink> to continue your reservation.
+              Please <NavLink style={{color:"#017A9B"}} to={{pathname: "/login"}}>Sign In</NavLink> to continue your reservation.
             </p>
           </Box>
         </Modal>
@@ -46,14 +46,15 @@ function ChildModal(props) {
     );
   }
 
-export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming, user}) {
+export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming}) {
     const handleClose = () => setOpen(false);
 
-    const header = { headers:{
+    const header = { headers: {
         "Content-type": "application/json",
         "x-access-token": localStorage.getItem("token")
-        }
-    }
+    }}
+
+    const user = JSON.parse(localStorage.getItem("user"))
 
     const departureTime1 = (new Date(departureFlight.departureTime).toString()).split(" ")
     const arrivalTime1 = (new Date(departureFlight.arrivalTime).toString()).split(" ")
@@ -225,6 +226,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                     email: user.email,
                     type: "cancel"
                 }
+                //
                 sendCancelEmail(emailData)
                 handleClose()
         }

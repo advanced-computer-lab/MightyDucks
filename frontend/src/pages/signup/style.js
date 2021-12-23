@@ -86,10 +86,6 @@ export const useStyles = makeStyles((theme) =>({
         color: "#017A9B" 
     },
 
-    relativity:{
-        position: "absolute",
-    },
-
     grid: {
         position: "absolute",
         border: "0.5px solid black",

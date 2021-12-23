@@ -26,10 +26,25 @@ export default class Admin extends Component {
     searchDate: false,
     adminFlag: true,
   }
-  
+
+    header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+    
+    data ={}
 
   componentDidMount = () => {
     this.getFlights()
+
+    axios.post('http://localhost:5000/user/getUser', this.data, this.header)
+        .then((res) => {
+            console.log(res.data)
+            this.setState({...this.state, adminFlag: res.data.isAdmin})
+            console.log(res.data.isAdmin)
+        }).catch((error) => {
+            console.log(error)
+        });
   }
 
   getFlights=async()=>{
@@ -159,7 +174,6 @@ export default class Admin extends Component {
     }
     return (
       <div style={{textAlign: "-webkit-center"}}>
-        <Navbar setUser={(u) => {this.setState({...this.state, adminFlag: u.isAdmin})}}/>
         <div className={styles["bar"]}>
             {this.state.searchDate ? 
             (

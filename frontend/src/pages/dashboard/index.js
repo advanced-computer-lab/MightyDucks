@@ -7,7 +7,6 @@ function Dashboard({setCriteria}) {
 
     return (
         <div className={styles.main} style={{overflow:'hidden'}}>
-            <Navbar/>
             <div className={styles.filter}>
                 <div className={styles.title}>Flight Booking</div>
                 <FlightFilter setCriteria={setCriteria}/>

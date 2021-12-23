@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
-const userRepository = require("./repositories/userRepository")
+const userRepository = require("../repositories/userRepository")
 
-export async function authorize(req, res, next) {
+async function authorize(req, res, next) {
     const token = req.headers["x-access-token"]?.split(' ')[1]
 
     if(token){
@@ -13,7 +13,7 @@ export async function authorize(req, res, next) {
             })
             req.user = {};
             req.user.id = decoded.id
-            req.username = decoded.userName
+            req.user.userName = decoded.userName
             next()
         })
     } else {
@@ -21,11 +21,11 @@ export async function authorize(req, res, next) {
     }
 }
 
-export async function adminAuthorize(req, res, next) {
+async function adminAuthorize(req, res, next) {
     const token = req.headers["x-access-token"]?.split(' ')[1]
 
     if(token){
-        jwt.verify(token,secret, (err, decoded) =>{
+        jwt.verify(token,secret, async (err, decoded) =>{
             if(err) return res.json({
                 isLoggedIn: false,
                 message: "Failed To Authenticate"
@@ -43,3 +43,5 @@ export async function adminAuthorize(req, res, next) {
         res.json({message : "Incorrect Token Given", isLoggedIn: false})
     }
 }
+
+module.exports = {authorize,adminAuthorize};

@@ -40,8 +40,8 @@ const userSchema = new Schema({
   homeAddress: {
     type: String
   },
-  telephoneNumbers: {
-    type: [String],
+  telephoneNumber: {
+    type: String,
   },
   countryCode:{
     type: String

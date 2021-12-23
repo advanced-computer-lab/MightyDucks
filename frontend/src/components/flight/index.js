@@ -5,7 +5,7 @@ import EditFlightModal from "../editFlightModal"
 import DeleteFlightModal from "../deleteFlightModal"
 import "./style.css"
 
-function Flight({flightDetails, getFlights, isAdmin, cabin, handleChosen, currentChosen}) {
+function Flight({flightDetails, getFlights, isAdmin, cabin, handleChosen, currentChosen, changing, oldPrice}) {
 
     const departureTime = (new Date(flightDetails.departureTime).toString()).split(" ")
     const arrivalTime = (new Date(flightDetails.arrivalTime).toString()).split(" ")
@@ -63,6 +63,13 @@ function Flight({flightDetails, getFlights, isAdmin, cabin, handleChosen, curren
     }
     else if(cabin==="First"){
         priceAddOn = 400;
+    }
+    priceAddOn+=flightDetails.price
+    if(changing){
+        priceAddOn = priceAddOn - oldPrice
+        if(priceAddOn<0){
+            priceAddOn = 0
+        }
     }
 
     const isSelected = flightDetails.flightNumber===currentChosen.flightNumber
@@ -190,7 +197,7 @@ function Flight({flightDetails, getFlights, isAdmin, cabin, handleChosen, curren
                     style={{width: "auto"}}>
                     {isAdmin && <Grid item><EditFlightModal flightDetails={flightDetails} getFlights={getFlights} /></Grid>}
                     {isAdmin && <Grid item><DeleteFlightModal flightNumber={flightDetails.flightNumber} getFlights={getFlights} /></Grid>}
-                    {!isAdmin && <Grid item style={{marginRight: "2em"}}><Button onClick={() => {handleChosen(flightDetails)}} style={{width: "6em"}} variant="contained" size="large">{"$"+(flightDetails.price+priceAddOn)}</Button></Grid>}
+                    {!isAdmin && <Grid item style={{marginRight: "2em"}}><Button onClick={() => {handleChosen(flightDetails)}} style={{width: "6em"}} variant="contained" size="large">{"$"+(priceAddOn)}</Button></Grid>}
                 </Grid>
             </Grid>
         </Grid>

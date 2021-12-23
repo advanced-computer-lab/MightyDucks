@@ -6,7 +6,9 @@ import Dashboard from "./pages/dashboard"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Itinerary from "./pages/itinerary"
-import SignUp from "./components/signUp"
+import Signup from "./pages/signup"
+import Login from "./pages/login"
+import Navbar from "./components/navbar"
 
 function App() {
 
@@ -17,12 +19,14 @@ function App() {
     <div className="App" >
       <ToastContainer />
       <Router>
+      <Navbar />
         <Routes>
           <Route exact path="/" element={<Dashboard setCriteria={setCriteria}/>} />
           <Route path="/admin" element={<Admin/>} />
           <Route path="/select-flights" element={<SelectFlight criteria={criteria}/>} />
           <Route path="/itinerary" element = {<Itinerary/>}/>
-          <Route path="/signup" element = {<SignUp/>}/>
+          <Route path="/signup" element = {<Signup/>}/>
+          <Route path="/login" element = {<Login/>}/>
         </Routes>
       </Router>
     </div>

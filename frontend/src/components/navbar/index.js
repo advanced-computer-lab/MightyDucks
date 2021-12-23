@@ -23,12 +23,13 @@ import Logo from '../../assets/Images/logo.svg'
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from "@material-ui/core/styles";
-import { Navigate } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import { AdminPanelSettings } from '@mui/icons-material';
 import {useLocation} from 'react-router-dom'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
-function Navbar({setUser, deleted}){
-    const [users,setUsers]=React.useState();
+function Navbar({ deleted}){
     const [open, setOpen] = React.useState(false);
     const [isEdit,setIsEdit]=React.useState(false);
     const [edited,setEdited]=React.useState(false)
@@ -36,18 +37,29 @@ function Navbar({setUser, deleted}){
     const [toTrips, setToTrips] = React.useState(false);
     const [toAdmin, setToAdmin] = React.useState(false);
     const [toSignUp, setToSignup] = React.useState(false);
+    const [toLogin, setToLogin] = React.useState(false);
+    const [curUser, setCurUser] = React.useState(null)
+
     const handleDrawerOpen=()=>{ setOpen(true) }
 
     const location = useLocation()
+    const data = {}
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
     useEffect(() => {
-        axios.get('http://localhost:5000/user/getUsers')
+        axios.post('http://localhost:5000/user/getUser', data, header)
         .then((res) => {
-        setUsers(res.data)
-        if(setUser!=null){
-        setUser(res.data[1])
-        }
-        setFlag(true);
-    })},[isEdit, deleted]);
+            setCurUser(res.data)
+            console.log(res.data)
+            setFlag(!(res.data.message === "Incorrect Token Given"))
+        }).catch((error) => {
+            console.log(error)
+        });
+        
+    },[isEdit, deleted, localStorage.getItem("token")])
+
     const theme = useTheme()
     const styles = useStyles()
     const xs = useMediaQuery(theme.breakpoints.only('xs'));
@@ -79,6 +91,23 @@ function Navbar({setUser, deleted}){
       }
     }
 
+    const handleSignOut = () => {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+      setFlag(false)
+      setCurUser(null)
+      toast.success("You have been logged out", {position: toast.POSITION.BOTTOM_RIGHT})
+
+    }
+
+    const handleLogin = () => {
+      if(location.pathname === "/login")
+        window.location.reload(false)
+      else {
+        setToLogin(true)
+      }
+    }
+
       const listSigned = (anchor) => (
         <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2  }} >
           <List>
@@ -88,15 +117,15 @@ function Navbar({setUser, deleted}){
                   Profile
                 </div>
                 <div className={styles.fields}>Username: </div>
-                <div className={styles.text}>{users[1].userName }</div>
+                <div className={styles.text}>{curUser && curUser.userName}</div>
                 <div className={styles.fields}>Firstname: </div>
-                <div className={styles.text}>{users[1].firstName}</div>
+                <div className={styles.text}>{curUser && curUser.firstName}</div>
                 <div className={styles.fields}>Lastname: </div>
-                <div className={styles.text}>{users[1].lastName}</div>
+                <div className={styles.text}>{curUser && curUser.lastName}</div>
                 <div className={styles.fields}>Email:</div>
-                <div className={styles.text}>{users[1].email}</div>
+                <div className={styles.text}>{curUser && curUser.email}</div>
                 <div className={styles.fields}>Passport Number: </div>
-                <div className={styles.text}>{users[1].passportNumber}</div>
+                <div className={styles.text}>{curUser && curUser.passportNumber}</div>
             </Paper>
             {['Edit Profile'].map((text, index) => (
                <ListItem key={text}  onClick={()=>handleList(text)} button >
@@ -114,8 +143,8 @@ function Navbar({setUser, deleted}){
               </ListItem>
             ))}
           </List>
-          {users[1].isAdmin && <Divider />}
-          {users[1].isAdmin && <List>
+          {curUser && curUser.isAdmin && <Divider />}
+          {curUser && curUser.isAdmin && <List>
             {['Admin Controls'].map((text, index) => (
               <ListItem onClick={()=>handleAdmin(text)} button key={text}>
                 <ListItemIcon  className={edited?styles.stylesEdited:""}> <AdminPanelSettings/> </ListItemIcon>
@@ -130,7 +159,7 @@ function Navbar({setUser, deleted}){
           <List>
             <Paper elevation={0} className={styles.paper}>
                 <Typography sx={{ fontSize: 24 }} color="text.secondary" >
-                  You are not logged in yet. Please sign in to access your account and itinerary.
+                  You are not logged in yet. Please <NavLink style={{color:"#017A9B"}} to={{pathname: "/login"}}>sign in</NavLink> to access your account and itinerary.
                 </Typography>
             </Paper>
           </List>
@@ -145,7 +174,7 @@ function Navbar({setUser, deleted}){
                 <IconButton onClick={handleDrawerOpen}>
                   <MenuIcon className={styles.drawer}/>
                 </IconButton> 
-                    {isEdit? <EditUser user={users[1]} onEdit={(edit)=>setIsEdit(edit)}/>:<></>}
+                    {isEdit? <EditUser user={curUser} onEdit={(edit)=>setIsEdit(edit)}/>:<></>}
                     <Drawer className={styles.drawer} anchor="left" open={open} onClose={()=>setOpen(false)}>
                       {flag? listSigned("left"):listUnsigned("left")}
                     </Drawer>
@@ -172,11 +201,11 @@ function Navbar({setUser, deleted}){
               
             </Grid>
 
-            {1===5 ?
+            {flag ?
 
              <Grid container direction = "row" className={styles.grid2} justifyContent="flex-end" spacing = {3} >
                 <Grid item>
-                  <div className={styles.barButtons} >
+                  <div className={styles.barButtons} onClick={handleSignOut} >
                     Sign Out
                   </div>
                 </Grid> 
@@ -202,7 +231,7 @@ function Navbar({setUser, deleted}){
                 : 
                 <Grid item>
                   <div className={styles.barText}>
-                    Hello, {users[1].firstName}
+                    Hello, {curUser && curUser.firstName}
                   </div>
                 </Grid>
                 }  
@@ -227,9 +256,11 @@ function Navbar({setUser, deleted}){
               }
                
               <Grid item>
-                <div className={styles.barButtons} style = {{marginTop: "0.5em"}}>
+              
+                <div className={styles.barButtons} style = {{marginTop: "0.5em"}} onClick={handleLogin}>
                   Login
                 </div>
+              
               </Grid>
 
               {(xs) ? null
@@ -246,6 +277,7 @@ function Navbar({setUser, deleted}){
             {toTrips && <Navigate to="/itinerary"/>}
             {toAdmin && <Navigate to="/admin"/>}
             {toSignUp  && <Navigate to="/signup"/>}
+            {toLogin  && <Navigate to="/login"/>}
             </Toolbar>
             
         </AppBar>

@@ -8,7 +8,7 @@ const {authorize , adminAuthorize} = require("./middleware/authorized.middleware
 const flightRepository = require("./repositories/flightRepository");
 const userRepository = require("./repositories/userRepository")
 const mailerRepository = require("./repositories/mailerRepository")
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
@@ -86,9 +86,9 @@ app.get('/user/getUsers',adminAuthorize, async (req, res) => {
   }
 })
 
-app.get('/user/getUser',authorize, async (req, res) => {
+app.post('/user/getUser',authorize, async (req, res) => {
   try {
-    let result = await userRepository.getUser(req.userName)
+    let result = await userRepository.getUser(req.user.userName)
     res.status(200).send(result)
   } catch (error) {
     res.status(400).send(error)

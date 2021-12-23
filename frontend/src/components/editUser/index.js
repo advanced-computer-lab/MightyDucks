@@ -32,9 +32,26 @@ const EditUser=(props)=>{
     } 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
-   
+    
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+
+    // React.useEffect(() => {
+    //     axios.post('http://localhost:5000/user/getUser', data, header)
+    //     .then((res) => {
+    //         setCurUser(res.data)
+    //         console.log(res.data)
+    //         setFlag(!(res.data.message === "Incorrect Token Given"))
+    //     }).catch((error) => {
+    //         console.log(error)
+    //     });
+        
+    // },[isEdit, deleted, localStorage.getItem("token")])
+
     const updateUser=async(data)=>{
-        await axios.post('http://localhost:5000/user/update', data)
+        await axios.post('http://localhost:5000/user/update', data, header)
         .then((res) => {
             notify(`User ${userName} was updated successfully!`)
             handleClose();
@@ -58,7 +75,7 @@ const EditUser=(props)=>{
     const handleEdit=()=>{
         var result = validateFields();
         if (result){
-            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:password, flights: props.user.flights}
+            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:"123", flights: props.user.flights}
             updateUser(user);
         }
     }

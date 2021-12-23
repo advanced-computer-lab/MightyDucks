@@ -13,7 +13,7 @@ async function authorize(req, res, next) {
             })
             req.user = {};
             req.user.id = decoded.id
-            req.username = decoded.userName
+            req.user.userName = decoded.userName
             next()
         })
     } else {

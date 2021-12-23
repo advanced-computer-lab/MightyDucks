@@ -55,18 +55,18 @@ class userRepository {
                     isAdmin: false,
                     flights: [],
                     homeAddress: newUser.homeAddress || "",
-                    telephoneNumbers: newUser.telephoneNumbers || [],
+                    telephoneNumber: newUser.telephoneNumber || "",
                     countryCode: newUser.countryCode || ""
                 }, function (err, docs) {
                     if (docs == undefined) {
-                        rej("An error occured while creating your account");
+                        rej("An error occurred while creating your account");
                     } else {
                         res("Registration Successful");
                     }
                 });
             } catch (err) {
                 console.log(err)
-                throw new Error("An error occured while creating your account");
+                throw new Error("An error occurred while creating your account");
             }
         });
     }
@@ -75,7 +75,8 @@ class userRepository {
             try {
                 users.findOne({userName : userName}).then(dbUser => {
                     if(!dbUser){
-                      rej("Invalid Username or Password")
+                      rej("Invalid username or Password")
+                      return
                     }
                     console.log(dbUser)
                     bcrypt.compare(password, dbUser.password)
@@ -98,7 +99,7 @@ class userRepository {
                           }
                         )
                       } else{
-                        res({message: "Invalid Email or Password"})
+                        res({message: "Invalid username or Password"})
                       }
                     })
                   })
@@ -114,18 +115,14 @@ class userRepository {
     }
 
     async getUser(userName) {
-        let user = users.find({userName : userName});
+        let user = users.findOne({userName : userName});
         return user;
     }
 
     async updateUser(req) {
         let user = users.find({
-            userName: req.user.userName
+            userName: req.user.oldUserName
         })
-        for (let num of req.body.telephoneNumbers) {
-            if (user.telephoneNumbers.includes(num))
-                user.telephoneNumbers.push(num)
-        }
         users
             .findOneAndUpdate({
                 userName: req.body.oldUserName
@@ -138,7 +135,7 @@ class userRepository {
                     passportNumber: req.body.passportNumber,
                     flights: req.body.flights,
                     homeAddress: newUser.homeAddress,
-                    telephoneNumbers: newUser.telephoneNumbers,
+                    telephoneNumber: newUser.telephoneNumbers,
                     countryCode: newUser.countryCode
                 },
             })

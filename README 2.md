@@ -1,4 +1,4 @@
-***## Admin Privileges:***
+*** ## Admin Privileges:***
 1. The admin can create flights by specifying the following:<br>
 	- Flight Number<br>
 	- Departure and Arrival Locations, Dates, and Times<br>

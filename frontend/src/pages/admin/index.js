@@ -11,7 +11,7 @@ import { TextField, Button, Menu, MenuItem, InputAdornment, IconButton,} from '@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { format } from 'date-fns'
-
+import {Navigate} from 'react-router-dom'
 export default class Admin extends Component {
 
   state={
@@ -245,6 +245,7 @@ export default class Admin extends Component {
           }))}
         </div>
           </div>
+          {!this.state.adminFlag && <Navigate to="/"/>}
         </div>
     )
   }

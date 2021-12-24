@@ -6,7 +6,7 @@ import axios from 'axios';
 import React from 'react';
 import 'react-toastify/dist/ReactToastify.css'
 import { toast } from 'react-toastify';
-import {InputAdornment, IconButton } from "@material-ui/core";
+import {InputAdornment, IconButton,Button } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
@@ -22,17 +22,27 @@ const EditUser=(props)=>{
     const [lastNameErr,setLastNameErr]=React.useState("");
     const [emailErr,setEmailErr]=React.useState("");
     const [passportNumErr,setPassportNumErr]=React.useState("");
-    const [passwordErr,setPasswordErr]=React.useState("");
-    const [showPassword, setShowPassword] = React.useState(false);
-
+    const [oldPassword, setOldPassword] = React.useState("");
+    const [newPassword, setNewPassword] = React.useState("");
+    const [newPassErr,setNewPassErr]= React.useState("");
+    const [oldPassErr,setOldPassErr]= React.useState("");
+    const [passChange,setPasswordChange]= React.useState(false);
+    const [showOldPassword, setShowOldPassword] = React.useState(false);
+    const [showNewPassword, setShowNewPassword] = React.useState(false);
+    const [telephone,setTelephone]=React.useState(props.user.telephoneNumber);     
+    const [homeAddress, setHomeAddress] = React.useState(props.user.homeAddress);
+    const [telephoneErr,setTelephoneErr]=React.useState("");
+    const [homeAddressErr,setHomeAddressErr]=React.useState("");
     const [open, setOpen] = React.useState(true);
+    const [updateSuccess, setUpdatesSuccess] = React.useState(false);
+    const [passwordChangeSuccess, setPasswordChangeSuccess] = React.useState(false);
     const handleClose = () =>{
         setOpen(false);
         props.onEdit(false)
     } 
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleClickShowOldPassword = () => setShowOldPassword(!showOldPassword);
+    const handleClickShowNewPassword = () => setShowNewPassword(!showNewPassword);
     const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
-    
     const header = { headers: {
         "Content-type": "application/json",
         "x-access-token": localStorage.getItem("token")
@@ -54,31 +64,75 @@ const EditUser=(props)=>{
         await axios.post('http://localhost:5000/user/update', data, header)
         .then((res) => {
             notify(`User ${userName} was updated successfully!`)
-            handleClose();
+            setUpdatesSuccess(true)
         }).catch((error) => {
             console.log(error)
         });
     };
-    
+    const passwordChange=async(data)=>{
+        await axios.post('http://localhost:5000/user/changePassword', data, header)
+        .then((res) => {
+            if(res.data.message==='Success'){
+            notify(`User ${userName} password updated successfully!`)
+            setPasswordChangeSuccess(true)
+            }else{
+                toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
+            }
+        }).catch((error) => {
+            console.log(error)
+        });
+    };
+    React.useEffect(()=>{
+        if(!passChange && updateSuccess){
+            handleClose();
+            setUpdatesSuccess(false);
+            setPasswordChange(false);
+        }else if( passChange && updateSuccess && passwordChangeSuccess){
+            handleClose();
+            setUpdatesSuccess(false);
+            setPasswordChangeSuccess(false);
+            setPasswordChange(false);
+        }
+    },[passwordChangeSuccess,updateSuccess,passChange])
     const validateFields=()=>{
         setUserNameErr(userName?"":"username error")
         setFirstNameErr(firstName?"":"firstname error")
         setLastNameErr(lastName?"":"lastname error")
         setEmailErr(email?"":"email error");
         setPassportNumErr(passportNumber?"":"passport error")
-        setPasswordErr(password?"":"password error")
-        if(!userName || !firstName || !lastName || !email || !passportNumber || !password){
+        setHomeAddressErr(homeAddress?"":"home add error")
+        setTelephoneErr(telephone?"":"telephone error")
+        setOldPassErr((oldPassword && passChange) ?"":"old password error val")
+        setNewPassErr((newPassword!==oldPassword) && (passChange) && (newPassword) ?"":"new password error val")
+        if(!userName || !firstName || !lastName || !email || !passportNumber || !telephone || !homeAddress ){
             return false;
         }
+        if((passChange && (!oldPassword  || !newPassword || oldPassword===newPassword))){
+            return false;
+        }
+        else{
         return true;
-    }
-    const handleEdit=()=>{
-        var result = validateFields();
-        if (result){
-            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,password:"123", flights: props.user.flights}
-            updateUser(user);
         }
     }
+    const handleEdit=()=>{
+        var result = validateFields(); 
+        if (result){
+            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,flights: props.user.flights, homeAddress:homeAddress, telephoneNumber:telephone}
+            if (!passChange){
+                console.log("oldusername ",props.user.userName,"  ","username ",userName,"   firstname ",firstName,"   lastname",lastName, "   email ",email,"   passportNo ",passportNumber,"  homeadd ",homeAddress,"  telephone ",telephone)
+                updateUser(user);
+                console.log("success",updateSuccess)
+                if(updateSuccess){
+                    handleClose();
+                }
+            }else{
+                passwordChange({"userName":props.user.userName,"oldPassword":oldPassword, "newPassword":newPassword});
+                updateUser(user);
+            }
+           
+        }
+    }
+    
     const handleUserName=(e)=>{
         setUserName(e.target.value)
         setUserNameErr("")
@@ -99,10 +153,27 @@ const EditUser=(props)=>{
         setPassportNumber(e.target.value)
         setPassportNumErr("")
     }
-    const handlePassword=(e)=>{
-        setPassword(e.target.value)
-        setPasswordErr("")
+    const handleOldPassword=(e)=>{
+        setOldPassword(e.target.value)
+        setOldPassErr("");
+       
     }
+    const handleNewPassword=(e)=>{
+        setNewPassword(e.target.value)
+        setNewPassErr(((e.target.value!==oldPassword) && (passChange) && (e.target.value)) ?"":"new password error onchange")
+    }
+    const handleChangePassword=()=>{
+        setPasswordChange(true);
+    }
+    const handleTelephone=(e)=>{
+        setTelephone(e.target.value)
+        setTelephoneErr("")
+    }
+    const handleHomeAddress=(e)=>{
+        setHomeAddress(e.target.value);
+        setHomeAddressErr("");
+    }
+    console.log(homeAddress)
     return(
     <div>
         <Modal className={styles["Modal"]}
@@ -133,15 +204,40 @@ const EditUser=(props)=>{
                     <div className={styles["textfields"]}>
                         <TextFields label="Passport Number" value={passportNumber} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handlePassportNum} error={passportNumErr?true:false}/>
                     </div>
+
                     <div className={styles["textfields"]}>
-                        <TextFields label="Password"  value={password}  variant="outlined" size="small" type={showPassword ? "text" : "password"} required style={{width:400}} onChange={handlePassword} error={passwordErr?true:false}
-                        InputProps={{  endAdornment: (
-                              <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword}>
-                                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                              </InputAdornment>
-                        ) }}/>
+                        <TextFields label="Home Address" value={homeAddress} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handleHomeAddress} error={homeAddressErr?true:false}/>
                     </div>
+
+                    <div className={styles["textfields"]}>
+                        <TextFields label="Telephone Number" value={telephone} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handleTelephone} error={telephoneErr?true:false}/>
+                    </div>
+                    {!passChange?
+                    <div className={styles["buttonPass"]}>
+                        <Button onClick={handleChangePassword}>Change Password</Button>
+                    </div>:
+                    <>
+                    <div className={styles["textfields"]}>
+                        <TextFields label="Old Password" value={oldPassword} variant="outlined" size="small" type={showOldPassword ? "text" : "password"} required style={{width:400}} onChange={handleOldPassword} error={oldPassErr?true:false}
+                         InputProps={{  endAdornment: (
+                            <InputAdornment position="end"> <IconButton onClick={handleClickShowOldPassword}>
+                                {showOldPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                      ) }}/>
+                    </div>
+                    <div className={styles["textfields"]}>
+                        <TextFields label="New Password" value={newPassword} variant="outlined" size="small" type={showNewPassword ? "text" : "password"} required style={{width:400}} onChange={handleNewPassword} error={newPassErr?true:false}
+                         InputProps={{  endAdornment: (
+                            <InputAdornment position="end"> <IconButton onClick={handleClickShowNewPassword}>
+                                {showNewPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                      ) }}/>
+                    </div>
+                </>}
+                   
+                    
                     <div className={styles["button"]} >
                         <ContainedButton style={{width:400}} onClick={handleEdit}>Save</ContainedButton>
                     </div>

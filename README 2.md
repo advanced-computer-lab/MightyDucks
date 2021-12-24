@@ -22,8 +22,7 @@ Run the following command inside the backend directory:
 ```bash
 npm run dev
 ```
-
-
+<br>
 
 ## ***Admin Privileges:***
 1. The admin can create flights by specifying the following:<br>

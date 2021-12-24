@@ -51,9 +51,9 @@
 -	First Name and Last Name (obligatory) <br>
 -	Email (obligatory) <br>
 -	Password (obligatory) <br>
--	Passport Number (obligatory) <br>
--	Home Address (obligatory) <br>
--	Country Code and Telephone Number (obligatory) <br>
+-	Passport Number (optional) <br>
+-	Home Address (optional) <br>
+-	Country Code and Telephone Number (optional) <br>
 
 4.	The guest user can go the login page from the sign up page or from the navigation bar.
 

@@ -39,9 +39,7 @@ export default class Admin extends Component {
 
     axios.post('http://localhost:5000/user/getUser', this.data, this.header)
         .then((res) => {
-            console.log(res.data)
             this.setState({...this.state, adminFlag: res.data.isAdmin})
-            console.log(res.data.isAdmin)
         }).catch((error) => {
             console.log(error)
         });

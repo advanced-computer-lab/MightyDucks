@@ -134,7 +134,6 @@ function Signup({}) {
 
     useEffect(() => {
         if(data !== ""){
-            console.log(data)
         axios.post("http://localhost:5000/user/add", data)
             .then (() => {
                 toast.success(`User created successfully. Welcome ${userName}. Login to your account to proceed`, {position: toast.POSITION.BOTTOM_RIGHT})

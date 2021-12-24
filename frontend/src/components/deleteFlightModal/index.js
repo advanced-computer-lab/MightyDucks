@@ -14,6 +14,11 @@ const DeleteFlightModal =({flightNumber, getFlights})=>{
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+
     const deleter=()=>{
          var flightDetails={
             flightNumber
@@ -21,11 +26,16 @@ const DeleteFlightModal =({flightNumber, getFlights})=>{
         deleteFlight(flightDetails) 
     }
     const deleteFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/delete', data)
+        await axios.post('http://localhost:5000/flight/delete', data, header)
         .then((res) => {
-            notify(`Flight ${flightNumber} has been deleted successfully!`)
-            handleClose()
-            getFlights()
+          if(!(res.data.message === "Incorrect Token Given")){
+              notify(`Flight ${flightNumber} has been deleted successfully!`)
+              handleClose()
+              getFlights()
+          }
+          else {
+              toast.error("An error occurred", {position: toast.POSITION.BOTTOM_RIGHT})
+          }
         }).catch((error) => {
             console.log(error)
         });

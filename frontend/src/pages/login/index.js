@@ -72,9 +72,7 @@ function Login() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('user')
                 localStorage.setItem("token", res.data.token)
-                console.log(res.data.token)
                 setToken(res.data.token)
-                console.log(res)
             axios.post("http://localhost:5000/user/getUser", data, {
             headers: {
                 "Content-type": "application/json",
@@ -84,8 +82,6 @@ function Login() {
         .then ((res) => {
             toast.success(`Logged in successfully. Welcome ${username}`, {position: toast.POSITION.BOTTOM_RIGHT})
             localStorage.setItem("user", JSON.stringify(res.data))
-            console.log(localStorage.getItem("user"))
-            console.log(JSON.parse(localStorage.getItem("user")).userName)
             setToHome(true)
         })
         .catch((error) => {

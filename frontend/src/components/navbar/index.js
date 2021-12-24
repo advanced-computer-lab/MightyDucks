@@ -52,7 +52,6 @@ function Navbar({ deleted}){
         axios.post('http://localhost:5000/user/getUser', data, header)
         .then((res) => {
             setCurUser(res.data)
-            console.log(res.data)
             setFlag(!(res.data.message === "Incorrect Token Given"))
         }).catch((error) => {
             console.log(error)

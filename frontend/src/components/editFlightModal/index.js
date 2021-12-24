@@ -35,6 +35,11 @@ const FlightModal =({flightDetails, getFlights})=>{
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+
     const Add=()=>{
         setDepartureErr("");
         var result = validateFields();
@@ -69,12 +74,17 @@ const FlightModal =({flightDetails, getFlights})=>{
         return true;
     }
     const updateFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/update', data)
+        await axios.post('http://localhost:5000/flight/update', data, header)
         .then((res) => {
-            notify(`Flight ${flightNum} was updated successfully!`)
-            resetFields();
-            handleClose();
-            getFlights();
+            if(!(res.data.message === "Incorrect Token Given")){
+                notify(`Flight ${flightNum} was updated successfully!`)
+                resetFields();
+                handleClose();
+                getFlights();
+            }
+            else {
+                toast.error("An error occurred", {position: toast.POSITION.BOTTOM_RIGHT})
+            }   
         }).catch((error) => {
             console.log(error)
         });

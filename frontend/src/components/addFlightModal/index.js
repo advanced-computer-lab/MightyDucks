@@ -32,6 +32,12 @@ const FlightModal =({getFlights})=>{
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+
     const Add=()=>{
         setDepartureErr("");
         var result = validateFields();        
@@ -67,12 +73,18 @@ const FlightModal =({getFlights})=>{
         return true;
     }
     const createFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/create', data)
+        await axios.post('http://localhost:5000/flight/create', data, header)
         .then((res) => {
-            getFlights();
-            notify(`Flight ${res.data} was added successfully!`)
-            resetFields()
-            handleClose()
+            if(!(res.data.message === "Incorrect Token Given")){
+                getFlights();
+                notify(`Flight ${res.data} was added successfully!`)
+                resetFields()
+                handleClose()
+            }
+            else {
+                toast.error("An error occurred", {position: toast.POSITION.BOTTOM_RIGHT})
+            }
+            
         }).catch((error) => {
             setblockButton(false);
             console.log(error)

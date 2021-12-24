@@ -62,7 +62,7 @@ function FlightFilter({ setCriteria }) {
     const handleDepartureChange = (event) => {
         setDeparture(format(new Date(event), 'yyyy-MM-dd'))
         setDepartureErr(false)
-        if(departure === null || format(new Date(departure), 'yyyy-MM-dd')<(format(new Date(), 'yyyy-MM-dd'))){
+        if(departure === null){
             setDepartureErr(true)
         }   
     }
@@ -70,7 +70,7 @@ function FlightFilter({ setCriteria }) {
     const handleReturnChange = (event) => {
         setReturnD(format(new Date(event), 'yyyy-MM-dd'))
         setReturnErr(false)
-        if(returnD === null || returnD<departure || format(new Date(returnD), 'yyyy-MM-dd')<(format(new Date(), 'yyyy-MM-dd'))){
+        if(returnD === null || returnD<departure){
             setReturnErr(true)
         }    
     }
@@ -105,7 +105,7 @@ function FlightFilter({ setCriteria }) {
         if(departure === null){
             setDepartureErr(true)
         }
-        if(returnD === null){
+        if(returnD === null || format(new Date(departure), 'yyyy-MM-dd')>(format(new Date(returnD), 'yyyy-MM-dd'))){
             setReturnErr(true)
         }
         if(cabin === ''){
@@ -197,6 +197,7 @@ function FlightFilter({ setCriteria }) {
                                 onChange={handleDepartureChange}
                                 format="YYYY-MM-DD"    
                                 renderInput={(params) => <TextField {...params} error={departureErr?true:false}/>}
+                                disablePast
                             />
                        </LocalizationProvider>
                     </Grid>
@@ -210,6 +211,7 @@ function FlightFilter({ setCriteria }) {
                                 onChange={handleReturnChange}
                                 format="YYYY-MM-DD"
                                 renderInput={(params) => <TextField {...params} error={returnErr?true:false} />}
+                                disablePast
                             />
                        </LocalizationProvider>
                     </Grid>

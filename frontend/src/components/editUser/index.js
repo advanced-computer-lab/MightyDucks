@@ -48,22 +48,9 @@ const EditUser=(props)=>{
         "x-access-token": localStorage.getItem("token")
     }}
 
-    // React.useEffect(() => {
-    //     axios.post('http://localhost:5000/user/getUser', data, header)
-    //     .then((res) => {
-    //         setCurUser(res.data)
-    //         console.log(res.data)
-    //         setFlag(!(res.data.message === "Incorrect Token Given"))
-    //     }).catch((error) => {
-    //         console.log(error)
-    //     });
-        
-    // },[isEdit, deleted, localStorage.getItem("token")])
-
     const updateUser=async(data)=>{
         await axios.post('http://localhost:5000/user/update', data, header)
         .then((res) => {
-            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(true)
         }).catch((error) => {
             console.log(error)
@@ -73,7 +60,6 @@ const EditUser=(props)=>{
         await axios.post('http://localhost:5000/user/changePassword', data, header)
         .then((res) => {
             if(res.data.message==='Success'){
-            notify(`User ${userName} password updated successfully!`)
             setPasswordChangeSuccess(true)
             }else{
                 toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
@@ -85,10 +71,12 @@ const EditUser=(props)=>{
     React.useEffect(()=>{
         if(!passChange && updateSuccess){
             handleClose();
+            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(false);
             setPasswordChange(false);
         }else if( passChange && updateSuccess && passwordChangeSuccess){
             handleClose();
+            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(false);
             setPasswordChangeSuccess(false);
             setPasswordChange(false);

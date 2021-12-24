@@ -51,7 +51,7 @@
 -	First Name and Last Name (obligatory) <br>
 -	Email (obligatory) <br>
 -	Password (obligatory) <br>
--	Passport Number (optional) <br>
+-	Passport Number (obligatory) <br>
 -	Home Address (optional) <br>
 -	Country Code and Telephone Number (optional) <br>
 

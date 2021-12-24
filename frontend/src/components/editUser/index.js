@@ -105,20 +105,15 @@ const EditUser=(props)=>{
         setOldPassErr((oldPassword && passChange) ?"":"old password error val")
         setNewPassErr((newPassword!==oldPassword) && (passChange) && (newPassword) ?"":"new password error val")
         if(!userName || !firstName || !lastName || !email || !passportNumber || !telephone || !homeAddress ){
-            console.log("not validated")
             return false;
         }
         if((passChange && (!oldPassword  || !newPassword || oldPassword===newPassword))){
-            console.log("not validated")
             return false;
         }
         else{
-            console.log(" validated")
         return true;
         }
     }
-
-    console.log("passchange ",passChange)
     const handleEdit=()=>{
         var result = validateFields(); 
         if (result){

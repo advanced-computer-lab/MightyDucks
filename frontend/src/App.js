@@ -9,7 +9,6 @@ import Itinerary from "./pages/itinerary"
 import Signup from "./pages/signup"
 import Login from "./pages/login"
 import Navbar from "./components/navbar"
-import axios from "axios"
 
 function App() {
 

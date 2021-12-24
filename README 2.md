@@ -1,15 +1,15 @@
-##***Admin Privileges:***
-- The admin can create flights by specifying the following:
-	a) flight number
-	b) departure and arrival locations, dates, and times
-	c) number of economy, business class, and first class seats
+***Admin Privileges:***
+- The admin can create flights by specifying the following:<br>
+	a) flight number<br>
+	b) departure and arrival locations, dates, and times<br>
+	c) number of economy, business class, and first class seats<br>
 
-- The admin can search for existing flights by either of these factors:
-	a) Flight number
-	b) Departure Destination
-	c) Arrival Destination
-	d) Departure Date and Time
-	e) Arrival Date and Time
+- The admin can search for existing flights by either of these factors:<br>
+	a) Flight number<br>
+	b) Departure Destination<br>
+	c) Arrival Destination<br>
+	d) Departure Date and Time<br>
+	e) Arrival Date and Time<br>
 
 - The admin can edit the flights by editing any of the flight’s details
 

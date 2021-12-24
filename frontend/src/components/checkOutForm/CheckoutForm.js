@@ -4,6 +4,7 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { ContainedButton } from "../buttons/styledButtons";
 
 export default function CheckoutForm({amount,setDone}) {
   const stripe = useStripe();
@@ -76,11 +77,11 @@ export default function CheckoutForm({amount,setDone}) {
     <form id="payment-form" onSubmit={handleSubmit}>
         <h3>{"$" + amount}</h3>
       <PaymentElement id="payment-element" />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
+      <ContainedButton style={{width:'100%'}} className="button" disabled={isLoading || !stripe || !elements} id="submit" onClick={handleSubmit}>
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
-      </button>
+      </ContainedButton>
       {message && <div id="payment-message">{message}</div>}
     </form>
   );

@@ -174,6 +174,16 @@ app.post('/user/add', async (req, res) => {
   }
 })
 
+app.post('/user/changePassword',authorize, async (req, res) => {
+  try {
+    console.log("change pass")
+    let result = await userRepository.changePassword(req);
+    res.status(200).send(result)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
 app.post("/create-payment-intent",authorize, async (req, res) => {
   let price = req.body.price;
   // Create a PaymentIntent with the order amount and currency

@@ -15,6 +15,7 @@ import { IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"
 
 function Login() {
 
@@ -26,10 +27,11 @@ function Login() {
     const [usernameErr, setUsernameErr] = useState(false)
     const [passwordErr, setPasswordErr] = useState(false)
     const [data, setData] = useState("");
-    const [token, setToken] = useState("");
     const [toHome, setToHome] = useState(false)
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+    const navigate = useNavigate()
 
     const handleUsername = (e) => {
         setUsername(e.target.value)
@@ -72,9 +74,6 @@ function Login() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('user')
                 localStorage.setItem("token", res.data.token)
-                console.log(res.data.token)
-                setToken(res.data.token)
-                console.log(res)
             axios.post("http://localhost:5000/user/getUser", data, {
             headers: {
                 "Content-type": "application/json",
@@ -84,9 +83,10 @@ function Login() {
         .then ((res) => {
             toast.success(`Logged in successfully. Welcome ${username}`, {position: toast.POSITION.BOTTOM_RIGHT})
             localStorage.setItem("user", JSON.stringify(res.data))
-            console.log(localStorage.getItem("user"))
-            console.log(JSON.parse(localStorage.getItem("user")).userName)
-            setToHome(true)
+            if(res.data.isAdmin) {
+                localStorage.setItem("admin", true)
+            }
+            navigate("../", {replace: true})
         })
         .catch((error) => {
             console.log(error)
@@ -165,7 +165,7 @@ function Login() {
                     Login
                 </Button>
             </Grid>
-            {toHome  && <Navigate to="/"/>}
+            
             </Grid>
         </div>
     )

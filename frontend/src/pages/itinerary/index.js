@@ -8,7 +8,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import {Box, Typography} from '@mui/material'
 import PropTypes from 'prop-types';
-import { HeadsetRounded } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom"
 
 function Itinerary(props) {
     const styles = useStyles()
@@ -22,14 +22,18 @@ function Itinerary(props) {
         "Content-type": "application/json",
         "x-access-token": localStorage.getItem("token")
     }}
+    const navigate = useNavigate()
     useEffect(() => {
+      if(!localStorage.getItem("token")){
+          navigate("../", {replace: true})
+      }
+      else{
        if(!flag || deleted)
-       { console.log("lol effect")
+       {
            axios.post('http://localhost:5000/user/getUser', {}, header)
         .then((res) => {
           if(!(res.data.message === "Incorrect Token Given")){
             setCurrentUser(res.data)
-            console.log(res.data.userName)
           }
           else{
             setCurrentUser(null)
@@ -40,12 +44,11 @@ function Itinerary(props) {
         }).catch((error) => {
             console.log(error)
         });
-        
+        }
     }
     },[deleted, flag])
 
      const getUpcomingFlights=async(data)=>{
-         console.log(header)
         await axios.post('http://localhost:5000/user/getFlights/upcoming', data , header)
         .then((res) => {
             setUpcoming(res.data)

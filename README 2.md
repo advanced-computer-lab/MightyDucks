@@ -72,8 +72,8 @@ npm run dev
 12. The admin can sign out using the ‘Sign Out’ in the navigation bar.
 
 13. The admin can search for flights either from the dashboard or from the ‘Book a flight?’ option in the navigation bar by adding the following information:
-	- Departure and Arrival Locations<br>
-	- Departure and Return Dates<br>
+	- Departure or Arrival Locations<br>
+	- Departure or Return Dates<br>
 	- Number of Adults and Children<br>
 	- Cabin type (Economy, Business Class, or First Class) <br>
 14. The admin can choose and select from the flight results for departure and return options. The user, then, gets to choose their seats for both trips, and finally the user can proceed to payment.
@@ -140,7 +140,7 @@ npm run dev
 	- Edit Profile option<br>
 	- My Trips option<br>
 
-7. The logged in can edit their profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
+7. The logged in user can edit their profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
 	- Username<br>
 	- First Name<br>
 	- Last Name<br>
@@ -148,7 +148,7 @@ npm run dev
 	- Passport Number<br>
 	- Password<br>
 
-8. The logged in can view their reserved upcoming and past trips from the ‘My Trips’ option in the drawer
+8. The logged in user can view their reserved upcoming and past trips from the ‘My Trips’ option in the drawer.
 
 9. The logged in user can cancel their reservation for a trip, and get an email with their cancelled reservation and the amount to be refunded.
 

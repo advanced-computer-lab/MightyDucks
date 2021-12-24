@@ -42,11 +42,11 @@
 10. The admin can switch to his/her admin privileges from the ‘Admin Controls’ option in the drawer
 
 ## ***Guest User Privileges:***
-1.	The guest user can login using the username and password.
+1. The guest user can login using the username and password.
 
-2.	The guest user can sign up from the login page as well as the navigation bar.
+2. The guest user can sign up from the login page as well as the navigation bar.
 
-3.	The guest user can sign up by adding the following obligatory and optional information:
+3. The guest user can sign up by adding the following obligatory and optional information:
 	- Username (obligatory) <br>
 	- First Name and Last Name (obligatory) <br>
 	- Email (obligatory) <br>
@@ -55,12 +55,12 @@
 	- Home Address (optional) <br>
 	- Country Code and Telephone Number (optional) <br>
 
-4.	The guest user can go the login page from the sign up page or from the navigation bar.
+4. The guest user can go the login page from the sign up page or from the navigation bar.
 
-5.	The guest user can search for flights by adding the following information:
+5. The guest user can search for flights by adding the following information:
 	- Departure and Arrival Locations<br>
-	- Departure and Return Dates and Times<br>
+	- Departure and Return Dates<br>
 	- Number of Adults and Children<br>
 	- Cabin type (Economy, Business Class, or First Class) <br>
 
-6.	The guest user can choose and select from the flight results for departure and return, however, the guest user can’t proceed to payment without logging in first.
+6. The guest user can choose and select from the flight results for departure and return, however, the guest user can’t proceed to payment without logging in first.

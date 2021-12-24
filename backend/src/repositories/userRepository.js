@@ -5,36 +5,32 @@ const secret = process.env.JWT_SECRET;
 
 class userRepository {
     async changePassword(req){
-        req.user.userName
         let hashed = await bcrypt.hash(req.body.newPassword,14)
-        let found;
-        return new Promise((res, rej) => {
+        return new Promise(async (res, rej) => {
             try {
-                users.findOne({userName : req.user.userName}).then(dbUser => {
+                await users.findOne({userName : req.user.userName}).then(dbUser => {
                     if(!dbUser){
                       rej("Invalid Username or Password")
                     }
-                    console.log(dbUser)
                     bcrypt.compare(req.body.oldPassword, dbUser.password)
                     .then(isCorrect => {
                         if(isCorrect){
-                            found = true;
+                                users.findOneAndUpdate({userName : req.user.userName},{
+                                  $set: {
+                                      password: hashed,
+                                  },
+                              }).then(() => {
+                                  console.log(`Password for ${req.user.userName} has been changed`);
+                                  res({message: "Success"});
+                              });
+                            
                         } else {
                             res({message: "Invalid Email or Password"})
                       }
                     })
                   })
 
-                  if(found){
-                      users.findOneAndUpdate({userName : req.user.userName},{
-                        $set: {
-                            password: hashed,
-                        },
-                    }).then(() => {
-                        console.log(`Password for ${req.user.userName} has been changed`);
-                        res({message: Success});
-                    });
-                  }
+                  
             } catch (err) {
                 throw new Error("Username Or Password Are Incorrect");
             }
@@ -119,32 +115,21 @@ class userRepository {
         return user;
     }
 
-    async updateUser(req) {
-        let user = users.find({
-            userName: req.user.oldUserName
-        })
-        users
-            .findOneAndUpdate({
-                userName: req.body.oldUserName
-            }, {
-                $set: {
-                    userName: req.body.userName,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    passportNumber: req.body.passportNumber,
-                    flights: req.body.flights,
-                    homeAddress: newUser.homeAddress,
-                    telephoneNumber: newUser.telephoneNumbers,
-                    countryCode: newUser.countryCode
-                },
-            })
-            .then(() => {
-                console.log(`User ${req.body.userName} was updated successfully!`);
+    async updateUser(req){
+        users.findOneAndUpdate({userName: req.body.oldUserName}, {$set:{
+            userName: req.body.userName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email:req.body.email,
+            passportNumber:req.body.passportNumber,
+            homeAddress: req.body.homeAddress,
+            telephoneNumber: req.body.telephoneNumber,
+            countryCode: req.body.countryCode,}}).then(() => {
+                console.log(`User ${req.body.userName} was updated successfully!`)
                 return req.body.userName;
-            });
+            })
     }
-
+    
     async getFlights(userName, allFlights) {
         return new Promise((res, rej) => {
             users.findOne({

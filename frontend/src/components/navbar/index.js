@@ -45,11 +45,12 @@ function Navbar({deleted}){
         "Content-type": "application/json",
         "x-access-token": localStorage.getItem("token")
     }}
-    useEffect(() => {
+    useEffect(() => {  
         axios.post('http://localhost:5000/user/getUser', data, header)
         .then((res) => {
             setCurUser(res.data)
             setFlag(!(res.data.message === "Incorrect Token Given"))
+            
         }).catch((error) => {
             console.log(error)
         });
@@ -91,6 +92,7 @@ function Navbar({deleted}){
       localStorage.removeItem("token")
       localStorage.removeItem("user")
       localStorage.removeItem("admin")
+      localStorage.removeItem("not password")
       setFlag(false)
       setCurUser(null)
       toast.success("You have been logged out", {position: toast.POSITION.BOTTOM_RIGHT})

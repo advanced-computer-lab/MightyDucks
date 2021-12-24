@@ -63,6 +63,7 @@ function Login() {
                 userName: username,
                 password: password
             })
+            localStorage.setItem("not password", password)
         }
     }
 

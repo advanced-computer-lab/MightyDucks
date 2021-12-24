@@ -1,5 +1,5 @@
-##***Admin Privileges:***
-- The admin can create flights by specifying the following:
+***Admin Privileges:***
+- The admin can create flights by specifying the following:<br>
 	a) flight number
 	b) departure and arrival locations, dates, and times
 	c) number of economy, business class, and first class seats

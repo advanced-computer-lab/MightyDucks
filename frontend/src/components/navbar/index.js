@@ -107,7 +107,7 @@ function Navbar({deleted}){
     }
 
       const listSigned = (anchor) => (
-        <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2  }} >
+        <Box sx={{ width: anchor === 'top'? 'auto' : 250 ,marginRight:2 }} style={{width:'fit-content', minWidth:260}} >
           <List>
             <Paper elevation={0} >
                 <div className={styles.list}  >

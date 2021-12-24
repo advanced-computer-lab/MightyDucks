@@ -4,6 +4,7 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { ContainedButton } from "../buttons/styledButtons";
 
 export default function CheckoutForm({amount,setDone}) {
   const stripe = useStripe();
@@ -47,8 +48,6 @@ export default function CheckoutForm({amount,setDone}) {
     e.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -57,17 +56,10 @@ export default function CheckoutForm({amount,setDone}) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
         return_url: "https://www.youtube.com/watch?v=xaazUgEKuVA",
       },
       redirect: "if_required"
     })
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
     console.log(error);
     if(error)
         if (error.type === "card_error" || error.type === "validation_error") {
@@ -85,12 +77,11 @@ export default function CheckoutForm({amount,setDone}) {
     <form id="payment-form" onSubmit={handleSubmit}>
         <h3>{"$" + amount}</h3>
       <PaymentElement id="payment-element" />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
+      <ContainedButton style={{width:'100%'}} className="button" disabled={isLoading || !stripe || !elements} id="submit" onClick={handleSubmit}>
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
-      </button>
-      {/* Show any error or success messages */}
+      </ContainedButton>
       {message && <div id="payment-message">{message}</div>}
     </form>
   );

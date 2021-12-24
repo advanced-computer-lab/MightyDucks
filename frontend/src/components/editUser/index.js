@@ -16,7 +16,6 @@ const EditUser=(props)=>{
     const [lastName,setLastName]=React.useState(props.user.lastName);
     const [email,setEmail]=React.useState(props.user.email);
     const [passportNumber, setPassportNumber] = React.useState(props.user.passportNumber);
-    const [password, setPassword] = React.useState(props.user.password);
     const [usernameErr,setUserNameErr]=React.useState("");
     const [firstNameErr,setFirstNameErr]=React.useState("");
     const [lastNameErr,setLastNameErr]=React.useState("");
@@ -31,8 +30,6 @@ const EditUser=(props)=>{
     const [showNewPassword, setShowNewPassword] = React.useState(false);
     const [telephone,setTelephone]=React.useState(props.user.telephoneNumber);     
     const [homeAddress, setHomeAddress] = React.useState(props.user.homeAddress);
-    const [telephoneErr,setTelephoneErr]=React.useState("");
-    const [homeAddressErr,setHomeAddressErr]=React.useState("");
     const [open, setOpen] = React.useState(true);
     const [updateSuccess, setUpdatesSuccess] = React.useState(false);
     const [passwordChangeSuccess, setPasswordChangeSuccess] = React.useState(false);
@@ -48,22 +45,9 @@ const EditUser=(props)=>{
         "x-access-token": localStorage.getItem("token")
     }}
 
-    // React.useEffect(() => {
-    //     axios.post('http://localhost:5000/user/getUser', data, header)
-    //     .then((res) => {
-    //         setCurUser(res.data)
-    //         console.log(res.data)
-    //         setFlag(!(res.data.message === "Incorrect Token Given"))
-    //     }).catch((error) => {
-    //         console.log(error)
-    //     });
-        
-    // },[isEdit, deleted, localStorage.getItem("token")])
-
     const updateUser=async(data)=>{
         await axios.post('http://localhost:5000/user/update', data, header)
         .then((res) => {
-            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(true)
         }).catch((error) => {
             console.log(error)
@@ -73,7 +57,6 @@ const EditUser=(props)=>{
         await axios.post('http://localhost:5000/user/changePassword', data, header)
         .then((res) => {
             if(res.data.message==='Success'){
-            notify(`User ${userName} password updated successfully!`)
             setPasswordChangeSuccess(true)
             }else{
                 toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
@@ -85,10 +68,12 @@ const EditUser=(props)=>{
     React.useEffect(()=>{
         if(!passChange && updateSuccess){
             handleClose();
+            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(false);
             setPasswordChange(false);
         }else if( passChange && updateSuccess && passwordChangeSuccess){
             handleClose();
+            notify(`User ${userName} was updated successfully!`)
             setUpdatesSuccess(false);
             setPasswordChangeSuccess(false);
             setPasswordChange(false);
@@ -100,11 +85,9 @@ const EditUser=(props)=>{
         setLastNameErr(lastName?"":"lastname error")
         setEmailErr(email?"":"email error");
         setPassportNumErr(passportNumber?"":"passport error")
-        setHomeAddressErr(homeAddress?"":"home add error")
-        setTelephoneErr(telephone?"":"telephone error")
         setOldPassErr((oldPassword && passChange) ?"":"old password error val")
         setNewPassErr((newPassword!==oldPassword) && (passChange) && (newPassword) ?"":"new password error val")
-        if(!userName || !firstName || !lastName || !email || !passportNumber || !telephone || !homeAddress ){
+        if(!userName || !firstName || !lastName || !email || !passportNumber ){
             return false;
         }
         if((passChange && (!oldPassword  || !newPassword || oldPassword===newPassword))){
@@ -119,7 +102,6 @@ const EditUser=(props)=>{
         if (result){
             var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,flights: props.user.flights, homeAddress:homeAddress, telephoneNumber:telephone}
             if (!passChange){
-                console.log("oldusername ",props.user.userName,"  ","username ",userName,"   firstname ",firstName,"   lastname",lastName, "   email ",email,"   passportNo ",passportNumber,"  homeadd ",homeAddress,"  telephone ",telephone)
                 updateUser(user);
                 console.log("success",updateSuccess)
                 if(updateSuccess){
@@ -167,11 +149,9 @@ const EditUser=(props)=>{
     }
     const handleTelephone=(e)=>{
         setTelephone(e.target.value)
-        setTelephoneErr("")
     }
     const handleHomeAddress=(e)=>{
         setHomeAddress(e.target.value);
-        setHomeAddressErr("");
     }
     console.log(homeAddress)
     return(
@@ -206,11 +186,11 @@ const EditUser=(props)=>{
                     </div>
 
                     <div className={styles["textfields"]}>
-                        <TextFields label="Home Address" value={homeAddress} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handleHomeAddress} error={homeAddressErr?true:false}/>
+                        <TextFields label="Home Address" value={homeAddress} variant="outlined" size="small" type="text" style={{width:400}} onChange={handleHomeAddress} />
                     </div>
 
                     <div className={styles["textfields"]}>
-                        <TextFields label="Telephone Number" value={telephone} variant="outlined" size="small" type="text" required style={{width:400}} onChange={handleTelephone} error={telephoneErr?true:false}/>
+                        <TextFields label="Telephone Number" value={telephone} variant="outlined" size="small" type="text" style={{width:400}} onChange={handleTelephone} />
                     </div>
                     {!passChange?
                     <div className={styles["buttonPass"]}>

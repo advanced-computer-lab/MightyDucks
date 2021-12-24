@@ -124,6 +124,10 @@ function Navbar({deleted}){
                 <div className={styles.text}>{curUser && curUser.email}</div>
                 <div className={styles.fields}>Passport Number: </div>
                 <div className={styles.text}>{curUser && curUser.passportNumber}</div>
+                <div className={styles.fields}>Home Address:</div>
+                <div className={styles.text}>{curUser && curUser.homeAddress}</div>
+                <div className={styles.fields}>Telephone Number: </div>
+                <div className={styles.text}>{curUser && curUser.telephoneNumber}</div>
             </Paper>
             {['Edit Profile'].map((text, index) => (
                <ListItem key={text}  onClick={()=>handleList(text)} button >

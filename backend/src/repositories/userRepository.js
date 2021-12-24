@@ -8,19 +8,19 @@ class userRepository {
         let hashed = await bcrypt.hash(req.body.newPassword,14)
         return new Promise(async (res, rej) => {
             try {
-                await users.findOne({userName : req.user.userName}).then(dbUser => {
+                await users.findOne({userName : req.body.userName}).then(dbUser => {
                     if(!dbUser){
                       rej("Invalid Username or Password")
                     }
                     bcrypt.compare(req.body.oldPassword, dbUser.password)
                     .then(isCorrect => {
                         if(isCorrect){
-                                users.findOneAndUpdate({userName : req.user.userName},{
+                                users.findOneAndUpdate({userName : req.body.userName},{
                                   $set: {
                                       password: hashed,
                                   },
                               }).then(() => {
-                                  console.log(`Password for ${req.user.userName} has been changed`);
+                                  console.log(`Password for ${req.body.userName} has been changed`);
                                   res({message: "Success"});
                               });
                             

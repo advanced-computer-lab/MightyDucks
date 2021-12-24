@@ -3,10 +3,11 @@ import {Modal, Typography, Button, Box, Grid} from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
 import axios from "axios"
 import { toast } from 'react-toastify';
-import { NavLink, Navigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import ConfirmationModal from "../confirmationModal"
 import ChangeSeatsModal from "../changeSeatsModal"
 import ChangeFlightModal from "../changeFlightModal"
+import CheckOut from "../checkOutForm"
 
 const style = {
   position: 'absolute',
@@ -19,6 +20,18 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const styles = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 function ChildModal(props) {
 
@@ -44,10 +57,45 @@ function ChildModal(props) {
         </Modal>
       </React.Fragment>
     );
-  }
+}
+
+function PayModal(props) {
+    const [done, setDone] = React.useState(false)
+
+    const handleClose = () => {
+      props.setOpen(false);
+    };
+
+    React.useEffect(() => {
+        if(done){
+            props.setPaid(true)
+            setDone(false)
+        }
+    }, [done])
+  
+    return (
+      <React.Fragment>
+        <Modal
+          hideBackdrop
+          open={props.open}
+          onClose={handleClose}
+          aria-labelledby="child-modal-title"
+          aria-describedby="child-modal-description"
+        >
+          <Box sx={{ ...styles, height: 450 }}>
+            <h2 id="child-modal-title">Payment portal</h2>
+            <CheckOut setDone={setDone} price={props.price} />
+          </Box>
+        </Modal>
+      </React.Fragment>
+    );
+}
 
 export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming}) {
     const handleClose = () => setOpen(false);
+
+    const [paid, setPaid] = React.useState(false);
+    const [payTime, setPayTime] = React.useState(false);
 
     const header = { headers: {
         "Content-type": "application/json",
@@ -233,13 +281,19 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     }
 
     const [child, setChild] = React.useState(false)
-    const [Redirect, setRedirect] = React.useState(false)
+    const navigate = useNavigate();
 
     const handleConfirm = () => {
         if(localStorage.getItem("token")===null){
             setChild(true)
         }
         else{
+            setPayTime(true)
+        }
+    }
+
+    React.useEffect(() => {
+        if(paid){
             var returnFlightdetails={
                 from:returnFlight.from, to:returnFlight.to, departureTime: returnFlight.departureTime,arrivalTime:returnFlight.arrivalTime,economy:(cabin2==="Economy"? returnFlight.economy-returningFlightSeats.length : returnFlight.economy),business:(cabin2==="Business"? returnFlight.business-returningFlightSeats.length : returnFlight.business), first:(cabin2==="First"? returnFlight.first-returningFlightSeats.length : returnFlight.first),flightNumber:returnFlight.flightNumber, oldFlightNumber: returnFlight.flightNumber, baggageAllowance: returnFlight.baggageAllowance, price:returnFlight.price, bookedSeats: returnFlight.bookedSeats.concat(returningFlightSeats)
             }
@@ -255,10 +309,11 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 toast.success("Trip booked successfully!", {
                     position: toast.POSITION.BOTTOM_RIGHT,
                   });
-                setRedirect(true);
+                navigate("/", {replace: true})
             }
+            setPaid(false)
         }
-    }
+    }, [paid])
 
     const updateFlight=async(data)=>{
         await axios.post('http://localhost:5000/flight/update', data, header)
@@ -477,7 +532,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     return (
         <div>
             {child && <ChildModal open={child} setOpen={setChild} />}
-            {Redirect && <Navigate to='/'/>}
             <Modal
             open={open}
             onClose={handleClose}
@@ -583,6 +637,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                     {changeFlight && <ChangeFlightModal setNewFlight={setChangeFlightNewFlight} setNewSeats={setChangeFlightNewSeats} setConfirmNewFlight={setConfirmNewFlight} oldFlight={changeFlightOldFlight} otherDate={otherDate} flightType={flightType} oldSeats={changeFlightOldSeats} oldCabin={changeFlightOldCabin} open={changeFlight} setOpen={setChangeFlight} />}
                 </Grid>}
                 {create && !upcoming && <Button variant="outlined" style={{ color: "#017A9B"}} onClick={handleConfirm}>Confirm reservation</Button>}
+                {create && !upcoming && payTime && <PayModal setOpen={setPayTime} open={payTime} price={departingFlightSeats.length*(departureFlight.price+priceAddOn1) + returningFlightSeats.length*(returnFlight.price+priceAddOn2)} setPaid={setPaid} />}
             </Box>
             </Modal>
         </div>

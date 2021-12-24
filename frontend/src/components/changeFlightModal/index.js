@@ -11,6 +11,7 @@ import FlightsCluster from "../flightsCluster"
 import { toast } from 'react-toastify';
 import SelectSeats from "../SelectSeats";
 import { ArrowForward } from '@mui/icons-material';
+import CheckOut from "../checkOutForm"
 
 const steps = [
   'Choose Your Flight',
@@ -126,6 +127,7 @@ function ChangeFlightModal({
                     value={departure}
                     onChange={handleDepartureChange}
                     format="YYYY-MM-DD"
+                    disablePast
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -304,10 +306,6 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, o
     setPaid(true)
   }
 
-  const handlePayment = () => {
-    setPaid(true)
-  }
-
   const departureTime1 = (new Date(flight.departureTime).toString()).split(" ")
     const arrivalTime1 = (new Date(flight.arrivalTime).toString()).split(" ")
     
@@ -414,7 +412,7 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, o
         </Grid>
       </Typography>
       
-      {price===0? <Button variant="contained" disabled={true}>All paid up!</Button> : <Button variant="contained" onClick={handlePayment}>Proceed to Payment</Button>}
+      {price===0? <Button variant="contained" disabled={true}>All paid up!</Button> : <div style={{width: "90%"}}><CheckOut setDone={setPaid} price={flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2))} /></div>}
     </div>
   )
 }

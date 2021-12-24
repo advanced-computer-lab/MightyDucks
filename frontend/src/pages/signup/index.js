@@ -8,7 +8,7 @@ import { IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import {InputAdornment} from '@mui/material';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"
 
 function Signup({}) {
     const styles = useStyles()
@@ -35,7 +35,7 @@ function Signup({}) {
     const [toLogin, setToLogin] = useState(false)
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
-
+    const navigate = useNavigate()
     const [data, setData] = useState("")
 
     const handleUsername = (e) => {
@@ -137,14 +137,13 @@ function Signup({}) {
         axios.post("http://localhost:5000/user/add", data)
             .then (() => {
                 toast.success(`User created successfully. Welcome ${userName}. Login to your account to proceed`, {position: toast.POSITION.BOTTOM_RIGHT})
-                setToLogin(true)
+                navigate("../login", {replace: true})
             })
             .catch((error) => {
                 toast.error("An error occurred while trying to create your account", {position: toast.POSITION.BOTTOM_RIGHT})
                 console.log(error)
             })
         }
-        
     }, [data])
 
     return (
@@ -234,7 +233,6 @@ function Signup({}) {
                     Create Account
                 </Button>
             </Grid>
-            {toLogin  && <Navigate to="/login"/>}
         </Grid>
       </div>
     );

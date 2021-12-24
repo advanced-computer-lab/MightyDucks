@@ -37,7 +37,6 @@
     margin-bottom: 24px;
   }
   
-  /* Buttons and links */
   button {
     background: #5469d4;
     font-family: Arial, sans-serif;
@@ -63,7 +62,6 @@
     cursor: default;
   }
   
-  /* spinner/processing state, errors */
   .spinner,
   .spinner:before,
   .spinner:after {
@@ -83,7 +81,6 @@
     -ms-transform: translateZ(0);
     transform: translateZ(0);
   }
-  
   .spinner:before,
   .spinner:after {
     position: absolute;

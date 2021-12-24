@@ -29,7 +29,7 @@
 	- My Trips option<br>
 	- Admin controls option<br>
 
-8. The admin can edit his profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
+8. The admin can edit their profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
 	- Username<br>
 	- First Name<br>
 	- Last Name<br>
@@ -37,9 +37,28 @@
 	- Passport Number<br>
 	- Password<br>
 
-9. The admin can view his/hers reserved upcoming and past trips from the ‘My Trips’ option in the drawer
+9. The admin can view their reserved upcoming and past trips from the ‘My Trips’ option in the drawer.
 
-10. The admin can switch to his/her admin privileges from the ‘Admin Controls’ option in the drawer
+10. The admin can switch to their admin privileges from the ‘Admin Controls’ option in the drawer.
+
+11. The admin can return to the dashboard by clicking on the logo of the website.
+
+12. The admin can sign out using the ‘Sign Out’ in the navigation bar.
+
+13. The admin can search for flights either from the dashboard or from the ‘Book a flight?’ option in the navigation bar by adding the following information:
+	- Departure and Arrival Locations<br>
+	- Departure and Return Dates<br>
+	- Number of Adults and Children<br>
+	- Cabin type (Economy, Business Class, or First Class) <br>
+14. The admin can choose and select from the flight results for departure and return options. The user, then, gets to choose their seats for both trips, and finally the user can proceed to payment.
+
+15. Upon payment, the admin can choose to pay either to pay with ‘Visa’ or ‘Master Card’, and then enter the following information:
+	- Card Number
+	- Expiration Date
+	- CCV
+
+16. After a successful payment, the admin user will receive an email with their itinerary, if they had chosen that option.
+
 
 ## ***Guest User Privileges:***
 1. The guest user can login using the username and password.
@@ -57,10 +76,54 @@
 
 4. The guest user can go the login page from the sign up page or from the navigation bar.
 
-5. The guest user can search for flights by adding the following information:
+5. The guest user can search for flights either from the dashboard or from the ‘Book a flight?’ option in the navigation bar by adding the following information:
 	- Departure and Arrival Locations<br>
 	- Departure and Return Dates<br>
 	- Number of Adults and Children<br>
 	- Cabin type (Economy, Business Class, or First Class) <br>
 
 6. The guest user can choose and select from the flight results for departure and return, however, the guest user can’t proceed to payment without logging in first.
+
+7. The guest user can return to the dashboard by clicking on the logo of the website.
+
+
+## ***Logged In User Privileges:***
+1. The logged in user can sign out using the ‘Sign Out’ in the navigation bar.
+
+2. The logged in user can search for flights either from the dashboard or from the ‘Book a flight?’ option in the navigation bar by adding the following information:
+	- Departure and Arrival Locations<br>
+	- Departure and Return Dates<br>
+	- Number of Adults and Children<br>
+	- Cabin type (Economy, Business Class, or First Class) <br>
+
+3. The logged in user can choose and select from the flight results for departure and return options. The user, then, gets to choose their seats for both trips, and finally the user can proceed to payment.
+
+4. Upon payment, the logged in user can choose to pay either to pay with ‘Visa’ or ‘Master Card’, and then enter the following information:
+	- Card Number
+	- Expiration Date
+	- CCV
+
+5. After a successful payment, the logged in user will receive an email with their itinerary, if they had chosen that option.
+
+6. The logged in user can view the following information from the drawer:
+	- Username<br>
+	- First Name<br>
+	- Last Name<br>
+	- Email<br>
+	- Passport Number<br>
+	- Edit Profile option<br>
+	- My Trips option<br>
+
+7. The logged in can edit their profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
+	- Username<br>
+	- First Name<br>
+	- Last Name<br>
+	- Email<br>
+	- Passport Number<br>
+	- Password<br>
+
+8. The logged in can view their reserved upcoming and past trips from the ‘My Trips’ option in the drawer
+
+9. The logged in user can cancel their reservation for a trip, and get an email with their cancelled reservation and the amount to be refunded.
+
+10. The logged in user can return to the dashboard by clicking on the logo of the website.

@@ -63,16 +63,65 @@ class mailerRepository {
 
     }
 
+    confirm(req) {
+        mailOptions.subject = "Mighty Ducks Airline Flight Reservation";
+        mailOptions.html = `<html>
+            <head>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap');
+                    .image {
+                        width : 600px;
+                        max-width : 100%;
+                    }
+
+                    h2 {
+                        font-weight: 400;
+                        font-size : 18pt;
+                    }
+
+                    body {
+                        font-family: Raleway, sans-serif;
+                        padding: 16px;
+                    }
+                    a {
+                        color: black;
+                        text-decoration: none;
+                        font-weight: 600;
+                    }
+                </style>
+            </head>
+
+            <body>
+                <h3 style="font-size:22pt;">Hello, ${req.body.firstName}</h3>
+                <h2>Greetings from Mighty Ducks Airline!</h2>
+                <h3>Reservation Details:</h3>
+                </br>
+                <h3>Departure: ${req.body.depdate} ${req.body.depTime} from ${req.body.departureAirport} to ${req.body.arrivalAirport}</h3>
+                <h3>Return: ${req.body.retDate} ${req.body.retTime} from ${req.body.arrivalAirport} to ${req.body.departureAirport}</h3>
+                </br>
+                <h3>Total amount: $${req.body.price}</h3>
+                
+                <p>Regards,</p>
+                <p>Mighty Ducks Airline.</p>
+            </body>
+            </html>`
+
+    }
+
     async send(req) {
         mailOptions.to = req.body.email;
-        if (req.body.type == 'cancel')
+        if (req.body.type === 'cancel')
             this.cancel(req);
+        else if(req.body.type === 'confirm')
+            this.confirm(req);
 
         transport.sendMail(mailOptions, function (err, info) {
             if (err) {
                 console.log(err)
+                throw(new Error('Email was not sent!'))
             } else {
                 console.log(info);
+
             }
         });
     }

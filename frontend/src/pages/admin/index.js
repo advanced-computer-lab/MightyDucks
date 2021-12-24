@@ -10,8 +10,6 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { TextField, Button, Menu, MenuItem, InputAdornment, IconButton,} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Navigate } from "react-router-dom"
-import Navbar from "../../components/navbar"
 import { format } from 'date-fns'
 
 export default class Admin extends Component {
@@ -39,9 +37,7 @@ export default class Admin extends Component {
 
     axios.post('http://localhost:5000/user/getUser', this.data, this.header)
         .then((res) => {
-            console.log(res.data)
             this.setState({...this.state, adminFlag: res.data.isAdmin})
-            console.log(res.data.isAdmin)
         }).catch((error) => {
             console.log(error)
         });
@@ -64,6 +60,8 @@ export default class Admin extends Component {
         console.log(error)
     });
   };
+
+
 
   render() {
     const open = Boolean(this.state.anchorEl);
@@ -246,7 +244,6 @@ export default class Admin extends Component {
             )
           }))}
         </div>
-        {!this.state.adminFlag && <Navigate to="/"/>}
           </div>
         </div>
     )

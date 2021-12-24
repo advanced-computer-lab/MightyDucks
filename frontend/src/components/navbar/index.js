@@ -28,20 +28,17 @@ import { AdminPanelSettings } from '@mui/icons-material';
 import {useLocation} from 'react-router-dom'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from "react-router-dom"
 
-function Navbar({ deleted}){
+function Navbar({deleted}){
     const [open, setOpen] = React.useState(false);
     const [isEdit,setIsEdit]=React.useState(false);
     const [edited,setEdited]=React.useState(false)
     const [flag,setFlag]= React.useState(false);
-    const [toTrips, setToTrips] = React.useState(false);
-    const [toAdmin, setToAdmin] = React.useState(false);
-    const [toSignUp, setToSignup] = React.useState(false);
-    const [toLogin, setToLogin] = React.useState(false);
     const [curUser, setCurUser] = React.useState(null)
 
     const handleDrawerOpen=()=>{ setOpen(true) }
-
+    const navigate = useNavigate()
     const location = useLocation()
     const data = {}
     const header = { headers: {
@@ -52,7 +49,6 @@ function Navbar({ deleted}){
         axios.post('http://localhost:5000/user/getUser', data, header)
         .then((res) => {
             setCurUser(res.data)
-            console.log(res.data)
             setFlag(!(res.data.message === "Incorrect Token Given"))
         }).catch((error) => {
             console.log(error)
@@ -72,13 +68,13 @@ function Navbar({ deleted}){
 
     const handleItinerary=(text)=>{
         switch(text){
-            case 'My Trips': setToTrips(true) ; break;
+            case 'My Trips': navigate("../itinerary", {replace: true}) ; break;
             default : ;break;
         }
     }
     const handleAdmin=(text)=>{
       switch(text){
-          case 'Admin Controls': setToAdmin(true) ; break;
+          case 'Admin Controls': navigate("../admin", {replace: true}) ; break;
           default : ;break;
       }
     }
@@ -87,25 +83,27 @@ function Navbar({ deleted}){
       if(location.pathname === "/signup")
         window.location.reload(false)
       else {
-        setToSignup(true)
+       navigate("../signup", {replace: true})
       }
     }
 
     const handleSignOut = () => {
       localStorage.removeItem("token")
       localStorage.removeItem("user")
+      localStorage.removeItem("admin")
       setFlag(false)
       setCurUser(null)
       toast.success("You have been logged out", {position: toast.POSITION.BOTTOM_RIGHT})
-
+      navigate("../", {replace: true})
     }
 
     const handleLogin = () => {
       if(location.pathname === "/login")
         window.location.reload(false)
       else {
-        setToLogin(true)
+        navigate("../login", {replace: true})
       }
+      
     }
 
       const listSigned = (anchor) => (
@@ -274,10 +272,6 @@ function Navbar({ deleted}){
                 
             </Grid>
             }
-            {toTrips && <Navigate to="/itinerary"/>}
-            {toAdmin && <Navigate to="/admin"/>}
-            {toSignUp  && <Navigate to="/signup"/>}
-            {toLogin  && <Navigate to="/login"/>}
             </Toolbar>
             
         </AppBar>

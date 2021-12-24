@@ -2,12 +2,12 @@ import React, {useEffect} from 'react'
 import "./style.css"
 import SelectFlightSteps from "../../components/SelectFlightSteps"
 import Navbar from "../../components/navbar"
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 
 function SelectFlight({criteria}) {
   const [user, setUser] = React.useState(null)
-
+  const navigate = useNavigate()
    const data = {}
     const header = { headers: {
         "Content-type": "application/json",
@@ -30,7 +30,7 @@ function SelectFlight({criteria}) {
 
   if(criteria===null){
     return(
-      <Navigate to='/'/>
+      navigate("../", {replace: true})
     )
   }
 

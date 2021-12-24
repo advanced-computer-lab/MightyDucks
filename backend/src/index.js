@@ -50,7 +50,7 @@ app.post('/flight/create', adminAuthorize, async (req, res) => {
   }
 })
 
-app.post('/flight/update',adminAuthorize, async (req, res) => {
+app.post('/flight/update',authorize, async (req, res) => {
   try {
     let result = await flightRepository.updateFlight(req)
     res.status(200).send(result)

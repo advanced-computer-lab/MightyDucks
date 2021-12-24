@@ -27,7 +27,7 @@
 	- Passport Number<br>
 	- Edit Profile option<br>
 	- My Trips option<br>
-	- Admin controls<br>
+	- Admin controls option<br>
 
 8. The admin can edit his profile information from the ‘Edit Profile’ option in the drawer. The admin can change the following information:
 	- Username<br>

@@ -25,8 +25,7 @@ npm run dev
 <br>
 
 # What is MightyDucks Airlines?
-	- MightyDucks Airlines a company that owns and operates many airplanes which are used for carrying passengers <br>
-and goods to different places. Our Airline system provides flexibility in booking the desired trips, as well as, cancelling and changing the trips.
+	- MightyDucks Airlines a company that owns and operates many airplanes which are used for carrying passengers and goods to different places. Our Airline system provides flexibility in booking the desired trips, as well as, cancelling and changing the trips with a full refund system.
 
 <br>
 

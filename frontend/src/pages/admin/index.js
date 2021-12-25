@@ -10,9 +10,8 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { TextField, Button, Menu, MenuItem, InputAdornment, IconButton,} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Navigate } from "react-router-dom"
-import Navbar from "../../components/navbar"
 import { format } from 'date-fns'
+import { Navigate } from "react-router-dom"
 
 export default class Admin extends Component {
 
@@ -26,10 +25,23 @@ export default class Admin extends Component {
     searchDate: false,
     adminFlag: true,
   }
-  
+
+    header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+    
+    data ={}
 
   componentDidMount = () => {
     this.getFlights()
+
+    axios.post('http://localhost:5000/user/getUser', this.data, this.header)
+        .then((res) => {
+            this.setState({...this.state, adminFlag: res.data.isAdmin})
+        }).catch((error) => {
+            console.log(error)
+        });
   }
 
   getFlights=async()=>{
@@ -49,6 +61,8 @@ export default class Admin extends Component {
         console.log(error)
     });
   };
+
+
 
   render() {
     const open = Boolean(this.state.anchorEl);
@@ -159,7 +173,6 @@ export default class Admin extends Component {
     }
     return (
       <div style={{textAlign: "-webkit-center"}}>
-        <Navbar setUser={(u) => {this.setState({...this.state, adminFlag: u.isAdmin})}}/>
         <div className={styles["bar"]}>
             {this.state.searchDate ? 
             (
@@ -226,14 +239,14 @@ export default class Admin extends Component {
           (this.state.flights.map((flight) => {
             return (
               <div key = {flight._id}>
-                <Flight flightDetails={flight} getFlights={this.getFlights} isAdmin={true} cabin="" currentChosen="" />
+                <Flight flightDetails={flight} getFlights={this.getFlights} isAdmin={true} cabin="" currentChosen="" changing={false} oldFlight={null} oldCabin={""} />
                 <br />
               </div>
             )
           }))}
         </div>
-        {!this.state.adminFlag && <Navigate to="/"/>}
           </div>
+          {!this.state.adminFlag && <Navigate to="/"/>}
         </div>
     )
   }

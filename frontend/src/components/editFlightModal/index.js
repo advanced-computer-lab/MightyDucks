@@ -10,7 +10,6 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { Button } from "@mui/material"
 import { Edit } from "@mui/icons-material"
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const FlightModal =({flightDetails, getFlights})=>{
     const [flightNum,setFlightNum]=React.useState(flightDetails.flightNumber);
@@ -34,6 +33,11 @@ const FlightModal =({flightDetails, getFlights})=>{
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
 
     const Add=()=>{
         setDepartureErr("");
@@ -69,12 +73,17 @@ const FlightModal =({flightDetails, getFlights})=>{
         return true;
     }
     const updateFlight=async(data)=>{
-        await axios.post('http://localhost:5000/flight/update', data)
+        await axios.post('http://localhost:5000/flight/update', data, header)
         .then((res) => {
-            notify(`Flight ${flightNum} was updated successfully!`)
-            resetFields();
-            handleClose();
-            getFlights();
+            if(!(res.data.message === "Incorrect Token Given")){
+                notify(`Flight ${flightNum} was updated successfully!`)
+                resetFields();
+                handleClose();
+                getFlights();
+            }
+            else {
+                toast.error("An error occurred", {position: toast.POSITION.BOTTOM_RIGHT})
+            }   
         }).catch((error) => {
             console.log(error)
         });

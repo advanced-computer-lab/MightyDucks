@@ -10,7 +10,10 @@ export const useStyles = makeStyles((theme) =>({
         },
         [theme.breakpoints.only("xs")]: {
             width: "90%"
-        },  
+        },
+        [theme.breakpoints.only("md")]: {
+          width: "50%"
+      },
    },
     empty: {
       fontWeight: "bold"

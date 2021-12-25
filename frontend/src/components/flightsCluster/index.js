@@ -4,9 +4,10 @@ import styles from './index.module.css';
 import axios from 'axios';
 import {RingLoader} from "react-spinners"
 
-function FlightsCluster({criteria, handleChosen, currentChosen}) {
+function FlightsCluster({criteria, handleChosen, currentChosen, changing, oldFlight, oldCabin, setNum}) {
     const [flights, setFlights] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [oldPrice, setOldPrice] = useState(0);
 
     const findFlights=()=>{
         var flightDetails={
@@ -24,7 +25,23 @@ function FlightsCluster({criteria, handleChosen, currentChosen}) {
         await axios.post('http://localhost:5000/flight/filterFlights', data)
         .then((res) => {
             setLoading(false)
-            setFlights(res.data)
+            let clusterData = res.data;
+            if(changing){
+              clusterData = res.data.filter((flight) =>{
+                return flight.flightNumber!==oldFlight.flightNumber
+              })
+              setNum(clusterData.length)
+              if(oldCabin==="Business"){
+                setOldPrice(oldFlight.price+100)
+              }
+              else if(oldCabin==="First"){
+                setOldPrice(oldFlight.price+400)
+              }
+              else{
+                setOldPrice(oldFlight.price)
+              }
+            }
+            setFlights(clusterData)
         }).catch((error) => {
             console.log(error)
         });
@@ -55,6 +72,8 @@ function FlightsCluster({criteria, handleChosen, currentChosen}) {
                   cabin={criteria.cabin}
                   handleChosen={handleChosen}
                   currentChosen={currentChosen}
+                  changing={true}
+                  oldPrice={oldPrice}
                 />
                 <br />
               </div>

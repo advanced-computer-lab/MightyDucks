@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../../components/navbar'
 import FlightFilter from '../../components/flightFilter'
 import useStyles from './style'
 function Dashboard({setCriteria}) {
@@ -7,7 +6,6 @@ function Dashboard({setCriteria}) {
 
     return (
         <div className={styles.main} style={{overflow:'hidden'}}>
-            <Navbar/>
             <div className={styles.filter}>
                 <div className={styles.title}>Flight Booking</div>
                 <FlightFilter setCriteria={setCriteria}/>

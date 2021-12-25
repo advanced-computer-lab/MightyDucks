@@ -5,7 +5,6 @@ import { Grid, Button, Typography} from '@mui/material';
 import { TextField } from '@material-ui/core';
 import {InputAdornment} from '@mui/material';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
 import Logo from '../../assets/Images/logo.svg'
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';

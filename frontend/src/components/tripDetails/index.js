@@ -91,7 +91,7 @@ function PayModal(props) {
     );
 }
 
-export default function TripDetails({open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming}) {
+export default function TripDetails({user, setBooked, open, setOpen, setDeleted, bookingId, departureFlight, departingFlightSeats, returnFlight, returningFlightSeats, create, upcoming}) {
     const handleClose = () => setOpen(false);
 
     const [paid, setPaid] = React.useState(false);
@@ -101,8 +101,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
         "Content-type": "application/json",
         "x-access-token": localStorage.getItem("token")
     }}
-
-    const user = JSON.parse(localStorage.getItem("user"))
 
     const departureTime1 = (new Date(departureFlight.departureTime).toString()).split(" ")
     const arrivalTime1 = (new Date(departureFlight.arrivalTime).toString()).split(" ")
@@ -238,7 +236,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
         const userNewFlights = user.flights.filter((flight) => {
             return flight.split(' ')[4] !== bookingId
         })
-        var userDUDE = {oldUserName:user.userName ,userName:user.userName,firstName:user.firstName ,lastName:user.lastName,email:user.email,passportNumber:user.passportNumber,password:user.password, flights: userNewFlights}
+        var userDUDE = {oldUserName:user.userName ,userName:user.userName,firstName:user.firstName ,lastName:user.lastName,email:user.email,passportNumber:user.passportNumber, flights: userNewFlights, homeAddress: user.homeAddress, telephoneNumber:user.telephoneNumber}
         updateUser(userDUDE);
 
         //updateflight dep
@@ -275,7 +273,7 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                     type: "cancel"
                 }
                 //
-                sendCancelEmail(emailData)
+                sendEmail(emailData)
                 handleClose()
         }
     }
@@ -309,9 +307,13 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
                 toast.success("Trip booked successfully!", {
                     position: toast.POSITION.BOTTOM_RIGHT,
                   });
+                handleSendItinerary();
                 navigate("/", {replace: true})
             }
             setPaid(false)
+            setBooked(true)
+            localStorage.setItem("confirmBooked", true)
+            
         }
     }, [paid])
 
@@ -333,13 +335,36 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
         });
     };
 
-    const sendCancelEmail=async(data)=>{
+    const sendEmail=async(data)=>{
         await axios.post('http://localhost:5000/user/notify', data, header)
         .then(() => {
         }).catch((error) => {
             console.log(error)
         });
     };
+
+    const handleSendItinerary = () => {
+        const emailData={
+            firstName: user.firstName,
+            depdate: `${departureTime1[0]}, ${departureTime1[1]} ${departureTime1[2]}, ${departureTime1[3]}`,
+            depTime: depHr,
+            departureAirport: departureFlight.from,
+            arrivalAirport: departureFlight.to,
+            retDate: `${departureTime2[0]}, ${departureTime2[1]} ${departureTime2[2]}, ${departureTime2[3]}`,
+            retTime: arrHr,
+            depCabin: cabin1,
+            depSeats: departingFlightSeats,
+            retCabin: cabin2,
+            retSeats: returningFlightSeats,
+            price: parseInt(departingFlightSeats.length*(departureFlight.price+priceAddOn1) + returningFlightSeats.length*(returnFlight.price+priceAddOn2)),
+            email: user.email,
+            type: "confirm"
+        }
+        sendEmail(emailData)
+        toast.success("Your trip itinerary has been sent to your email!", {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
 
 
     const [changeSeats, setChangeSeats] = React.useState(false)
@@ -349,15 +374,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     const [newSeats, setNewSeats] = React.useState([])
     const [confirmNewSeats, setConfirmNewSeats] = React.useState(false)
     const [changedSeatsFlight, setChangedSeatsFlight] = React.useState(false)
-    
-    
-
-    const handleSendItinerary = () => {
-        //send an email to user with their itinerary
-        toast.success("Your trip itinerary has been sent to your email!", {
-            position: toast.POSITION.BOTTOM_RIGHT,
-        });
-    }
 
     const handleChangeSeats = (depFlight) => {
         setChangedSeatsFlight(depFlight)
@@ -477,11 +493,6 @@ export default function TripDetails({open, setOpen, setDeleted, bookingId, depar
     }, [confirmNewFlight])
 
     const handleChangeFlightConfirm = () => {
-        console.log(changeFlightNewFlight)
-        console.log(changeFlightNewSeats)
-
-
-
         var userNewFlights = user.flights.filter((flight) => {
             return flight.split(' ')[4] !== bookingId
         })

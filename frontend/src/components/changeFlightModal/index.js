@@ -84,9 +84,6 @@ function ChangeFlightModal({
 
   const handleClose = () => setOpen(false);
 
-  const handleConfirm = () => {
-    //setConfirmNewFlight(true);
-  };
 
   return (
     <Modal
@@ -214,6 +211,14 @@ function SelectingModal({criteria, oldFlight, oldCabin, oldSeats, newCabin, open
     }
   };
 
+  React.useEffect(() => {
+    if(paid){
+      finalConfirm(true)
+      handleClose();
+      handleParentClose();
+    }
+  }, [paid])
+
   const handleBack = () => {
     if(activeStep===0){
       handleClose();
@@ -300,11 +305,7 @@ function SelectingModal({criteria, oldFlight, oldCabin, oldSeats, newCabin, open
   )
 }
 
-function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, oldFlight}){
-
-  if(price===0){
-    setPaid(true)
-  }
+function PaymentLocation({price, setPaid, flight, flightSeats, oldSeats, oldFlight}){
 
   const departureTime1 = (new Date(flight.departureTime).toString()).split(" ")
     const arrivalTime1 = (new Date(flight.arrivalTime).toString()).split(" ")
@@ -365,17 +366,17 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, o
         cabin1 = "First"
     }
 
-    var cabin2 = "Economy"
     var priceAddOn2 = 0;
     if(oldSeats[0].charAt(0)==="B"){
         priceAddOn2 = 100;
-        cabin2 = "Business"
     }
     else if(oldSeats[0].charAt(0)==="F"){
         priceAddOn2 = 400;
-        cabin2 = "First"
     }
 
+    if((flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2)))===0){
+      setPaid(true)
+    }
 
   return(
     <div>
@@ -412,7 +413,7 @@ function PaymentLocation({price, paid, setPaid, flight, flightSeats, oldSeats, o
         </Grid>
       </Typography>
       
-      {price===0? <Button variant="contained" disabled={true}>All paid up!</Button> : <div style={{width: "90%"}}><CheckOut setDone={setPaid} price={flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2))} /></div>}
+      {(flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2)))===0? <Button variant="contained" onClick={() => setPaid(true)}>All paid up!</Button> : <div style={{width: "90%"}}><CheckOut setDone={setPaid} price={flightSeats.length*(parseInt(price+priceAddOn1)-parseInt(oldFlight.price+priceAddOn2))} /></div>}
     </div>
   )
 }

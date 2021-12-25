@@ -32,7 +32,6 @@ function Signup({}) {
     const [passwordErr, setPasswordErr] = useState(false)
     const [telephoneNumberErr, setTelephoneNumberErr] = useState(false)
     const [countryCodeErr, setCountryCodeErr] = useState(false)
-    const [toLogin, setToLogin] = useState(false)
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const navigate = useNavigate()

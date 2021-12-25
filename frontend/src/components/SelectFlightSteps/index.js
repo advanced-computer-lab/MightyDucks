@@ -98,7 +98,7 @@ function SelectFlightSteps(props) {
 
   return (
     <div>
-      {open && <TripDetails user={props.user} open={open} setOpen={setOpen} bookingId={bookingId} departureFlight={departingFlight} departingFlightSeats={departingFlightSeats} returnFlight={returningFlight} returningFlightSeats={returningFlightSeats} create={true} upcoming={false}/>}
+      {open && <TripDetails setBooked={props.setBooked} user={props.user} open={open} setOpen={setOpen} bookingId={bookingId} departureFlight={departingFlight} departingFlightSeats={departingFlightSeats} returnFlight={returningFlight} returningFlightSeats={returningFlightSeats} create={true} upcoming={false}/>}
       <Box sx={{ width: "100%", textAlign: "-webkit-center" }}>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => (

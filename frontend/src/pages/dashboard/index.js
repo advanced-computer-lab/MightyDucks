@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../../components/navbar'
 import FlightFilter from '../../components/flightFilter'
 import useStyles from './style'
 function Dashboard({setCriteria}) {

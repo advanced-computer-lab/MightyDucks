@@ -55,7 +55,6 @@ const EditUser=(props)=>{
             }
             })
         .then ((res) => {
-            localStorage.setItem("user", JSON.stringify(res.data))
             if(res.data.isAdmin) {
                 localStorage.setItem("admin", true)
             }
@@ -142,27 +141,8 @@ const EditUser=(props)=>{
                     handleClose();
                 }
             }else{
-               
-                axios.post('http://localhost:5000/user/update', curUser, header)
-                .then((res) => {
-                    setUpdatesSuccess(true)
-                    
-                }).catch((error) => {
-                    console.log(error)
-                });
-                axios.post('http://localhost:5000/user/changePassword', {"userName":curUser.userName,"oldPassword":oldPassword, "newPassword":newPassword}, header)
-                .then((res) => {
-                    if(res.data.message==='Success'){
-                    setPasswordChangeSuccess(true)
-                    localStorage.setItem("not password", newPassword)
-                    }else{
-                        toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
-                    }
-                    }).catch((error) => {
-                        console.log(error)
-                    });
-                // passwordChange({"userName":user.userName,"oldPassword":oldPassword, "newPassword":newPassword});
-                // updateUser(curUser);
+                passwordChange({"userName":curUser.userName,"oldPassword":oldPassword, "newPassword":newPassword});
+                updateUser(curUser);
             }
            
         }

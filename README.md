@@ -48,10 +48,12 @@ inside both frontend and backend directories
 The following APIs were used:<br>
 	- Nodemailer: a module for Node.js applications to allow easy email sending.<br>
 	- Stripe: a service that allows users to accept payments online.<br>
+	
 <br>
 
 ## Tests
 Manual tests were done at each phase making each part of the project free of bugs before building upon.
+
 <br>
 
 ## How to use?
@@ -63,6 +65,7 @@ Run the following command inside the backend directory:
 ```bash
 npm run dev
 ```
+
 <br>
 
 ## Contribute

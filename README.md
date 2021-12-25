@@ -42,6 +42,7 @@ To install all the project dependencies run:
 npm install
 ```
 inside both frontend and backend directories
+
 <br>
 
 ## API References

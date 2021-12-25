@@ -68,8 +68,6 @@ npm run dev
 
 ## Contribute
 Please refer to the scrum master if you want to contribute. Follow the following link: <br>
-```bash
 [The scrum master](https://github.com/Andrew51234).
-```
 <br>
 

@@ -29,7 +29,7 @@ https://github.com/advanced-computer-lab/MightyDucks/tree/dev/screenshots
 <br>
 
 ## Features
-The following features were implemented:
+The following features were implemented:<br>
 	- Signing up, logging in, and signing out <br>
 	- Booking flights <br>
 	- Online payments <br>

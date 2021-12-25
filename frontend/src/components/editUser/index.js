@@ -4,7 +4,6 @@ import {Modal,Box ,Typography} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import React from 'react';
-import 'react-toastify/dist/ReactToastify.css'
 import { toast } from 'react-toastify';
 import {InputAdornment, IconButton,Button } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";

@@ -1,7 +1,6 @@
 import {Modal,Box ,Typography, Button, Tooltip} from '@mui/material';
 import React from 'react';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
 import styles from './index.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import { ContainedButton , TextFields} from '../buttons/styledButtons';

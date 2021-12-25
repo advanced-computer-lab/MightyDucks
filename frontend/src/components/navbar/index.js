@@ -27,7 +27,6 @@ import { NavLink } from 'react-router-dom';
 import { AdminPanelSettings } from '@mui/icons-material';
 import {useLocation} from 'react-router-dom'
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from "react-router-dom"
 
 function Navbar({deleted}){

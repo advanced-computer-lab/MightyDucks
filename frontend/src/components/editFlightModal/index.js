@@ -10,7 +10,6 @@ import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import { Button } from "@mui/material"
 import { Edit } from "@mui/icons-material"
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const FlightModal =({flightDetails, getFlights})=>{
     const [flightNum,setFlightNum]=React.useState(flightDetails.flightNumber);

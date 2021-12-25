@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import useStyles from './style';
 import { Grid, Button, Typography, TextField} from '@mui/material';
-import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";

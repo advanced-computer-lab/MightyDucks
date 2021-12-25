@@ -11,11 +11,12 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const EditUser=(props)=>{
-    const [userName,setUserName]=React.useState(props.user.userName);
-    const [firstName,setFirstName]=React.useState(props.user.firstName);
-    const [lastName,setLastName]=React.useState(props.user.lastName);
-    const [email,setEmail]=React.useState(props.user.email);
-    const [passportNumber, setPassportNumber] = React.useState(props.user.passportNumber);
+    const [user, setUser] = React.useState(props.user)
+    const [userName,setUserName]=React.useState(user.userName);
+    const [firstName,setFirstName]=React.useState(user.firstName);
+    const [lastName,setLastName]=React.useState(user.lastName);
+    const [email,setEmail]=React.useState(user.email);
+    const [passportNumber, setPassportNumber] = React.useState(user.passportNumber);
     const [usernameErr,setUserNameErr]=React.useState("");
     const [firstNameErr,setFirstNameErr]=React.useState("");
     const [lastNameErr,setLastNameErr]=React.useState("");
@@ -28,22 +29,55 @@ const EditUser=(props)=>{
     const [passChange,setPasswordChange]= React.useState(false);
     const [showOldPassword, setShowOldPassword] = React.useState(false);
     const [showNewPassword, setShowNewPassword] = React.useState(false);
-    const [telephone,setTelephone]=React.useState(props.user.telephoneNumber);     
-    const [homeAddress, setHomeAddress] = React.useState(props.user.homeAddress);
+    const [telephone,setTelephone]=React.useState(user.telephoneNumber);     
+    const [homeAddress, setHomeAddress] = React.useState(user.homeAddress);
     const [open, setOpen] = React.useState(true);
     const [updateSuccess, setUpdatesSuccess] = React.useState(false);
     const [passwordChangeSuccess, setPasswordChangeSuccess] = React.useState(false);
-    const handleClose = () =>{
-        setOpen(false);
-        props.onEdit(false)
+
+     const header = { headers: {
+        "Content-type": "application/json",
+        "x-access-token": localStorage.getItem("token")
+    }}
+
+    const handleClose = () =>{  
+        
+        axios.post("http://localhost:5000/login", {userName: userName, password: localStorage.getItem("not password")})
+        .then ((res) => {        
+            if(!(res.data.message === "Invalid username or Password")){
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+                localStorage.setItem("token", res.data.token)
+        axios.post("http://localhost:5000/user/getUser", {}, {
+            headers: {
+                "Content-type": "application/json",
+                "x-access-token": localStorage.getItem("token")
+            }
+            })
+        .then ((res) => {
+            localStorage.setItem("user", JSON.stringify(res.data))
+            if(res.data.isAdmin) {
+                localStorage.setItem("admin", true)
+            }
+            setUser(res.data)
+            setOpen(false);
+            props.onEdit(false)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+        
+        
     } 
     const handleClickShowOldPassword = () => setShowOldPassword(!showOldPassword);
     const handleClickShowNewPassword = () => setShowNewPassword(!showNewPassword);
     const notify = (text) => toast.success(text, {position: toast.POSITION.BOTTOM_RIGHT})
-    const header = { headers: {
-        "Content-type": "application/json",
-        "x-access-token": localStorage.getItem("token")
-    }}
+   
 
     const updateUser=async(data)=>{
         await axios.post('http://localhost:5000/user/update', data, header)
@@ -58,6 +92,7 @@ const EditUser=(props)=>{
         .then((res) => {
             if(res.data.message==='Success'){
             setPasswordChangeSuccess(true)
+            localStorage.setItem("not password", newPassword)
             }else{
                 toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
             }
@@ -100,16 +135,34 @@ const EditUser=(props)=>{
     const handleEdit=()=>{
         var result = validateFields(); 
         if (result){
-            var user= {oldUserName:props.user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,flights: props.user.flights, homeAddress:homeAddress, telephoneNumber:telephone}
+            var curUser= {oldUserName:user.userName ,userName:userName,firstName:firstName ,lastName:lastName,email:email,passportNumber:passportNumber,flights: user.flights, homeAddress:homeAddress, telephoneNumber:telephone}
             if (!passChange){
-                updateUser(user);
-                console.log("success",updateSuccess)
+                updateUser(curUser);
                 if(updateSuccess){
                     handleClose();
                 }
             }else{
-                passwordChange({"userName":props.user.userName,"oldPassword":oldPassword, "newPassword":newPassword});
-                updateUser(user);
+               
+                axios.post('http://localhost:5000/user/update', curUser, header)
+                .then((res) => {
+                    setUpdatesSuccess(true)
+                    
+                }).catch((error) => {
+                    console.log(error)
+                });
+                axios.post('http://localhost:5000/user/changePassword', {"userName":curUser.userName,"oldPassword":oldPassword, "newPassword":newPassword}, header)
+                .then((res) => {
+                    if(res.data.message==='Success'){
+                    setPasswordChangeSuccess(true)
+                    localStorage.setItem("not password", newPassword)
+                    }else{
+                        toast.error("Wrong password", {position: toast.POSITION.BOTTOM_RIGHT})
+                    }
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+                // passwordChange({"userName":user.userName,"oldPassword":oldPassword, "newPassword":newPassword});
+                // updateUser(curUser);
             }
            
         }
@@ -153,7 +206,6 @@ const EditUser=(props)=>{
     const handleHomeAddress=(e)=>{
         setHomeAddress(e.target.value);
     }
-    console.log(homeAddress)
     return(
     <div>
         <Modal className={styles["Modal"]}

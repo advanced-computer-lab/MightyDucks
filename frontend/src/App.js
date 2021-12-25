@@ -23,7 +23,7 @@ function App() {
       <Navbar/>
         <Routes>
           <Route exact path="/" element={<Dashboard setCriteria={setCriteria}/>} />
-          <Route path="/admin" element={<Admin/>} />
+          <Route path="/admin" element={localStorage.getItem("admin") ? <Admin/>: <Navigate to="/" replace={true}/>} />
           <Route path="/select-flights" element={<SelectFlight criteria={criteria}/>} />
           <Route path="/itinerary" element = {<Itinerary/>}/>
           <Route path="/signup" element = {<Signup/>}/>

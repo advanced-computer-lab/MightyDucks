@@ -45,9 +45,9 @@ inside both frontend and backend directories
 <br>
 
 ## API References
-The following APIs were used:
-	- Nodemailer: a module for Node.js applications to allow easy email sending.
-	- Stripe: a service that allows users to accept payments online.
+The following APIs were used:<br>
+	- Nodemailer: a module for Node.js applications to allow easy email sending.<br>
+	- Stripe: a service that allows users to accept payments online.<br>
 <br>
 
 ## Tests

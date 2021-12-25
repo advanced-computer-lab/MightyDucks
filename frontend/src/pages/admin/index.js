@@ -245,7 +245,6 @@ export default class Admin extends Component {
             )
           }))}
         </div>
-        {!this.state.adminFlag && <Navigate to="/"/>}
           </div>
           {!this.state.adminFlag && <Navigate to="/"/>}
         </div>

@@ -23,7 +23,12 @@ Run the following command inside the backend directory:
 npm run dev
 ```
 <br>
+# What is MightyDucks Airlines?
+	- MightyDucks Airlines a company that owns and operates many airplanes which are used for carrying passengers and goods to different places. Our Airline system provides flexibility in booking the desired trips, as well as, cancelling and changing the trips.
 
+
+
+<br>
 ## ***Admin Privileges:***
 1. The admin can create flights by specifying the following:<br>
 	- Flight Number<br>

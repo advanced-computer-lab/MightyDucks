@@ -1,17 +1,3 @@
-# Welcome to MightyDucks Airlines
-<<<<<<< Updated upstream
-This project was created for the Advanced Computer Lab course offered by the German University in Cairo.
-## Technologies
-`Database`: MongoDB <br>
-`Frontend`: React JS <br>
-`Backend` : Node JS & Express JS <br> <br>
-*The project utilizes the MERN stack* <br>
-## Prerequisites
-You need `node` and `npm` installed on your system to build and run this project.
-## Installing dependancies
-=======
-<br>
-
 ## What is MightyDucks Airlines?
 MightyDucks Airlines is a company that owns and operates many airplanes which are used for carrying passengers and goods to different places. Our Airline system provides flexibility in booking the desired trips, as well as, cancelling and changing the trips with a full refund system.
 
@@ -52,15 +38,12 @@ The following features were implemented:
 <br>
 
 ## Installions
->>>>>>> Stashed changes
 To install all the project dependencies run:
 ```bash
 npm install
 ```
 inside both frontend and backend directories
-<<<<<<< Updated upstream
-## Running the application
-=======
+<br>
 
 ## API References
 The following APIs were used:
@@ -73,7 +56,6 @@ Manual tests were done at each phase making each part of the project free of bug
 <br>
 
 ## How to use?
->>>>>>> Stashed changes
 Run the following command inside the frontend directory:
 ```bash
 npm start
@@ -82,8 +64,6 @@ Run the following command inside the backend directory:
 ```bash
 npm run dev
 ```
-<<<<<<< Updated upstream
-=======
 <br>
 
 ## Contribute
@@ -92,4 +72,4 @@ Please refer to the scrum master if you want to contribute. Follow the following
 https://github.com/Andrew51234
 ```
 <br>
->>>>>>> Stashed changes
+

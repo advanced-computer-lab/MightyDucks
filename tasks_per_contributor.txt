@@ -5,6 +5,8 @@ Frontend addflight functionality.
 _sprint#2
 Backend init user, getUserInfo & updateUserInfo
 Fronted drawer and editusermodal
+_sprint#3
+Frontend change password and Payment
 
 Amr Hoballah:
 _sprint#1
@@ -13,6 +15,8 @@ Flight and users Database models.
 Flight and users Database repositories initialization.
 _sprint#2
 Backend modemailer and mailer repository, getUpcomingTrips & getPastTrips, .env update
+_sprint#3
+Backend confirm email, change password, stripe API, user model update, addUser and login functions
 
 Andrew Hany:
 _sprint#1
@@ -21,6 +25,9 @@ Backend deleteFlight functionality.
 _sprint#2
 frontend dashboard and itinerary pages and navbar, filterFlights and tripCards components
 Backend filter flights
+_sprint#3
+Frontend sign in and login pages
+Misc. Rebuilt login system to match sprint 3 requirements
 
 Peter Osama:
 _sprint#1
@@ -30,6 +37,9 @@ design of pages and components
 _sprint#2
 Frontend confirm delete modal and it's functionalities
 design of pages and components
+_sprint#3
+Frontend signup
+updated ReadME report
 
 Shehabeldin Solyman:
 _sprint#1
@@ -38,3 +48,6 @@ Frontend Flight record display and admin page.
 _sprint#2
 Backend init in flight modal addUpcomingFlight and deleteUpcomingFlight
 Frontend selectFlight page and components tripDetals, flightSelect, flightCluster, flightSeats & flight
+_sprint#3
+Frontend change Flight modal change seats modal
+Misc. Rebuilt booking system to match sprint 3 requirements

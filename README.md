@@ -21,6 +21,7 @@ No coding styles were followed.
 ## Screenshots
 Please refer the screenshots folder. Follow the following link: <br>
 https://github.com/advanced-computer-lab/MightyDucks/tree/dev/screenshots
+
 <br>
 
 ## Frameworks

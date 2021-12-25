@@ -20,9 +20,7 @@ No coding styles were followed.
 
 ## Screenshots
 Please refer the screenshots folder. Follow the following link: <br>
-```bash
 https://github.com/advanced-computer-lab/MightyDucks/tree/dev/screenshots
-```
 <br>
 
 ## Frameworks
@@ -68,6 +66,6 @@ npm run dev
 
 ## Contribute
 Please refer to the scrum master if you want to contribute. Follow the following link: <br>
-[The scrum master](https://github.com/Andrew51234).
+[The Scrum Master](https://github.com/Andrew51234).
 <br>
 

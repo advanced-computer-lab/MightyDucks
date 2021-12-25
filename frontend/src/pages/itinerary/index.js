@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useStyles from './style'
-import Navbar from '../../components/navbar';
 import TripCard from '../../components/tripCard';
 import Grid from '@mui/material/Grid';
 import Tabs from '@mui/material/Tabs'
@@ -28,8 +27,9 @@ function Itinerary(props) {
           navigate("../", {replace: true})
       }
       else{
-       if(!flag || deleted)
+       if(!flag || deleted || localStorage.getItem("confirmBooked"))
        {
+         
            axios.post('http://localhost:5000/user/getUser', {}, header)
         .then((res) => {
           if(!(res.data.message === "Incorrect Token Given")){
@@ -41,12 +41,15 @@ function Itinerary(props) {
         getUpcomingFlights({userName: res.data.userName})
         getPastFlights({userName: res.data.userName})
         setFlag(true)
+        localStorage.removeItem("confirmBooked")
         }).catch((error) => {
             console.log(error)
         });
+        setDeleted(false)
+        setFlag(true)
         }
     }
-    },[deleted, flag])
+    },[deleted, flag, localStorage.getItem("confirmBooked")])
 
      const getUpcomingFlights=async(data)=>{
         await axios.post('http://localhost:5000/user/getFlights/upcoming', data , header)

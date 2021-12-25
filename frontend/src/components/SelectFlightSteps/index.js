@@ -98,7 +98,7 @@ function SelectFlightSteps(props) {
 
   return (
     <div>
-      {open && <TripDetails user={props.user} open={open} setOpen={setOpen} bookingId={bookingId} departureFlight={departingFlight} departingFlightSeats={departingFlightSeats} returnFlight={returningFlight} returningFlightSeats={returningFlightSeats} create={true} upcoming={false}/>}
+      {open && <TripDetails setBooked={props.setBooked} user={props.user} open={open} setOpen={setOpen} bookingId={bookingId} departureFlight={departingFlight} departingFlightSeats={departingFlightSeats} returnFlight={returningFlight} returningFlightSeats={returningFlightSeats} create={true} upcoming={false}/>}
       <Box sx={{ width: "100%", textAlign: "-webkit-center" }}>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => (
@@ -112,8 +112,8 @@ function SelectFlightSteps(props) {
         <div>
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1 }}>
-                {activeStep === 0 && <FlightsCluster criteria={dep} handleChosen={setDepartingFlight} currentChosen={departingFlight} />}
-                {activeStep === 1 && <FlightsCluster criteria={ret} handleChosen={setReturningFlight} currentChosen={returningFlight} />}
+                {activeStep === 0 && <FlightsCluster changing={false} oldFlight={null} oldCabin={""} criteria={dep} handleChosen={setDepartingFlight} currentChosen={departingFlight} />}
+                {activeStep === 1 && <FlightsCluster changing={false} oldFlight={null} oldCabin={""} criteria={ret} handleChosen={setReturningFlight} currentChosen={returningFlight} />}
                 {activeStep === 2 && <SelectSeats oldSeats={[]} changing={false} flightSeats={departingFlightSeats} setFlightSeats={setDepartingFlightSeats} noSeats={parseInt(dep.adults)+parseInt(dep.children)} cabin={dep.cabin} flight={departingFlight}/>}
                 {activeStep === 3 && <SelectSeats oldSeats={[]} changing={false} flightSeats={returningFlightSeats} setFlightSeats={setReturningFlightSeats} noSeats={parseInt(ret.adults)+parseInt(ret.children)} cabin={ret.cabin} flight={returningFlight}/>}
               </Typography>

@@ -124,6 +124,7 @@ class userRepository {
             passportNumber:req.body.passportNumber,
             homeAddress: req.body.homeAddress,
             telephoneNumber: req.body.telephoneNumber,
+            flights: req.body.flights,
             countryCode: req.body.countryCode,}}).then(() => {
                 console.log(`User ${req.body.userName} was updated successfully!`)
                 return req.body.userName;

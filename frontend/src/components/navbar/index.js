@@ -23,7 +23,7 @@ import Logo from '../../assets/Images/logo.svg'
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from "@material-ui/core/styles";
-import { Navigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { AdminPanelSettings } from '@mui/icons-material';
 import {useLocation} from 'react-router-dom'
 import { toast } from 'react-toastify';
@@ -69,13 +69,13 @@ function Navbar({deleted}){
 
     const handleItinerary=(text)=>{
         switch(text){
-            case 'My Trips': navigate("../itinerary", {replace: true}) ; break;
+            case 'My Trips': navigate("../itinerary", {replace: true}); setOpen(false) ; break;
             default : ;break;
         }
     }
     const handleAdmin=(text)=>{
       switch(text){
-          case 'Admin Controls': navigate("../admin", {replace: true}) ; break;
+          case 'Admin Controls': navigate("../admin", {replace: true}); setOpen(false) ; break;
           default : ;break;
       }
     }

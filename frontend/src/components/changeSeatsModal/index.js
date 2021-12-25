@@ -3,8 +3,6 @@ import {Modal,Box , Grid, Button} from '@mui/material';
 import { useStyles } from './style'
 import SelectSeats from "../SelectSeats"
 import HelpIcon from '@mui/icons-material/Help';
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
 
 function ChangeSeatsModal({flight, cabin, oldFlightSeats, setFlightSeats, open, setOpen, setNewSeats, setConfirmNewSeats}) {
     const styles = useStyles()
@@ -12,14 +10,12 @@ function ChangeSeatsModal({flight, cabin, oldFlightSeats, setFlightSeats, open, 
     const handleClose = () => setOpen(false);
 
     const handleConfirm = () => {
-        setConfirmNewSeats(true)
-        handleClose()
+      setConfirmNewSeats(true)
     }
 
     return (
         
       <Modal
-      hideBackdrop
       open={open}
       onClose={handleClose}
       className={styles.modal}

@@ -6,15 +6,12 @@ import { TextField } from '@material-ui/core';
 import {InputAdornment} from '@mui/material';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import Navbar from '../../components/navbar';
 import Logo from '../../assets/Images/logo.svg'
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
-import Icon from '@mui/material/Icon';
 import { IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { Navigate } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"
 
 function Login() {
@@ -27,7 +24,6 @@ function Login() {
     const [usernameErr, setUsernameErr] = useState(false)
     const [passwordErr, setPasswordErr] = useState(false)
     const [data, setData] = useState("");
-    const [toHome, setToHome] = useState(false)
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -83,7 +79,6 @@ function Login() {
             })
         .then ((res) => {
             toast.success(`Logged in successfully. Welcome ${username}`, {position: toast.POSITION.BOTTOM_RIGHT})
-            localStorage.setItem("user", JSON.stringify(res.data))
             if(res.data.isAdmin) {
                 localStorage.setItem("admin", true)
             }

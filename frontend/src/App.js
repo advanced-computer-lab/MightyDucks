@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState} from "react"
 import {Navigate, BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import Admin from "./pages/admin"
 import SelectFlight from "./pages/selectFlight"
@@ -9,6 +9,7 @@ import Itinerary from "./pages/itinerary"
 import Signup from "./pages/signup"
 import Login from "./pages/login"
 import Navbar from "./components/navbar"
+import Page404 from "./pages/404"
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/itinerary" element = {<Itinerary/>}/>
           <Route path="/signup" element = {<Signup/>}/>
           <Route path="/login" element = {<Login/>}/>
+          <Route path={"*"} element={<Page404 />}/>
         </Routes>
       </Router>
     </div>

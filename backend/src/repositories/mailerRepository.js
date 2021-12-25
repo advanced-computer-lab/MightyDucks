@@ -94,12 +94,16 @@ class mailerRepository {
             <body>
                 <h3 style="font-size:22pt;">Hello, ${req.body.firstName}</h3>
                 <h2>Greetings from Mighty Ducks Airline!</h2>
-                <h3>Reservation Details:</h3>
-                </br>
-                <h3>Departure: ${req.body.depdate} ${req.body.depTime} from ${req.body.departureAirport} to ${req.body.arrivalAirport}</h3>
-                <h3>Return: ${req.body.retDate} ${req.body.retTime} from ${req.body.arrivalAirport} to ${req.body.departureAirport}</h3>
-                </br>
-                <h3>Total amount: $${req.body.price}</h3>
+                <h3>Here's your upcoming trip's itinirary</h3>
+                <br/>
+                <h3>Departure: ${req.body.depdate}, ${req.body.depTime} from ${req.body.departureAirport} to ${req.body.arrivalAirport}. ${req.body.depCabin} Class Seats: ${req.body.depSeats}</h3>
+                <br/>
+                <h3>Return: ${req.body.retDate}, ${req.body.retTime} from ${req.body.arrivalAirport} to ${req.body.departureAirport}. ${req.body.retCabin} Class Seats: ${req.body.retSeats}</h3>
+                <br/>
+                <br/>
+                <h3>Total amount: $${req.body.price} (status: paid)</h3>
+                <br/>
+                <h3>From all of us here at MDA, we wish you a happy trip and safe travels.</h3>
                 
                 <p>Regards,</p>
                 <p>Mighty Ducks Airline.</p>

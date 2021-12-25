@@ -36,7 +36,7 @@ The following features were implemented:<br>
 	- Online payments <br>
 <br>
 
-## Installions
+## Installations
 To install all the project dependencies run:
 ```bash
 npm install
